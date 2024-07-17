@@ -67,7 +67,7 @@ function App() {
       {isUserMobile ? (
         <RouterProvider router={MobileRouter} />
       ) : (
-        <RouterProvider router={DesktopRouter} />
+        <RouterProvider router={MobileRouter} />
       )}
     </div>
   );
