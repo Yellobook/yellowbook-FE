@@ -20,6 +20,10 @@
     @apply px-2 py-2 rounded-md cursor-pointer hover:bg-yellow;
   }
 
+  .homeCard {
+    @apply flex items-center justify-between rounded-2xl px-5 py-3 h-20 bg-yellow;
+  }
+
   .iconHover {
     @apply p-1 cursor-pointer hover:bg-yellow rounded-full;
   }

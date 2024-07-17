@@ -1,0 +1,57 @@
+.calendar-container {
+  @apply p-4 bg-white rounded-lg shadow-md;
+}
+
+.react-calendar {
+  @apply w-full;
+}
+
+.react-calendar__navigation button {
+  @apply text-yellow;
+}
+
+.react-calendar__navigation {
+  @apply flex items-center justify-center text-3xl mb-8 w-1/2 mx-auto;
+}
+
+.react-calendar__navigation__label {
+  @apply flex-grow-0;
+}
+
+.react-calendar__navigation__prev-button,
+.react-calendar__navigation__next-button {
+  @apply size-10 hover:text-yellow text-[50px] transition-colors;
+}
+
+.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__next2-button {
+  @apply hidden;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  @apply opacity-0;
+}
+
+.react-calendar__tile {
+  @apply flex flex-col text-[11px] rounded-md text-gray hover:border-2 hover:border-orange transition-colors;
+}
+
+.react-calendar__tile abbr {
+  @apply px-2 py-1;
+}
+
+.react-calendar__tile--active {
+  @apply border-orange border-2 text-black font-bold;
+}
+
+.event {
+  @apply mt-1 text-black text-[9px] w-full text-center overflow-y-scroll  flex flex-col gap-1;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  @apply hidden;
+}
+
+.react-calendar__month-view__days button {
+  @apply h-[100px] p-0;
+}

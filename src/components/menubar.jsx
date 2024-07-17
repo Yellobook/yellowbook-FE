@@ -12,12 +12,14 @@ export default function MenuBar() {
   return (
     <>
       <div
-        className={`absolute top-0 left-0 h-full w-[20%] bg-white p-5 transform ${
+        className={`absolute top-0 left-0 h-full ${
+          isUserMobile ? "w-full" : "w-[20%]"
+        } bg-white p-5 transform ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out z-50 flex flex-col gap-5 shadow-lg`}
       >
         <XMarkIcon
-          className="size-6 self-end iconHover"
+          className="size-8 self-end iconHover"
           onClick={() => setIsMenuOpen(false)}
         />
         <img alt="logo" src="./logo.png" className="w-10" />
