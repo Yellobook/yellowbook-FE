@@ -1,9 +1,4 @@
-import {
-  Bars3Icon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  XMarkIcon,
-} from "@heroicons/react/16/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
 import { useRecoilValue } from "recoil";
 import { isMobile } from "../atom";
 import { useState } from "react";
@@ -12,11 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSubmenuOpen, setIsSubMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const onSubmenu = () => {
-    setIsSubMenuOpen((prev) => !prev);
-  };
 
   return (
     <>
@@ -51,40 +42,14 @@ export default function MenuBar() {
           >
             캘린더
           </li>
-          <li>
-            <div onClick={onSubmenu} className="flex justify-between menuBtn">
-              <span>재고현황관리</span>
-              {isSubmenuOpen ? (
-                <ChevronUpIcon className="size-6" />
-              ) : (
-                <ChevronDownIcon className="size-6" />
-              )}
-            </div>
-
-            <div
-              className={`ml-4 transition-max-height duration-300 ease-in-out overflow-hidden ${
-                isSubmenuOpen ? "max-h-40" : "max-h-0"
-              }`}
-            >
-              <div
-                className="menuBtn px-7 text-neutral-400 cursor-pointer"
-                onClick={() => {
-                  navigate("/manage-inventory");
-                  setIsMenuOpen(false);
-                }}
-              >
-                재고 게시글
-              </div>
-              <div
-                className="menuBtn px-7 text-neutral-400 cursor-pointer"
-                onClick={() => {
-                  navigate("/manage-inventory");
-                  setIsMenuOpen(false);
-                }}
-              >
-                제품 생성 / 수정
-              </div>
-            </div>
+          <li
+            onClick={() => {
+              navigate("/manage-inventory");
+              setIsMenuOpen(false);
+            }}
+            className="menuBtn"
+          >
+            재고현황관리
           </li>
           <li
             className="menuBtn"
