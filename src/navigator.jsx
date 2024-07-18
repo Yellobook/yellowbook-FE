@@ -13,7 +13,7 @@ export default function Navigator() {
           <Outlet />
         </div>
       ) : (
-        <div className="px-10 py-7">
+        <div className="lg:px-96 px-24 py-7">
           <Outlet />
         </div>
       )}

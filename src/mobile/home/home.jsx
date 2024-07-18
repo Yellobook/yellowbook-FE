@@ -1,5 +1,4 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
-import Calendar from "react-calendar";
 import ReactCalendar from "../../components/calendar";
 
 export default function MobileHome() {
