@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 export default function EventLists({ listProps }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 py-5">
       {listProps
         ? listProps.map((prop, i) => {
             return (

@@ -6,7 +6,7 @@ import MenuBar from "./components/menubar";
 export default function Navigator() {
   const isUserMobile = useRecoilValue(isMobile);
   return (
-    <div>
+    <div className="">
       <MenuBar />
       {isUserMobile ? (
         <div className="px-5 py-3">
