@@ -4,13 +4,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
-import OrderContainer from "./mobile/calendar/order";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RecoilRoot>
-      <OrderContainer />
+      <App />
     </RecoilRoot>
   </React.StrictMode>
 );
