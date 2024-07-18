@@ -9,9 +9,34 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "gmarket-light";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gmarket-bold";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer utilities {
   body {
     @apply font-gmarket;
+  }
+
+  .gmarketBold {
+    font-family: gmarket-bold;
+  }
+
+  .gmarketLight {
+    font-family: gmarket-light;
   }
 }
 
