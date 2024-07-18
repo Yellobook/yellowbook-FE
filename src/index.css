@@ -52,4 +52,8 @@
   .iconHover {
     @apply p-1 cursor-pointer hover:bg-yellow rounded-full;
   }
+
+  .checkbox {
+    @apply appearance-none checked:bg-orange checked:border-none size-4 border-neutral-400 border-[1px] checked:ring-1 ring-orange ring-offset-1 rounded-full;
+  }
 }

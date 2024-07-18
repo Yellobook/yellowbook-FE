@@ -17,6 +17,8 @@ import { useRecoilState } from "recoil";
 import { isMobile } from "./atom";
 import DesktopAbout from "./desktop/about/about";
 import MobileAbout from "./mobile/about/about";
+import MobileTerm from "./mobile/login/term";
+import DesktopTerm from "./desktop/login/term";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -38,6 +40,7 @@ const DesktopRouter = createBrowserRouter([
     ],
   },
   { path: "/login", element: <DesktopLogin /> },
+  { path: "/login/term", element: <DesktopTerm /> },
 ]);
 
 const MobileRouter = createBrowserRouter([
@@ -54,6 +57,7 @@ const MobileRouter = createBrowserRouter([
     ],
   },
   { path: "/login", element: <MobileLogin /> },
+  { path: "/login/term", element: <MobileTerm /> },
 ]);
 
 function App() {
