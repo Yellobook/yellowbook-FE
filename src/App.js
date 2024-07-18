@@ -27,7 +27,7 @@ const isMobileDevice = () => {
 const DesktopRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Navigator isMobile={false} />,
+    element: <Navigator />,
     children: [
       { path: "/", element: <DesktopHome /> },
       { path: "/calendar", element: <DestkopCalendar /> },
@@ -43,7 +43,7 @@ const DesktopRouter = createBrowserRouter([
 const MobileRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Navigator isMobile={true} />,
+    element: <Navigator />,
     children: [
       { path: "/", element: <MobileHome /> },
       { path: "/calendar", element: <MobileCalendar /> },
