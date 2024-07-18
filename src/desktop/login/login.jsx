@@ -4,7 +4,7 @@ import logo2 from "../../assets/logo2.png";
 
 export default function DesktopLogin() {
   return (
-    <div className="lg:px-96 px-24 py-7 flex flex-col justify-center items-center h-[100vh] gap-5 lg:gap-10">
+    <div className="lg:px-96 px-24 py-7 flex flex-col justify-center items-center gap-5 lg:gap-10">
       <div className="gmarketBold text-orange text-[40px] tracking-widest">
         YELLOBOOK 에 오신 것을 환영합니다!
       </div>

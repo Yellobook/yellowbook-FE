@@ -56,4 +56,31 @@
   .checkbox {
     @apply appearance-none checked:bg-orange checked:border-none size-4 border-neutral-400 border-[1px] checked:ring-1 ring-orange ring-offset-1 rounded-full;
   }
+
+  .pageTitle {
+    @apply gmarketBold text-[40px] text-center text-orange tracking-widest;
+  }
+
+  .pageDesktopContainer {
+    @apply lg:px-96 px-24 py-7 flex flex-col justify-center items-center gap-5 lg:gap-10;
+  }
+
+  .createTeamFormContainer {
+    @apply border-yellow border-2 px-6 w-[510px] lg:w-[700px] rounded-3xl flex flex-col justify-around items-center h-[500px] py-10;
+  }
+
+  .selectMode {
+    @apply bg-yellow bg-opacity-45;
+  }
+
+  .mode {
+    @apply border-2 border-yellow w-40 py-6 rounded-xl cursor-pointer;
+  }
+
+  .companyInfoInput {
+    @apply border-2 border-yellow w-[180px] px-2 focus:outline-none focus:border-orange;
+  }
+}
+input {
+  margin: 0.4rem;
 }

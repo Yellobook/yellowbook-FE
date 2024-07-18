@@ -21,6 +21,8 @@ import MobileTerm from "./mobile/login/term";
 import DesktopTerm from "./desktop/login/term";
 import DesktopLoginLayout from "./desktop/login/desktopLoginLayout";
 import MobileLoginLayout from "./mobile/login/mobileLoginLayout";
+import DesktopCreateTeam from "./desktop/login/create-team";
+import MobileCreateTeam from "./mobile/login/create-team";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -47,6 +49,7 @@ const DesktopRouter = createBrowserRouter([
     children: [
       { path: "/login", element: <DesktopLogin /> },
       { path: "/login/term", element: <DesktopTerm /> },
+      { path: "/login/create-team", element: <DesktopCreateTeam /> },
     ],
   },
 ]);
@@ -70,6 +73,7 @@ const MobileRouter = createBrowserRouter([
     children: [
       { path: "/login", element: <MobileLogin /> },
       { path: "/login/term", element: <MobileTerm /> },
+      { path: "/login/create-team", element: <MobileCreateTeam /> },
     ],
   },
 ]);

@@ -26,13 +26,11 @@ export default function DesktopTerm() {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 3000));
     alert("약관에 모두 동의하셨습니다!");
-    navigate("/create-team");
+    navigate("/login/create-team");
   };
   return (
     <div className="lg:px-96 px-24 py-12">
-      <div className="gmarketBold text-[30px] text-center text-orange tracking-widest">
-        회원가입 약관 동의
-      </div>
+      <div className="pageTitle">회원가입 약관 동의</div>
       <div className="gmarketLight text-center">
         나를 관리하고 함께 소통하는 옐로우북에 필요한 3개의 약관입니다!
       </div>
