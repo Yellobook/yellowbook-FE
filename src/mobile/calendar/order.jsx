@@ -149,7 +149,7 @@ const DropDown = ({ width, height, size, hint, color, weight }) => {
   );
 };
 
-const Text = ({ color, size, weight, children }) => {
+export const Text = ({ color, size, weight, children }) => {
   const textStyle = {
     fontSize: size,
     color: color,
