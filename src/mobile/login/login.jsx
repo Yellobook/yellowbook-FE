@@ -1,9 +1,10 @@
 import kakao from "../../assets/login/kakao.svg";
 import naver from "../../assets/login/navaer.svg";
+import logo2 from "../../assets/logo2.png";
 
 export default function MobileLogin() {
   return (
-    <div className="px-10 flex flex-col justify-center items-center gap-5 h-screen">
+    <div className="px-10 flex flex-col justify-start py-4 items-center gap-5">
       <div className="gmarketBold text-orange text-[23px] tracking-widest text-center">
         YELLOBOOK에 오신 것을 환영합니다!
       </div>
@@ -15,7 +16,7 @@ export default function MobileLogin() {
       </div>
 
       <div className="flex flex-col justfiy-center items-center">
-        <img src="./logo2.png" alt="logo2" className="w-[200px]" />
+        <img src={logo2} alt="logo2" className="w-[200px]" />
         <div className="text-orange underline-offset-2 underline">
           옐로우북 이용가이드 바로가기
         </div>

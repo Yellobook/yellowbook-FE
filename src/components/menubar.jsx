@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import { isMobile } from "../atom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
@@ -22,7 +23,7 @@ export default function MenuBar() {
           className="size-8 self-end iconHover"
           onClick={() => setIsMenuOpen(false)}
         />
-        <img alt="logo" src="./logo.png" className="w-10" />
+        <img alt="logo" src={logo} className="w-10" />
         <div className="text-2xl font-bold">Username 님!</div>
 
         <ul>
@@ -80,7 +81,7 @@ export default function MenuBar() {
           onClick={() => setIsMenuOpen(true)}
         />
         <div className="flex items-center gap-1">
-          <img alt="logo" src="./logo.png" className="w-9" />
+          <img alt="logo" src={logo} className="w-9" />
           {isUserMobile ? null : (
             <span className="text-orange">Yello Book</span>
           )}
