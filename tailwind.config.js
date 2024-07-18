@@ -10,6 +10,9 @@ module.exports = {
         subOrange: "#FF7008",
         subGreen: "#15E4CB",
       },
+      screens: {
+        lg: "1375px",
+      },
     },
     fontFamily: {
       gmarket: ["gmarket"],

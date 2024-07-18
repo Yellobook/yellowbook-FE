@@ -16,7 +16,7 @@ export default function MenuBar() {
           isUserMobile ? "w-full" : "w-[20%]"
         } bg-white p-5 transform ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 flex flex-col gap-5 shadow-lg`}
+        } transition-transform duration-300 ease-in-out z-50 flex flex-col gap-5 shadow-lg overflow-hidden`}
       >
         <XMarkIcon
           className="size-8 self-end iconHover"
