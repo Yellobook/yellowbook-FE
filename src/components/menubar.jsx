@@ -82,7 +82,7 @@ export default function MenuBar() {
         <div className="flex items-center gap-1">
           <img alt="logo" src="./logo.png" className="w-9" />
           {isUserMobile ? null : (
-            <span className="text-orange">Yellow Book</span>
+            <span className="text-orange">Yello Book</span>
           )}
         </div>
       </div>
