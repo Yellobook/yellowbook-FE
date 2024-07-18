@@ -19,6 +19,8 @@ import DesktopAbout from "./desktop/about/about";
 import MobileAbout from "./mobile/about/about";
 import MobileTerm from "./mobile/login/term";
 import DesktopTerm from "./desktop/login/term";
+import DesktopLoginLayout from "./desktop/login/desktopLoginLayout";
+import MobileLoginLayout from "./mobile/login/mobileLoginLayout";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -39,8 +41,14 @@ const DesktopRouter = createBrowserRouter([
       { path: "/about", element: <DesktopAbout /> },
     ],
   },
-  { path: "/login", element: <DesktopLogin /> },
-  { path: "/login/term", element: <DesktopTerm /> },
+  {
+    path: "/login",
+    element: <DesktopLoginLayout />,
+    children: [
+      { path: "/login", element: <DesktopLogin /> },
+      { path: "/login/term", element: <DesktopTerm /> },
+    ],
+  },
 ]);
 
 const MobileRouter = createBrowserRouter([
@@ -56,8 +64,14 @@ const MobileRouter = createBrowserRouter([
       { path: "/about", element: <MobileAbout /> },
     ],
   },
-  { path: "/login", element: <MobileLogin /> },
-  { path: "/login/term", element: <MobileTerm /> },
+  {
+    path: "/login",
+    element: <MobileLoginLayout />,
+    children: [
+      { path: "/login", element: <MobileLogin /> },
+      { path: "/login/term", element: <MobileTerm /> },
+    ],
+  },
 ]);
 
 function App() {

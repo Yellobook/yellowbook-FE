@@ -1,16 +1,17 @@
 import kakao from "../../assets/login/kakao.svg";
 import naver from "../../assets/login/navaer.svg";
+import logo2 from "../../assets/logo2.png";
 
 export default function DesktopLogin() {
   return (
-    <div className="lg:px-96 px-24 py-7 flex flex-col justify-center items-center h-[100vh] gap-10">
+    <div className="lg:px-96 px-24 py-7 flex flex-col justify-center items-center h-[100vh] gap-5 lg:gap-10">
       <div className="gmarketBold text-orange text-[40px] tracking-widest">
         YELLOBOOK 에 오신 것을 환영합니다!
       </div>
 
       <div className="flex lg:flex-row flex-col items-center justify-center gap-5">
         <div className="flex flex-col items-center gap-3 text-orange underline underline-offset-4 cursor-pointer">
-          <img src="./logo2.png" alt="logo3D" className="bg-white size-96" />
+          <img src={logo2} alt="logo3D" className="bg-white size-96" />
           <div>옐로우북 이용가이드 바로가기</div>
         </div>
 

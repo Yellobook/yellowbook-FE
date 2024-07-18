@@ -29,7 +29,7 @@ export default function DesktopTerm() {
     navigate("/create-team");
   };
   return (
-    <div className="lg:px-96 px-24 py-7 h-[100vh] flex flex-col justify-center">
+    <div className="lg:px-96 px-24 py-12">
       <div className="gmarketBold text-[30px] text-center text-orange tracking-widest">
         회원가입 약관 동의
       </div>
