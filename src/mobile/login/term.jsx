@@ -26,7 +26,7 @@ export default function MobileTerm() {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 3000));
     alert("약관에 모두 동의하셨습니다!");
-    navigate("/create-team");
+    navigate("/login/create-team");
   };
   return (
     <div className="px-3 py-7 flex flex-col justify-center">
