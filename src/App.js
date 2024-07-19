@@ -10,6 +10,7 @@ import DestkopCalendar from "./desktop/calendar/calendar";
 import DesktopManageInventory from "./desktop/manage-inventory/magage-inventory";
 import DesktopCheckInventory from "./desktop/check-inventory/check-inventory";
 import DesktopMyPage from "./desktop/mypage/mypage";
+import DesktopExitTeam from './desktop/mypage/ExitTeam';
 import DesktopLogin from "./desktop/login/login";
 import Navigator from "./navigator";
 import { useEffect } from "react";
@@ -17,6 +18,12 @@ import { useRecoilState } from "recoil";
 import { isMobile } from "./atom";
 import DesktopAbout from "./desktop/about/about";
 import MobileAbout from "./mobile/about/about";
+import MobileTerm from "./mobile/login/term";
+import DesktopTerm from "./desktop/login/term";
+import DesktopLoginLayout from "./desktop/login/desktopLoginLayout";
+import MobileLoginLayout from "./mobile/login/mobileLoginLayout";
+import DesktopCreateTeam from "./desktop/login/create-team";
+import MobileCreateTeam from "./mobile/login/create-team";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -27,23 +34,32 @@ const isMobileDevice = () => {
 const DesktopRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Navigator isMobile={false} />,
+    element: <Navigator />,
     children: [
       { path: "/", element: <DesktopHome /> },
       { path: "/calendar", element: <DestkopCalendar /> },
       { path: "/manage-inventory", element: <DesktopManageInventory /> },
       { path: "/check-inventory", element: <DesktopCheckInventory /> },
       { path: "/mypage", element: <DesktopMyPage /> },
+      { path: '/exitTeam', element: <DesktopExitTeam/>},
       { path: "/about", element: <DesktopAbout /> },
     ],
   },
-  { path: "/login", element: <DesktopLogin /> },
+  {
+    path: "/login",
+    element: <DesktopLoginLayout />,
+    children: [
+      { path: "/login", element: <DesktopLogin /> },
+      { path: "/login/term", element: <DesktopTerm /> },
+      { path: "/login/create-team", element: <DesktopCreateTeam /> },
+    ],
+  },
 ]);
 
 const MobileRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Navigator isMobile={true} />,
+    element: <Navigator />,
     children: [
       { path: "/", element: <MobileHome /> },
       { path: "/calendar", element: <MobileCalendar /> },
@@ -53,7 +69,15 @@ const MobileRouter = createBrowserRouter([
       { path: "/about", element: <MobileAbout /> },
     ],
   },
-  { path: "/login", element: <MobileLogin /> },
+  {
+    path: "/login",
+    element: <MobileLoginLayout />,
+    children: [
+      { path: "/login", element: <MobileLogin /> },
+      { path: "/login/term", element: <MobileTerm /> },
+      { path: "/login/create-team", element: <MobileCreateTeam /> },
+    ],
+  },
 ]);
 
 function App() {

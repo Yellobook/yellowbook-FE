@@ -1,43 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "../style/calendar.css";
 import dayjs from "dayjs";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { initEvents, isMobile } from "../atom";
+import EventLists from "./eventLists";
 
 const ReactCalendar = () => {
-  const events = [
-    {
-      date: new Date(2024, 6, 7),
-      title: [{ line: "제품 10개", color: "orange" }],
-    },
-    {
-      date: new Date(2024, 6, 20),
-      title: [
-        { line: "제품 10개", color: "yellow" },
-        { line: "제품 10개", color: "orange" },
-      ],
-    },
-    {
-      date: new Date(2024, 6, 29),
-      title: [{ line: "제품 10개", color: "yellow" }],
-    },
-  ];
-
+  const isUserMobile = useRecoilValue(isMobile);
+  const [events, setEvents] = useRecoilState(initEvents);
+  const [listProps, setListProps] = useState(null);
   const tileContent = ({ date, view }) => {
+    let event = [];
     if (view === "month") {
-      const event = events.find(
-        (e) => e.date.toDateString() === date.toDateString()
-      );
+      for (let i = 0; i < events.length; i++) {
+        if (events[i].date.toString() === date.toString()) {
+          event.push(events[i]);
+        }
+      }
+
       return event ? (
         <div className="event">
-          {event.title.map((t, index) => (
+          {event.map((e, i) => (
             <div
+              key={i}
               className=""
               style={{
-                backgroundColor: `${t.color}`,
+                backgroundColor: `${e.color}`,
               }}
-              key={index}
             >
-              {t.line}
+              {e.line}
             </div>
           ))}
         </div>
@@ -46,15 +38,33 @@ const ReactCalendar = () => {
     return null;
   };
 
+  const onClickDay = (value, event) => {
+    let temp = [];
+    for (let i = 0; i < event.target.children[1].children.length; i++) {
+      temp.push({
+        date: value,
+        title: event.target.children[1].children[i].innerText,
+        color: event.target.children[1].children[i].style.backgroundColor,
+      });
+    }
+
+    setListProps(temp);
+  };
+
   return (
-    <div className="calendar-container">
-      <Calendar
-        tileContent={tileContent}
-        defaultValue={new Date()}
-        formatDay={(locale, date) => dayjs(date).format("DD")}
-        formatMonthYear={(date) => dayjs(date).format("M월")}
-      />
-    </div>
+    <>
+      <div className="calendar-container flex flex-col">
+        <Calendar
+          tileContent={tileContent}
+          defaultValue={new Date()}
+          formatDay={(locale, date) => dayjs(date).format("DD")}
+          formatMonthYear={(locale, date) => dayjs(date).format("M월")}
+          onClickDay={onClickDay}
+        />
+      </div>
+
+      <EventLists listProps={listProps} />
+    </>
   );
 };
 

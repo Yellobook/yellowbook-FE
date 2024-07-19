@@ -9,6 +9,12 @@ module.exports = {
         gray: "#697675",
         subOrange: "#FF7008",
         subGreen: "#15E4CB",
+        customGray: "#97A5A4",
+        dateGray: "#00000080",
+        customGray1: "#97A5A499",
+      },
+      screens: {
+        lg: "1375px",
       },
     },
     fontFamily: {

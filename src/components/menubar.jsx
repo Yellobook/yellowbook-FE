@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import { isMobile } from "../atom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
@@ -12,17 +13,17 @@ export default function MenuBar() {
   return (
     <>
       <div
-        className={`absolute top-0 left-0 h-full ${
-          isUserMobile ? "w-full" : "w-[20%]"
+        className={`fixed top-0 left-0 h-full ${
+          isUserMobile ? "w-full" : "w-[300px]"
         } bg-white p-5 transform ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 flex flex-col gap-5 shadow-lg`}
+        } transition-transform duration-300 ease-in-out z-50 flex flex-col gap-5 shadow-lg overflow-hidden`}
       >
         <XMarkIcon
           className="size-8 self-end iconHover"
           onClick={() => setIsMenuOpen(false)}
         />
-        <img alt="logo" src="./logo.png" className="w-10" />
+        <img alt="logo" src={logo} className="w-10" />
         <div className="text-2xl font-bold">Username 님!</div>
 
         <ul>
@@ -80,9 +81,9 @@ export default function MenuBar() {
           onClick={() => setIsMenuOpen(true)}
         />
         <div className="flex items-center gap-1">
-          <img alt="logo" src="./logo.png" className="w-9" />
+          <img alt="logo" src={logo} className="w-9" />
           {isUserMobile ? null : (
-            <span className="text-orange">Yellow Book</span>
+            <span className="text-orange">Yello Book</span>
           )}
         </div>
       </div>
