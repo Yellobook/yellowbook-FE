@@ -95,24 +95,18 @@ function InventoryItem({ item }) {
         onClick={handleOpenModal}
       >
         <div className="font-bold font-gmarket">{item.date} 재고 현황</div>
-        
+
         <div className="flex justify-end items-center mt-1">
-          <div className="text-sm text-gray font-gmarket font-thin">
-            작성일자: {item.creationDate}
-          </div>
+          <div className="text-sm text-gray font-gmarket font-thin">작성일자: {item.creationDate}</div>
         </div>
-        
+
         <div className="flex justify-between items-center mt-1">
-          <div className="text-sm text-gray font-gmarket font-thin">
-            조회수: {item.views}
-          </div>
-          <div className="text-sm text-gray font-gmarket font-thin">
-            마지막 업데이트: {item.lastUpdated}
-          </div>
+          <div className="text-sm text-gray font-gmarket font-thin">조회수: {item.views}</div>
+          <div className="text-sm text-gray font-gmarket font-thin">마지막 업데이트: {item.lastUpdated}</div>
         </div>
       </div>
 
-      <InventoryDetails isOpen={isModalOpen} onClose={handleCloseModal}>
+      <InventoryDetails isOpen={isModalOpen} onClose={handleCloseModal} date={item.date}>
         <div>
           <strong>재고 현황 상세</strong>
           <p>날짜: {item.date}</p>
@@ -124,4 +118,5 @@ function InventoryItem({ item }) {
     </div>
   );
 }
+
 export default MobileManageInventory;
