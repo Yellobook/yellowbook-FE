@@ -5,19 +5,33 @@ import Logo from "../../assets/mobile/calendar/logo.png";
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const closeLogoutModal = () => {
+    setIsLogoutModalOpen(false);
   };
 
   const handleLogout = () => {
     // 로그아웃 로직 추가
-    closeModal();
+    closeLogoutModal();
+  };
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    // 회원 탈퇴 로직 추가
+    closeDeleteModal();
   };
 
   return (
@@ -91,27 +105,29 @@ const MyPage = () => {
           서비스 정보
         </div>
         <div
-          onClick={openModal}
+          onClick={openLogoutModal}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
           className="cursor-pointer border-b flex items-center p-2"
         >
           로그아웃
         </div>
         <div
+          onClick={openDeleteModal}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           회원 탈퇴
         </div>
       </div>
+      {/* 로그아웃 모달 */}
       <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
+        isOpen={isLogoutModalOpen}
+        onRequestClose={closeLogoutModal}
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
         className="bg-white rounded-lg w-72 text-center"
       >
         <div
-          onClick={closeModal}
+          onClick={closeLogoutModal}
           className="cursor-pointer flex justify-end mr-2"
         >
           x
@@ -119,7 +135,7 @@ const MyPage = () => {
         <h2>로그아웃 하시겠습니까 ?</h2>
         <div className="border-t flex pl-4 pr-4 justify-between mt-4">
           <button
-            onClick={closeModal}
+            onClick={closeLogoutModal}
             className="px-4 py-2 bg-gray-200 text-blue-500 rounded"
           >
             돌아가기
@@ -129,6 +145,39 @@ const MyPage = () => {
             className="px-4 py-2 bg-gray-200 text-red-500 rounded"
           >
             로그아웃
+          </button>
+        </div>
+      </Modal>
+      {/* 회원 가입 모달 */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onRequestClose={closeDeleteModal}
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+        className="bg-white rounded-lg w-72 text-center"
+      >
+        <div
+          onClick={closeDeleteModal}
+          className="cursor-pointer flex justify-end mr-2"
+        >
+          x
+        </div>
+        <h2>회원 탈퇴 하시겠습니까 ?</h2>
+        <div style={{ color: "#828282" }} className="p-3 text-xs">
+          회원 탈퇴시 계정 정보가 삭제되어 <br /> 복구가 불가능합니다.
+        </div>
+        <div>정말로 탈퇴하시겠습니까?</div>
+        <div className="border-t flex pl-4 pr-4 justify-between mt-4">
+          <button
+            onClick={closeDeleteModal}
+            className="px-4 py-2 bg-gray-200 text-blue-500 rounded"
+          >
+            돌아가기
+          </button>
+          <button
+            onClick={handleDelete}
+            className="px-4 py-2 bg-gray-200 text-red-500 rounded"
+          >
+            회원 탈퇴
           </button>
         </div>
       </Modal>
