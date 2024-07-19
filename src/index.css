@@ -66,7 +66,7 @@
   }
 
   .createTeamFormContainer {
-    @apply border-yellow border-2 px-6 w-[510px] lg:w-[700px] rounded-3xl flex flex-col justify-around items-center h-[500px] py-10;
+    @apply px-6 w-[510px] lg:w-[700px] flex flex-col justify-around items-center h-[500px] py-10;
   }
 
   .selectMode {
@@ -79,6 +79,10 @@
 
   .companyInfoInput {
     @apply border-2 border-yellow w-[180px] px-2 focus:outline-none focus:border-orange;
+  }
+
+  .formCard {
+    @apply h-full flex flex-col justify-between items-center py-10;
   }
 }
 input {
