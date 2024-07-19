@@ -10,6 +10,7 @@ import DestkopCalendar from "./desktop/calendar/calendar";
 import DesktopManageInventory from "./desktop/manage-inventory/magage-inventory";
 import DesktopCheckInventory from "./desktop/check-inventory/check-inventory";
 import DesktopMyPage from "./desktop/mypage/mypage";
+import DesktopExitTeam from './desktop/mypage/ExitTeam';
 import DesktopLogin from "./desktop/login/login";
 import Navigator from "./navigator";
 import { useEffect } from "react";
@@ -40,6 +41,7 @@ const DesktopRouter = createBrowserRouter([
       { path: "/manage-inventory", element: <DesktopManageInventory /> },
       { path: "/check-inventory", element: <DesktopCheckInventory /> },
       { path: "/mypage", element: <DesktopMyPage /> },
+      { path: '/exitTeam', element: <DesktopExitTeam/>},
       { path: "/about", element: <DesktopAbout /> },
     ],
   },

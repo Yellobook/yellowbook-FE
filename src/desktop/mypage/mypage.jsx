@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/mobile/calendar/logo.png"; // Ensure the path is correct
 
 const MyPage = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="flex justify-center space-x-12 items-center mt-4">
@@ -34,8 +36,9 @@ const MyPage = () => {
           멤버 권한 설정
         </div>
         <div
+          onClick={() => navigate("/exitTeam")}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           협업 팀 나가기
         </div>
