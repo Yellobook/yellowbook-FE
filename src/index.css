@@ -64,6 +64,9 @@
   .pageDesktopContainer {
     @apply lg:px-96 px-24 py-7 flex flex-col justify-center items-center gap-5 lg:gap-10;
   }
+  .pageMobileContainer {
+    @apply px-3 py-7 flex flex-col justify-center items-center gap-5;
+  }
 
   .createTeamFormContainer {
     @apply px-6 w-[510px] lg:w-[700px] flex flex-col justify-around items-center h-[500px] py-10;
@@ -73,12 +76,16 @@
     @apply bg-yellow bg-opacity-45;
   }
 
+  .mobileFormCard {
+    @apply flex flex-col justify-between h-full py-10 px-5;
+  }
+
   .mode {
     @apply border-2 border-yellow w-40 py-6 rounded-xl cursor-pointer;
   }
 
   .companyInfoInput {
-    @apply border-2 border-yellow w-[180px] px-2 focus:outline-none focus:border-orange;
+    @apply border-2 border-yellow w-[180px] px-2 focus:outline-none focus:border-orange rounded-xl h-7;
   }
 
   .formCard {
