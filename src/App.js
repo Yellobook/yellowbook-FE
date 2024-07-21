@@ -24,6 +24,8 @@ import DesktopLoginLayout from "./desktop/login/desktopLoginLayout";
 import MobileLoginLayout from "./mobile/login/mobileLoginLayout";
 import DesktopCreateTeam from "./desktop/login/create-team";
 import MobileCreateTeam from "./mobile/login/create-team";
+import DesktopEditInventory from "./desktop/manage-inventory/EditInventory";
+import DesktopPlusProduct from "./desktop/manage-inventory/PlusProduct";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -39,6 +41,8 @@ const DesktopRouter = createBrowserRouter([
       { path: "/", element: <DesktopHome /> },
       { path: "/calendar", element: <DestkopCalendar /> },
       { path: "/manage-inventory", element: <DesktopManageInventory /> },
+      { path: "/manage-inventory/edit", element:<DesktopEditInventory/>},
+      {path: "/manage-inventory/edit/plus", element:<DesktopPlusProduct/>},
       { path: "/check-inventory", element: <DesktopCheckInventory /> },
       { path: "/mypage", element: <DesktopMyPage /> },
       { path: '/exitTeam', element: <DesktopExitTeam/>},
