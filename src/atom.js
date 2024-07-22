@@ -30,3 +30,20 @@ export const initEvents = atom({
     },
   ],
 });
+
+export const teamBuild = atom({
+  key: "teamBuild",
+  default: {
+    teamName: "",
+    mode: "",
+    companyInfo: {
+      companyName: "",
+      companyNumber: "",
+      companyAddress: "",
+    },
+    user: {
+      userName: "username",
+      userEmail: "",
+    },
+  },
+});
