@@ -1,6 +1,6 @@
 import OrderContainer from "./order";
-import OrderCheck from "./orderer-check-order";
+import ManageCheckOrder from "./manage-check-order";
 
 export default function MobileCalendar() {
-  return <OrderCheck />;
+  return <ManageCheckOrder />;
 }
