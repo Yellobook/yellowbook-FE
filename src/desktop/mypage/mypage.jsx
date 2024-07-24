@@ -60,8 +60,9 @@ const MyPage = () => {
           팀원 초대하기
         </div>
         <div
+          onClick={() => alert("준비 중 입니다.")}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           멤버 권한 설정
         </div>
