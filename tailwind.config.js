@@ -15,6 +15,8 @@ module.exports = {
         customGray1: "#97A5A499",
         customGray2: "#97A5A450",
         borderGray: "#D9D9D9",
+        red: "#FF4D00",
+        lightblue: "#007AFF",
       },
       screens: {
         lg: "1375px",
