@@ -55,7 +55,7 @@ const MyPage = () => {
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           팀원 초대하기
         </div>
@@ -74,8 +74,9 @@ const MyPage = () => {
           협업 팀 나가기
         </div>
         <div
+          onClick={() => navigate("/login/create-team")}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           협업 팀 새로 생성
         </div>
@@ -83,25 +84,25 @@ const MyPage = () => {
       <div className="mt-20">
         <div
           style={{ color: "#FFAB08" }}
-          className="border-b text-xl flex items-center p-2"
+          className="cursor-pointer border-b text-xl flex items-center p-2"
         >
           이용 안내
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           문의하기
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           서비스 이용 약관
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           서비스 정보
         </div>
