@@ -14,6 +14,8 @@ module.exports = {
         dateGray: "#00000080",
         customGray1: "#97A5A499",
         borderGray: "#D9D9D9",
+        red: "#FF4D00",
+        lightblue: "#007AFF",
       },
       screens: {
         lg: "1375px",
