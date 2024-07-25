@@ -24,7 +24,7 @@ const ReactCalendar = () => {
           {event.map((e, i) => (
             <div
               key={i}
-              className=""
+              className="h-[15px] overflow-hidden"
               style={{
                 backgroundColor: `${e.color}`,
               }}
@@ -40,13 +40,15 @@ const ReactCalendar = () => {
 
   const onClickDay = (value, event) => {
     let temp = [];
-    for (let i = 0; i < event.target.children[1].children.length; i++) {
-      temp.push({
-        date: value,
-        title: event.target.children[1].children[i].innerText,
-        color: event.target.children[1].children[i].style.backgroundColor,
-      });
-    }
+    try {
+      for (let i = 0; i < event.target.children[1].children.length; i++) {
+        temp.push({
+          date: value,
+          title: event.target.children[1].children[i].innerText,
+          color: event.target.children[1].children[i].style.backgroundColor,
+        });
+      }
+    } catch (e) {}
 
     setListProps(temp);
   };
