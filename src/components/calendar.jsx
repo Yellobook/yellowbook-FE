@@ -24,7 +24,7 @@ const ReactCalendar = () => {
           {event.map((e, i) => (
             <div
               key={i}
-              className=""
+              className="h-[15px] overflow-hidden"
               style={{
                 backgroundColor: `${e.color}`,
               }}
