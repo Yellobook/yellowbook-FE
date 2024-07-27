@@ -21,6 +21,9 @@ module.exports = {
       screens: {
         lg: "1375px",
       },
+      maxWidth: {
+        'max': '18.1875rem',
+      }
     },
     fontFamily: {
       gmarket: ["gmarket"],

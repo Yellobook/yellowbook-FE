@@ -1,15 +1,33 @@
 import React, { useState } from "react";
 import { Text } from "./order"; // color, size, weight
-
+import Modal from "../../components/modal";
 export default function OrderCheckOrder() {
   // 버튼 비활성화
   const [cancleDisabled, setCancleDisabled] = useState(false);
+  // 모달
+  const [showModal, setShowModal] = useState(false);
 
-  // 주문 취소하기
+  // 모달 띄우기
+  const openModal = () => {
+    setShowModal(true);
+  }
+
+  // 모달 닫기
+  const closeModal = () => {
+    setShowModal(false);
+  }
+
+  // 주문 취소하기 -> 모달 띄우기
   const handleCancleClick = () => {
+    setShowModal(true);
     setCancleDisabled(true);
     console.log("주문 취소 클릭");
   };
+
+  // 주문 삭제 로직 추가하기 !!!!!!!!!!!!!!!!1
+  const handleOrderCancle = () => {
+    setShowModal(false);
+  }
 
   return (
     <div className="w-full p-0 m-0">
@@ -65,6 +83,16 @@ export default function OrderCheckOrder() {
       <hr className="border-yellow mt-[1.5rem] mb-[1rem]" />
       <Chat />
       <Comment />
+      {showModal && (
+        <Modal
+          title="주문을 취소하시겠습니까?"
+          content1="주문 취소는 관리자와 상의 후, 취소를 해주세요."
+          button1="돌아가기"
+          button2="주문 취소"
+          onClose={closeModal}
+          onClick={handleOrderCancle}
+          />
+      )}
     </div>
   );
 }
