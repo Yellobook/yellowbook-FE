@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
+import axios from "axios";
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const getProfile = async () => {
+    try {
+      const response = await axios.get(
+        "https://api.yellobook.site/api/v1/members/profile"
+      );
+      setProfile(response.data.data);
+    } catch (error) {
+      console.error("프로필 불러오기 중 오류 발생", error);
+    }
+  };
 
   const openLogoutModal = () => {
     setIsLogoutModalOpen(true);
@@ -37,16 +54,21 @@ const MyPage = () => {
   return (
     <div>
       <div className="flex justify-center space-x-12 items-center mt-4">
-        <img src={Logo} alt="Logo" className="border w-32 h-32 rounded-full" />
+        <img
+          src={profile ? profile.profileImage : Logo}
+          alt="profileImage"
+          className="border w-32 h-32 rounded-full"
+        />
         <div className="space-y-2">
           <div className="text-xl" style={{ color: "#FFAB08" }}>
-            nickName
+            {profile ? profile.nickname : "로딩 중..."}
           </div>
           <div style={{ color: "#697675" }}>관리자 | 딸기네 딸기농장</div>
           <div style={{ color: "#697675" }}>주문자 | 피그마 플라스틱 공장</div>
         </div>
       </div>
-      <div className="mt-20">
+      {/*협업 팀 관리*/}
+      <div className="mt-10">
         <div
           style={{ color: "#FFAB08" }}
           className="border-b text-xl flex items-center p-2"
@@ -55,13 +77,14 @@ const MyPage = () => {
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           팀원 초대하기
         </div>
         <div
+          onClick={() => alert("준비 중 입니다.")}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           멤버 권한 설정
         </div>
@@ -73,34 +96,36 @@ const MyPage = () => {
           협업 팀 나가기
         </div>
         <div
+          onClick={() => navigate("/login/create-team")}
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           협업 팀 새로 생성
         </div>
       </div>
-      <div className="mt-20">
+      {/*이용 안내*/}
+      <div className="mt-10">
         <div
           style={{ color: "#FFAB08" }}
-          className="border-b text-xl flex items-center p-2"
+          className="cursor-pointer border-b text-xl flex items-center p-2"
         >
           이용 안내
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           문의하기
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           서비스 이용 약관
         </div>
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="border-b flex items-center p-2"
+          className="cursor-pointer border-b flex items-center p-2"
         >
           서비스 정보
         </div>
