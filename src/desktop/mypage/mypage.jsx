@@ -46,7 +46,8 @@ const MyPage = () => {
           <div style={{ color: "#697675" }}>주문자 | 피그마 플라스틱 공장</div>
         </div>
       </div>
-      <div className="mt-20">
+      {/*협업 팀 관리*/}
+      <div className="mt-10">
         <div
           style={{ color: "#FFAB08" }}
           className="border-b text-xl flex items-center p-2"
@@ -81,7 +82,8 @@ const MyPage = () => {
           협업 팀 새로 생성
         </div>
       </div>
-      <div className="mt-20">
+      {/*이용 안내*/}
+      <div className="mt-10">
         <div
           style={{ color: "#FFAB08" }}
           className="cursor-pointer border-b text-xl flex items-center p-2"
