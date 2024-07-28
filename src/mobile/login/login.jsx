@@ -28,10 +28,13 @@ export default function MobileLogin() {
           <div>간편로그인</div>
           <div className="w-24 border-[1px] h-0 border-neutral-300" />
         </div>
-        <div className="gap-5 grid grid-cols-[1fr_4fr] px-8 rounded-xl bg-[#f6dd01] w-full cursor-pointer hover:bg-opacity-65 transition">
+        <Link
+          to="https://api.yellobook.site/oauth2/authorization/kakao"
+          className="gap-5 grid grid-cols-[1fr_4fr] px-8 rounded-xl bg-[#f6dd01] w-full cursor-pointer hover:bg-opacity-65 transition"
+        >
           <img src={kakao} alt="kakao" className="size-12" />
           <span className="flex items-center">카카오 로그인</span>
-        </div>
+        </Link>
         <div className="grid grid-cols-[1fr_4fr] gap-5 h-[48px] px-8 rounded-xl bg-[#03c63c] w-full cursor-pointer hover:bg-opacity-65 transition">
           <div className="flex items-center">
             <img src={naver} alt="naver" className="size-6 flex items-center" />
