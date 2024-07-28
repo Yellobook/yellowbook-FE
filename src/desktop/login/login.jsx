@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import kakao from "../../assets/login/kakao.svg";
 import naver from "../../assets/login/navaer.svg";
 import logo2 from "../../assets/logo2.png";
 
 export default function DesktopLogin() {
   return (
-    <div className="lg:px-96 px-24 py-7 flex flex-col justify-center items-center gap-5 lg:gap-10">
+    <div className="lg:px-90 px-24 py-7 text-center flex flex-col justify-center items-center gap-5 lg:gap-10">
       <div className="gmarketBold text-orange text-[40px] tracking-widest">
         YELLOBOOK 에 오신 것을 환영합니다!
       </div>
@@ -29,10 +30,13 @@ export default function DesktopLogin() {
               <div>간편로그인</div>
               <div className="w-32 border-[1px] h-0 border-neutral-300" />
             </div>
-            <div className="flex gap-5 items-center justify-center rounded-xl bg-[#f6dd01] w-[200px] cursor-pointer hover:bg-opacity-65 transition">
+            <Link
+              to="https://api.yellobook.site/oauth2/authorization/kakao"
+              className="flex gap-5 items-center justify-center rounded-xl bg-[#f6dd01] w-[200px] cursor-pointer hover:bg-opacity-65 transition"
+            >
               <img src={kakao} alt="kakao" className="size-12" />
               <span>카카오 로그인</span>
-            </div>
+            </Link>
             <div className="flex gap-5 items-center justify-center rounded-xl bg-[#03c63c] w-[200px] h-12 cursor-pointer hover:bg-opacity-65 transition">
               <img src={naver} alt="naver" className="size-6" />
               <span className="text-white">네이버 로그인</span>
