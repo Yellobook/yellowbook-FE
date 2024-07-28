@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import kakao from "../../assets/login/kakao.svg";
 import naver from "../../assets/login/navaer.svg";
 import logo2 from "../../assets/logo2.png";
