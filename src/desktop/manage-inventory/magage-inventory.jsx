@@ -1,11 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { format } from "date-fns";
+import ko from "date-fns/locale/ko";
+
+const getTotalInventory = async ({ page, size }) => {
+  try {
+    const response = await axios.get(
+      `https://api.yellobook.site/api/v1/inventories?page=${page}&size=${size}`,
+      {}
+    );
+    return response.data.data.inventories;
+  } catch (error) {
+    console.error("전체 재고 현황 조회 중 오류 발생", error);
+  }
+};
 
 const DesktopManageInventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inventories, setInventories] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchInventories = async () => {
+      const inventories = await getTotalInventory({ page: 1, size: 5 });
+      setInventories(inventories);
+    };
+
+    fetchInventories();
+  }, []);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -45,6 +69,26 @@ const DesktopManageInventory = () => {
         className="cursor-pointer inline-block bg-yellow mt-10"
       >
         <span>api 연결 전 모달 버튼 예시</span>
+      </div>
+      <div className="mt-10">
+        {inventories?.map((inventory) => (
+          <div key={inventory.inventoryId} className="border-b py-4">
+            <h3 className="text-lg font-bold">{inventory.title}</h3>
+            <p className="text-xs text-gray-500">조회수: {inventory.view}</p>
+            <p className="text-xs text-gray-500">
+              작성일자:{" "}
+              {format(new Date(inventory.createdAt), "yyyy년 MM월 dd일", {
+                locale: ko,
+              })}
+            </p>
+            <p className="text-xs text-gray-500">
+              마지막 업데이트 일시:{" "}
+              {format(new Date(inventory.updatedAt), "yyyy년 MM월 dd일", {
+                locale: ko,
+              })}
+            </p>
+          </div>
+        ))}
       </div>
       <Modal
         isOpen={isModalOpen}
