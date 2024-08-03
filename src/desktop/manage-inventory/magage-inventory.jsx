@@ -50,11 +50,75 @@ const sampleData = {
   },
 };
 
+const dateInventorySampleData = {
+  isSuccess: true,
+  message: "요청이 성공적으로 처리되었습니다.",
+  data: {
+    products: [
+      {
+        productId: 1,
+        name: "row1",
+        subProduct: "red",
+        sku: 2018102,
+        purchasePrice: 100000,
+        salePrice: 150000,
+        amount: 5000,
+      },
+      {
+        productId: 2,
+        name: "row2",
+        subProduct: "123",
+        sku: 456,
+        purchasePrice: 456,
+        salePrice: 456,
+        amount: 650,
+      },
+      {
+        productId: 3,
+        name: "row3",
+        subProduct: "123",
+        sku: 456,
+        purchasePrice: 456,
+        salePrice: 456,
+        amount: 150,
+      },
+      {
+        productId: 4,
+        name: "row4",
+        subProduct: "123",
+        sku: 456,
+        purchasePrice: 456,
+        salePrice: 456,
+        amount: 100,
+      },
+      {
+        productId: 5,
+        name: "row5",
+        subProduct: "123",
+        sku: 456,
+        purchasePrice: 456,
+        salePrice: 456,
+        amount: 0,
+      },
+    ],
+  },
+};
+
 const DesktopManageInventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inventories, setInventories] = useState([]);
   const [selectedInventory, setSelectedInventory] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
+  const dateInventory = dateInventorySampleData.data.products;
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleClick = () => {
+    document.getElementById("fileInput").click();
+  };
 
   useEffect(() => {
     const fetchInventories = () => {
@@ -84,11 +148,26 @@ const DesktopManageInventory = () => {
         >
           재고 현황 게시글
         </div>
-        <div
-          style={{ backgroundColor: "#FFDE33" }}
-          className="cursor-pointer inline-block rounded p-1 pt-2 text-sm text-center"
-        >
-          + 파일 불러오기
+        <div>
+          <div
+            style={{ backgroundColor: "#FFDE33" }}
+            className="cursor-pointer inline-block rounded p-1 pt-2 text-sm text-center"
+            onClick={handleClick}
+          >
+            + 파일 불러오기
+          </div>
+          <input
+            id="fileInput"
+            type="file"
+            accept=".xlsx,.xls"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          {selectedFile && (
+            <p className="text-xs mt-2 text-gray">
+              선택된 파일: {selectedFile.name}
+            </p>
+          )}
         </div>
       </div>
       <p style={{ color: "#97A5A4" }} className="mt-6 text-xs">
@@ -142,7 +221,7 @@ const DesktopManageInventory = () => {
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-        className="bg-white rounded-lg w-72 text-center"
+        className="bg-white rounded-lg max-w-5xl w-auto max-h-full p-4 overflow-y-auto"
       >
         <div
           onClick={closeModal}
@@ -153,21 +232,73 @@ const DesktopManageInventory = () => {
         </div>
         {selectedInventory && (
           <>
-            <h2 style={{ color: "#FFAB08" }}>
+            <h2 className="text-center text-xl" style={{ color: "#FFAB08" }}>
               {format(
                 new Date(selectedInventory.createdAt),
                 "yyyy년 MM월 dd일"
               )}{" "}
               재고현황
             </h2>
-            <div className="p-4">표</div>
-            <button
-              onClick={() => navigate("/manage-inventory/edit")}
-              className="mb-5 p-2 rounded-md text-xs"
-              style={{ backgroundColor: "#FFDE33" }}
-            >
-              재고현황 수정하기
-            </button>
+            <div className="p-4 overflow-x-auto">
+              <table className="">
+                <thead>
+                  <tr className="text-gray">
+                    <th className="py-2 pr-20">제품이름</th>
+                    <th className="py-2 px-4">하위제품</th>
+                    <th className="py-2 px-4">SKU</th>
+                    <th className="py-2 px-4">기본단가</th>
+                    <th className="py-2 px-4">판매가</th>
+                    <th className="py-2 px-4">수량</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dateInventorySampleData.data.products.map((inventory) => (
+                    <tr className="text-center" key={inventory.productId}>
+                      <td className="py-2 pr-20 text-lg font-bold">
+                        {inventory.name}
+                      </td>
+                      <td className="py-2 px-4 text-gray">
+                        {inventory.subProduct}
+                      </td>
+                      <td className="py-2 px-4 text-gray">{inventory.sku}</td>
+                      <td className="py-2 px-4 text-gray">
+                        {inventory.purchasePrice.toLocaleString()}
+                      </td>
+                      <td className="py-2 px-4 text-gray">
+                        {inventory.salePrice.toLocaleString()}
+                      </td>
+                      <td className="py-2 px-4 text-gray">
+                        <div className="flex items-center">
+                          <span className="text-sm">
+                            {inventory.amount.toLocaleString()}
+                          </span>
+                          <div className="">
+                            <div
+                              style={{
+                                width: `${(inventory.amount / 5000) * 100}%`,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={() =>
+                  navigate(
+                    `/manage-inventory/edit?date=${selectedInventory.createdAt}&id=${selectedInventory.inventoryId}`
+                  )
+                }
+                className="mb-5 px-4 py-3 rounded-xl text-xs"
+                style={{ backgroundColor: "#FFDE33" }}
+              >
+                재고현황 수정하기
+              </button>
+            </div>
           </>
         )}
       </Modal>

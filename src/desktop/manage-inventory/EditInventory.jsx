@@ -1,12 +1,25 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { format } from "date-fns";
 
 const DesktopEditInventory = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const [date, setDate] = useState("");
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const idParams = params.get("id");
+    const dateParams = params.get("date");
+    setDate(format(dateParams, "yyyy년 MM월 dd일"));
+    setId(idParams);
+  }, [location.search]);
+
   return (
     <div>
       <div className="mt-10 inline-block border-b" style={{ color: "#FFAB08" }}>
-        YYYY년 MM월 DD일 재고현황
+        {date} 재고현황
       </div>
       <div className="flex justify-end">
         <button
