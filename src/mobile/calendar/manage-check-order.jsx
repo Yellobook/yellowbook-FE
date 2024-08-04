@@ -132,7 +132,7 @@ const Chat = () => {
 // 댓글 쓰기
 const Comment = () => {
   return (
-    <div className="fixed bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center">
+    <div className="fixed left-0 bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center justify-center">
       <div className="w-[22rem] h-[2.75rem] flex items-center border border-yellow rounded-[1.25rem] p-1">
         <input
           className="w-[18.75rem] h-[100%] placeholder-borderGray"
