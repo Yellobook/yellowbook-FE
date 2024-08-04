@@ -10,12 +10,12 @@ export default function OrderCheckOrder() {
   // 모달 띄우기
   const openModal = () => {
     setShowModal(true);
-  }
+  };
 
   // 모달 닫기
   const closeModal = () => {
     setShowModal(false);
-  }
+  };
 
   // 주문 취소하기 -> 모달 띄우기
   const handleCancleClick = () => {
@@ -27,7 +27,7 @@ export default function OrderCheckOrder() {
   // 주문 삭제 로직 추가하기 !!!!!!!!!!!!!!!!1
   const handleOrderCancle = () => {
     setShowModal(false);
-  }
+  };
 
   return (
     <div className="w-full p-0 m-0">
@@ -91,7 +91,7 @@ export default function OrderCheckOrder() {
           button2="주문 취소"
           onClose={closeModal}
           onClick={handleOrderCancle}
-          />
+        />
       )}
     </div>
   );
@@ -148,7 +148,7 @@ const Chat = () => {
 // 댓글 쓰기
 const Comment = () => {
   return (
-    <div className="fixed bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center">
+    <div className="fixed left-0 bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center justify-center">
       <div className="w-[22rem] h-[2.75rem] flex items-center border border-yellow rounded-[1.25rem] p-1">
         <input
           className="w-[18.75rem] h-[100%] placeholder-borderGray"

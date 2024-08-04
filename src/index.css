@@ -95,3 +95,20 @@
 input {
   margin: 0.4rem;
 }
+
+.mentions-input-custom textarea {
+  padding-left: 5px; 
+}
+.mentions-mention {
+  background-color: rgba(0, 126, 255, 0.1);
+  padding: 2px;
+}
+
+.mentions__suggestions__item--focused {
+  background-color: rgba(0, 126, 255, 0.3);
+}
+
+.mention--focused {
+  background-color: #ccc !important;
+}
+
