@@ -1,9 +1,16 @@
+import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function DesktopTerm() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [tempToken] = useSearchParams();
+  console.log(tempToken.get("token"));
+
+  const [cookie, setCookie] = useCookies(["token"]);
+
   const agreeAll = (e) => {
     const term1 = document.getElementById("term-1");
     const term2 = document.getElementById("term-2");
@@ -23,10 +30,23 @@ export default function DesktopTerm() {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    alert("약관에 모두 동의하셨습니다!");
-    navigate("/login/create-team");
+    await axios
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/auth/terms`,
+        {
+          token: tempToken.get("token"),
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        setCookie("accessToken", res.data.data.accessToken);
+        setCookie("refreshToken", res.data.data.refreshToken);
+      })
+      .catch((e) => console.log(e));
+    // setIsLoading(true);
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // alert("약관에 모두 동의하셨습니다!");
+    // navigate("/login/create-team");
   };
   return (
     <div className="lg:px-96 px-24 py-12">

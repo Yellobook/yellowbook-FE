@@ -37,10 +37,13 @@ export default function DesktopLogin() {
               <img src={kakao} alt="kakao" className="size-12" />
               <span>카카오 로그인</span>
             </Link>
-            <div className="flex gap-5 items-center justify-center rounded-xl bg-[#03c63c] w-[200px] h-12 cursor-pointer hover:bg-opacity-65 transition">
+            <Link
+              to="https://api.yellobook.site/oauth2/authorization/naver"
+              className="flex gap-5 items-center justify-center rounded-xl bg-[#03c63c] w-[200px] h-12 cursor-pointer hover:bg-opacity-65 transition"
+            >
               <img src={naver} alt="naver" className="size-6" />
               <span className="text-white">네이버 로그인</span>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
