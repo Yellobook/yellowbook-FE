@@ -7,6 +7,7 @@ import MobileMyPage from "./mobile/mypage/mypage";
 import MobileLogin from "./mobile/login/login";
 import DesktopHome from "./desktop/home/home";
 import DestkopCalendar from "./desktop/calendar/calendar";
+import DesktopNotice from "./desktop/calendar/notice";
 import DesktopManageInventory from "./desktop/manage-inventory/magage-inventory";
 import DesktopCheckInventory from "./desktop/check-inventory/check-inventory";
 import DesktopMyPage from "./desktop/mypage/mypage";
@@ -40,6 +41,7 @@ const DesktopRouter = createBrowserRouter([
     children: [
       { path: "/", element: <DesktopHome /> },
       { path: "/calendar", element: <DestkopCalendar /> },
+      { path: "/notice", element:<DesktopNotice/>},
       { path: "/manage-inventory", element: <DesktopManageInventory /> },
       { path: "/manage-inventory/edit", element:<DesktopEditInventory/>},
       {path: "/manage-inventory/edit/plus", element:<DesktopPlusProduct/>},
