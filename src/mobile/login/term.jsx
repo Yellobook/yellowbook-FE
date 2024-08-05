@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getCookies } from "../../util/LoginUtils.ts";
+import { getCookies } from "../../util/LoginUtils.js";
 
 export default function MobileTerm() {
   const navigate = useNavigate();

@@ -19,7 +19,7 @@ import { useCookies } from "react-cookie";
 //     .catch((e) => console.log(e));
 // };
 
-export async function getCookies(tempToken: string) {
+export async function getCookies(tempToken) {
   await axios
     .post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/auth/terms`,
