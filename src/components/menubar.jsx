@@ -75,6 +75,15 @@ export default function MenuBar() {
           <li
             className="menuBtn"
             onClick={() => {
+              navigate("/notice");
+              setIsMenuOpen(false);
+            }}
+          >
+            공지사항
+          </li>
+          <li
+            className="menuBtn"
+            onClick={() => {
               navigate("/login");
               setIsMenuOpen(false);
             }}
