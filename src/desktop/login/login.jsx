@@ -1,9 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import kakao from "../../assets/login/kakao.svg";
 import naver from "../../assets/login/navaer.svg";
 import logo2 from "../../assets/logo2.png";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 export default function DesktopLogin() {
+  const [cookie] = useCookies(["token"]);
+  const navigate = useNavigate("/");
+  // useEffect(() => {
+  //   const token = localStorage.getItem("accessToken");
+  //   console.log(token);
+  //   if (token) {
+  //     localStorage.setItem("accessToken", cookie.accessToken);
+  //     localStorage.setItem("refreshToken", cookie.accessToken);
+  //     navigate("/");
+  //   }
+  // }, []);
   return (
     <div className="lg:px-90 px-24 py-7 text-center flex flex-col justify-center items-center gap-5 lg:gap-10">
       <div className="gmarketBold text-orange text-[40px] tracking-widest">
