@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getCookies } from "../../util/LoginUtils.ts";
 
 export default function MobileTerm() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [tempToken] = useSearchParams();
+
   const agreeAll = (e) => {
     const term1 = document.getElementById("term-1");
     const term2 = document.getElementById("term-2");
@@ -23,10 +26,17 @@ export default function MobileTerm() {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    alert("약관에 모두 동의하셨습니다!");
-    navigate("/login/create-team");
+    let err;
+    try {
+      await getCookies(tempToken.get("token"));
+    } catch (e) {
+      err = e;
+      console.log(e);
+    } finally {
+      if (localStorage.getItem("accessToken") && !err) {
+        navigate("/");
+      }
+    }
   };
   return (
     <div className="px-3 py-7 flex flex-col justify-center">
