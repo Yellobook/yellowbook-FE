@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { getCookies } from "../../util/LoginUtils.ts";
+import { getCookies } from "../../util/LoginUtils.js";
 
 export default function DesktopTerm() {
   const navigate = useNavigate();
