@@ -1,10 +1,38 @@
 import React, { useState } from "react";
+import axios from "axios";
+
+const chatSampleData = [
+  {
+    id: 1,
+    author: "생산자",
+    message: "20일까지 20개는 불가할 것 같아요! 15개로 정정해주세요",
+    time: "시간",
+  },
+  {
+    id: 2,
+    author: "주문자",
+    message: "네, 확인했어요~",
+    time: "시간",
+  },
+];
 
 const DesktopCheckInventory = () => {
   const [product, setProduct] = useState("");
   const [subProduct, setSubProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const [memo, setMemo] = useState("");
+
+  // todo : orderId 넣어서 하는거로 바꿔야 됨
+  const correctOrder = async () => {
+    try {
+      await axios.post(
+        `https://api.yellobook.site/api/v1/orders/orderId/correction`
+      );
+    } catch (error) {
+      console.error("주문 정정 요청 중 오류 발생", error);
+    }
+  };
+
   return (
     <div>
       {/* 제목 */}
@@ -72,7 +100,10 @@ const DesktopCheckInventory = () => {
           />
         </div>
         <div className="flex justify-between mt-6">
-          <button className="bg-yellowDisable px-20 py-3 rounded-xl">
+          <button
+            onClick={correctOrder()}
+            className="bg-yellowDisable px-20 py-3 rounded-xl"
+          >
             주문 정정 요청
           </button>
           <button className="bg-yellow px-20 py-3 rounded-xl">
@@ -82,38 +113,19 @@ const DesktopCheckInventory = () => {
       </div>
       {/* 댓글 */}
       <div className="mt-6">
-        <div
-          style={{ borderColor: "#D9D9D9" }}
-          className="py-3 pl-3 pr-3 rounded border flex flex-row justify-between items-start relative"
-        >
-          <div className="mr-8">생산자</div>
-          <div className="flex-1">
-            20일까지 20개는 불가할 것 같아요! <br />
-            15개로 정정해주세요
+        {chatSampleData.map((chat) => (
+          <div
+            key={chat.id}
+            style={{ borderColor: "#D9D9D9" }}
+            className="py-3 pl-3 pr-3 rounded border flex relative"
+          >
+            <div className="mr-8">{chat.author}</div>
+            <div className="flex-1">{chat.message}</div>
+            <div className="absolute bottom-1 right-3 text-gray text-xs">
+              {chat.time}
+            </div>
           </div>
-          <div className="absolute bottom-1 right-3 text-gray text-xs">
-            시간
-          </div>
-        </div>
-        <div
-          style={{ borderColor: "#D9D9D9" }}
-          className="py-3 pl-3 pr-3 rounded border flex flex-row justify-between items-start relative"
-        >
-          <div className="mr-8">주문자</div>
-          <div className="flex-1">네, 확인했어요~</div>
-          <div className="absolute bottom-1 right-3 text-gray text-xs">
-            시간
-          </div>
-        </div>
-      </div>
-      <div className="border-t mt-36">
-        <div className="border mt-6 border-yellow w-full rounded-3xl py-3 px-6 flex items-center">
-          <input
-            className="flex-grow bg-transparent border-none outline-none"
-            placeholder="댓글 쓰기"
-          />
-          <button className="ml-4 bg-yellow rounded-md px-8 py-2">입력</button>
-        </div>
+        ))}
       </div>
     </div>
   );

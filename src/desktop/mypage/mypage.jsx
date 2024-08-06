@@ -16,12 +16,22 @@ const MyPage = () => {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(
+      const getProfile_res = await axios.get(
         "https://api.yellobook.site/api/v1/members/profile"
       );
-      setProfile(response.data.data);
+      setProfile(getProfile_res.data.data);
     } catch (error) {
       console.error("프로필 불러오기 중 오류 발생", error);
+    }
+  };
+
+  const deactivateUser = async () => {
+    try {
+      const deactivateUser_res = await axios.post(
+        "https://api.yellobook.site/api/v1/auth/deactivate"
+      );
+    } catch (error) {
+      alert("회원 탈퇴 중 오류 발생", error);
     }
   };
 
@@ -47,7 +57,7 @@ const MyPage = () => {
   };
 
   const handleDelete = () => {
-    // 회원 탈퇴 로직 추가
+    deactivateUser();
     closeDeleteModal();
   };
 
@@ -173,7 +183,7 @@ const MyPage = () => {
           </button>
         </div>
       </Modal>
-      {/* 회원 가입 모달 */}
+      {/* 회원 탈퇴 달 */}
       <Modal
         isOpen={isDeleteModalOpen}
         onRequestClose={closeDeleteModal}
@@ -182,7 +192,7 @@ const MyPage = () => {
       >
         <div
           onClick={closeDeleteModal}
-          className="cursor-pointer flex justify-end mr-2"
+          className="cursor-pointer flex text-gray justify-end mr-2"
         >
           x
         </div>
@@ -198,10 +208,7 @@ const MyPage = () => {
           >
             돌아가기
           </button>
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-gray-200 text-red-500 rounded"
-          >
+          <button onClick={handleDelete} className="px-4 py-2 text-red rounded">
             회원 탈퇴
           </button>
         </div>
