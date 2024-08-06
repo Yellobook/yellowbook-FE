@@ -9,7 +9,15 @@ export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-
+  const onLogout = async () => {
+    try {
+      if (localStorage.getItem("accessToken")) {
+        console.log(localStorage.getItem("accessToken"));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
       <div
