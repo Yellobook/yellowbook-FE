@@ -20,7 +20,7 @@ const DesktopPlusProduct = () => {
         amount: amount,
       });
     } catch (error) {
-      console.error("제품 추가 중 오류 발생", error);
+      alert("제품 추가 중 오류 발생", error);
     }
   };
 

@@ -29,7 +29,18 @@ const DesktopCheckInventory = () => {
         `https://api.yellobook.site/api/v1/orders/orderId/correction`
       );
     } catch (error) {
-      console.error("주문 정정 요청 중 오류 발생", error);
+      alert("주문 정정 요청 중 오류 발생", error);
+    }
+  };
+
+  // todo : parameter informId 추가해야 됨
+  const writeChat = async () => {
+    try {
+      await axios.post(`https://api.yellobook.site/api/v1/informs/1/comment`, {
+        content: "댓글",
+      });
+    } catch (error) {
+      alert("댓글 작성 중 오류 발생", error);
     }
   };
 
@@ -126,6 +137,20 @@ const DesktopCheckInventory = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div style={{ borderColor: "#d9d9d9" }} className="border-t mt-10">
+        <div className="border mt-6 border-yellow w-full rounded-3xl py-3 px-6 flex items-center">
+          <input
+            className="flex-grow bg-transparent border-none outline-none"
+            placeholder="댓글 쓰기"
+          />
+          <button
+            onClick={writeChat}
+            className="ml-4 bg-yellow rounded-md px-8 py-2"
+          >
+            입력
+          </button>
+        </div>
       </div>
     </div>
   );
