@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
 import axios from "axios";
+import { tr } from "date-fns/locale";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -16,12 +17,32 @@ const MyPage = () => {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(
+      const getProfile_res = await axios.get(
         "https://api.yellobook.site/api/v1/members/profile"
       );
-      setProfile(response.data.data);
+      setProfile(getProfile_res.data.data);
     } catch (error) {
       console.error("프로필 불러오기 중 오류 발생", error);
+    }
+  };
+
+  const deactivateUser = async () => {
+    try {
+      const deactivateUser_res = await axios.post(
+        "https://api.yellobook.site/api/v1/auth/deactivate"
+      );
+    } catch (error) {
+      alert("회원 탈퇴 중 오류 발생", error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const logout_res = await axios.post(
+        "https://api.yellobook.site/api/v1/auth/logout"
+      );
+    } catch (error) {
+      alert("로그아웃 중 오류 발생", error);
     }
   };
 
@@ -34,7 +55,7 @@ const MyPage = () => {
   };
 
   const handleLogout = () => {
-    // 로그아웃 로직 추가
+    logout();
     closeLogoutModal();
   };
 
@@ -47,7 +68,7 @@ const MyPage = () => {
   };
 
   const handleDelete = () => {
-    // 회원 탈퇴 로직 추가
+    deactivateUser();
     closeDeleteModal();
   };
 
@@ -149,15 +170,15 @@ const MyPage = () => {
         isOpen={isLogoutModalOpen}
         onRequestClose={closeLogoutModal}
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-        className="bg-white rounded-lg w-72 text-center"
+        className="bg-white rounded-sm w-72 text-center"
       >
         <div
           onClick={closeLogoutModal}
-          className="cursor-pointer flex justify-end mr-2"
+          className="cursor-pointer flex justify-end mr-2 text-gray"
         >
           x
         </div>
-        <h2>로그아웃 하시겠습니까 ?</h2>
+        <h2 className="py-6">로그아웃 하시겠습니까 ?</h2>
         <div className="border-t flex pl-4 pr-4 justify-between mt-4">
           <button
             onClick={closeLogoutModal}
@@ -167,22 +188,22 @@ const MyPage = () => {
           </button>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-gray-200 text-red-500 rounded"
+            className="px-4 py-2 bg-gray-200 text-red rounded"
           >
             로그아웃
           </button>
         </div>
       </Modal>
-      {/* 회원 가입 모달 */}
+      {/* 회원 탈퇴 달 */}
       <Modal
         isOpen={isDeleteModalOpen}
         onRequestClose={closeDeleteModal}
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-        className="bg-white rounded-lg w-72 text-center"
+        className="bg-white rounded-sm w-72 text-center"
       >
         <div
           onClick={closeDeleteModal}
-          className="cursor-pointer flex justify-end mr-2"
+          className="cursor-pointer flex text-gray justify-end mr-2"
         >
           x
         </div>
@@ -198,10 +219,7 @@ const MyPage = () => {
           >
             돌아가기
           </button>
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-gray-200 text-red-500 rounded"
-          >
+          <button onClick={handleDelete} className="px-4 py-2 text-red rounded">
             회원 탈퇴
           </button>
         </div>

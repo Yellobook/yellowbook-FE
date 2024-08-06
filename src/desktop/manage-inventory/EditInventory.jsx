@@ -10,7 +10,7 @@ const dateInventorySampleData = {
     products: [
       {
         productId: 1,
-        name: "row1",
+        name: "Row1",
         subProduct: "red",
         sku: 2018102,
         purchasePrice: 100000,
@@ -19,7 +19,7 @@ const dateInventorySampleData = {
       },
       {
         productId: 2,
-        name: "row2",
+        name: "Row2",
         subProduct: "123",
         sku: 456,
         purchasePrice: 456,
@@ -28,7 +28,7 @@ const dateInventorySampleData = {
       },
       {
         productId: 3,
-        name: "row3",
+        name: "Row3",
         subProduct: "123",
         sku: 456,
         purchasePrice: 456,
@@ -37,7 +37,7 @@ const dateInventorySampleData = {
       },
       {
         productId: 4,
-        name: "row4",
+        name: "Row4",
         subProduct: "123",
         sku: 456,
         purchasePrice: 456,
@@ -46,7 +46,7 @@ const dateInventorySampleData = {
       },
       {
         productId: 5,
-        name: "row5",
+        name: "Row5",
         subProduct: "123",
         sku: 456,
         purchasePrice: 456,
@@ -131,7 +131,7 @@ const DesktopEditInventory = () => {
         <table className="">
           <thead>
             <tr className="text-xs text-gray">
-              <th className="py-2 px-4">선택</th>
+              <th className="py-2 px-4"></th>
               <th className="py-2 px-4">제품이름</th>
               <th className="py-2 px-4">하위제품</th>
               <th className="py-2 px-4">SKU</th>
@@ -142,14 +142,19 @@ const DesktopEditInventory = () => {
           </thead>
           <tbody className="text-xs">
             {dateInventorySampleData.data.products.map((inventory) => (
-              <tr className="text-center" key={inventory.productId}>
+              <tr
+                className="text-center items-center"
+                key={inventory.productId}
+              >
                 <td>
                   <input
                     type="checkbox"
                     onChange={() => handleCheckboxChange(inventory.productId)}
                   />
                 </td>
-                <td className="py-2 font-bold">{inventory.name}</td>
+                <td className="py-2 text-black text-base font-bold">
+                  {inventory.name}
+                </td>
                 <td className="py-2 px-4 text-gray">{inventory.subProduct}</td>
                 <td className="py-2 px-4 text-gray">{inventory.sku}</td>
                 <td className="py-2 px-4 text-gray">
