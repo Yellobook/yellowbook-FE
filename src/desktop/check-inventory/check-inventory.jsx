@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { tr } from "date-fns/locale";
 
 const chatSampleData = [
   {
@@ -21,6 +22,8 @@ const DesktopCheckInventory = () => {
   const [subProduct, setSubProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const [memo, setMemo] = useState("");
+  const [correctBtnClicked, setCorrectBtnClicked] = useState(false);
+  const [checkBtnClicked, setCheckBtnClicked] = useState(false);
 
   // todo : orderId 넣어서 하는거로 바꿔야 됨
   const correctOrder = async () => {
@@ -42,6 +45,24 @@ const DesktopCheckInventory = () => {
     } catch (error) {
       alert("댓글 작성 중 오류 발생", error);
     }
+  };
+
+  const handleCorrectBtnClick = async () => {
+    try {
+      setCorrectBtnClicked(true);
+      await correctOrder();
+      setCorrectBtnClicked(false);
+    } catch (error) {
+      alert("주문 정정 요청 중 오류 발생", error);
+      setCorrectBtnClicked(false);
+    }
+  };
+
+  const handleCheckBtnClick = async () => {
+    setTimeout(() => {
+      setCheckBtnClicked(false);
+    }, 500);
+    setCheckBtnClicked(true);
   };
 
   return (
@@ -112,12 +133,19 @@ const DesktopCheckInventory = () => {
         </div>
         <div className="flex justify-between mt-6">
           <button
-            onClick={correctOrder()}
-            className="bg-yellowDisable px-20 py-3 rounded-xl"
+            onClick={handleCorrectBtnClick}
+            className={`px-20 py-3 rounded-xl ${
+              correctBtnClicked ? "bg-yellowDisable" : "bg-yellow"
+            }`}
           >
             주문 정정 요청
           </button>
-          <button className="bg-yellow px-20 py-3 rounded-xl">
+          <button
+            onClick={handleCheckBtnClick}
+            className={`px-20 py-3 rounded-xl ${
+              checkBtnClicked ? "bg-yellowDisable" : "bg-yellow"
+            }`}
+          >
             주문 확인하기
           </button>
         </div>
