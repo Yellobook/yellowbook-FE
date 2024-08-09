@@ -30,8 +30,8 @@ export async function getCookies(tempToken) {
     )
     .then((res) => {
       console.log(res.data.data);
-      localStorage.setItem("accessToken", res.data.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.data.refreshToken);
+      localStorage.setItem("accessToken", res.data.data.ac_t);
+      localStorage.setItem("refreshToken", res.data.data.rc_t);
     })
     .catch((e) => console.log(e));
 }
