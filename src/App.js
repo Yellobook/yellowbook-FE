@@ -61,6 +61,7 @@ const DesktopRouter = createBrowserRouter([
       { path: "/login/create-team", element: <DesktopCreateTeam /> },
     ],
   },
+  { path: "/loading", element: <Loading /> },
 ]);
 
 const MobileRouter = createBrowserRouter([
