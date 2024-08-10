@@ -43,11 +43,6 @@ export default function DesktopCreateTeam() {
       console.log(error);
       alert("정보를 확인해주세요");
     } finally {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setLoading(false);
-      alert("정보 입력에 성공했습니다.");
-      navigate("/");
     }
   };
 
