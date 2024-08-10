@@ -7,11 +7,10 @@ export async function MakeTeam(act, makeTeamProps) {
       {
         headers: { Authorization: `Bearer ${act}` },
       },
-      makeTeamProps,
-      { withCredentials: true }
+      makeTeamProps
     )
     .then((res) => {
       console.log(res.data.data);
     })
-    .catch((e) => console.log("여기가 에러!"));
+    .catch((e) => console.log("여기가 에러! makeTeam!", e));
 }
