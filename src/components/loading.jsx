@@ -19,7 +19,7 @@ export default function Loading() {
         navigate("");
       }
     }
-  }, []);
+  }, [localStorage, cookie]);
   return (
     <div className="h-screen flex items-center justify-center">
       <ScaleLoader color="#FFAB08" />
