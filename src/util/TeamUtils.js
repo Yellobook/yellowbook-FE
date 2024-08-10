@@ -5,7 +5,7 @@ export async function MakeTeam(act, makeTeamProps) {
     .post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/teams`,
       {
-        historyeaders: { Authorization: `Bearer ${act}` },
+        headers: { Authorization: `Bearer ${act}` },
       },
       makeTeamProps,
       { withCredentials: true }
