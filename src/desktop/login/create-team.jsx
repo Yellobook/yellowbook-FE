@@ -8,50 +8,38 @@ import "../../style/slider.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+import { MakeTeam } from "../../util/TeamUtils";
 
 export default function DesktopCreateTeam() {
   const [teamInfo, setTeamInfo] = useRecoilState(teamBuild);
   const [modeNum, setModeNum] = useState(0);
-  const [formPage, setFormPage] = useState(1);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // console.log(e);
     let tempInfo = teamInfo;
+
     try {
-      tempInfo = { ...tempInfo, teamName: e.target[0].value };
+      tempInfo = { ...tempInfo, name: e.target[0].value };
       if (e.target[2].checked) {
-        tempInfo = { ...tempInfo, mode: e.target[2].value };
+        tempInfo = { ...tempInfo, role: e.target[2].value };
       }
       if (e.target[3].checked) {
-        tempInfo = { ...tempInfo, mode: e.target[3].value };
+        tempInfo = { ...tempInfo, role: e.target[3].value };
       }
       if (e.target[4].checked) {
-        tempInfo = { ...tempInfo, mode: e.target[4].value };
+        tempInfo = { ...tempInfo, role: e.target[4].value };
       }
       tempInfo = {
         ...tempInfo,
-        companyInfo: {
-          companyName: e.target[5].value,
-          companyNumber: e.target[6].value,
-          companyAddress: e.target[7].value,
-        },
+        phoneNumber: e.target[6].value,
+        address: e.target[7].value,
       };
 
-      tempInfo = {
-        ...tempInfo,
-        user: {
-          userName: e.target[8].value,
-          userEmail: e.target[9].value,
-        },
-      };
-      setTeamInfo(tempInfo);
-      setIsSuccess(true);
+      console.log(tempInfo);
+      await MakeTeam(localStorage.getItem("accessToken"), tempInfo);
     } catch (error) {
-      setIsSuccess(false);
       console.log(error);
       alert("정보를 확인해주세요");
     } finally {
@@ -100,13 +88,13 @@ export default function DesktopCreateTeam() {
               <div className="flex items-center justify-center w-full">
                 <fieldset className="flex flex-col items-center text-center gap-5">
                   <label
-                    for="mode1"
+                    htmlFor="mode1"
                     className={`mode ${modeNum === 1 ? "selectMode" : ""}`}
                   >
                     <input
                       type="radio"
                       name="mode"
-                      value="관리자모드"
+                      value="ADMIN"
                       className="hidden"
                       id="mode1"
                       onClick={() => setModeNum(1)}
@@ -114,13 +102,13 @@ export default function DesktopCreateTeam() {
                     관리자 모드
                   </label>
                   <label
-                    for="mode2"
+                    htmlFor="mode2"
                     className={`mode ${modeNum === 2 ? "selectMode" : ""}`}
                   >
                     <input
                       type="radio"
                       name="mode"
-                      value="주문자모드"
+                      value="ORDER"
                       className="hidden"
                       id="mode2"
                       onClick={() => setModeNum(2)}
@@ -128,13 +116,13 @@ export default function DesktopCreateTeam() {
                     주문자 모드
                   </label>
                   <label
-                    for="mode3"
+                    htmlFor="mode3"
                     className={`mode ${modeNum === 3 ? "selectMode" : ""}`}
                   >
                     <input
                       type="radio"
                       name="mode"
-                      value="뷰어모드"
+                      value="VIEWER"
                       id="mode3"
                       className="hidden"
                       onClick={() => setModeNum(3)}
@@ -158,7 +146,7 @@ export default function DesktopCreateTeam() {
               <div className="flex items-center justify-center w-full">
                 <div className="flex flex-col">
                   <label
-                    for="companyName"
+                    htmlFor="companyName"
                     className="flex justify-between items-center"
                   >
                     회사/매장명
@@ -171,7 +159,7 @@ export default function DesktopCreateTeam() {
                   </label>
 
                   <label
-                    for="companyNumber"
+                    htmlFor="companyNumber"
                     className="flex justify-between items-center"
                   >
                     회사/매장 전화번호
@@ -184,7 +172,7 @@ export default function DesktopCreateTeam() {
                   </label>
 
                   <label
-                    for="companyAddress"
+                    htmlFor="companyAddress"
                     className="flex justify-between items-center"
                   >
                     회사/매장 주소
