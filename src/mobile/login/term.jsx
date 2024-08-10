@@ -31,7 +31,7 @@ export default function MobileTerm() {
       await getCookies(tempToken.get("token"));
     } catch (e) {
       err = e;
-      console.log(e);
+      console.log("제출시 에러!", e);
     } finally {
       if (localStorage.getItem("accessToken") && !err) {
         navigate("/");
