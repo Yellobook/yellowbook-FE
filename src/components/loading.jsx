@@ -15,7 +15,7 @@ export default function Loading() {
       err = e;
       console.log(e);
     } finally {
-      if (!err && localStorage.getItem("accessToken")) {
+      if (!err && cookie) {
         navigate("");
       }
     }
