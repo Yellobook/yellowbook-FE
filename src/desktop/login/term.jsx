@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { Cookies, useCookies } from "react-cookie";
 import { getCookies } from "../../util/LoginUtils.js";
 
 export default function DesktopTerm() {
@@ -9,7 +9,6 @@ export default function DesktopTerm() {
   const [isLoading, setIsLoading] = useState(false);
   const [tempToken] = useSearchParams();
   const [cookie, setCookie] = useCookies();
-  console.log(tempToken.get("token"));
 
   const agreeAll = (e) => {
     const term1 = document.getElementById("term-1");
@@ -35,7 +34,7 @@ export default function DesktopTerm() {
       await getCookies(tempToken.get("token"));
     } catch (e) {
       err = e;
-      console.log(e);
+      console.log("제출시 에러!", e);
     } finally {
       if (localStorage.getItem("accessToken") && !err) {
         navigate("/");
