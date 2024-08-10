@@ -15,9 +15,7 @@ export default function Loading() {
       err = e;
       console.log(e);
     } finally {
-      if (!err && cookie) {
-        navigate("");
-      }
+      navigate("");
     }
   }, [localStorage, cookie]);
   return (
