@@ -1,23 +1,45 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Text } from "./order"; // color, size, weight
+import orderPatchCorr from "./orderApi/orderPatchCorr";
+import orderPatchConfirm from "./orderApi/orderPatchConfirm";
 
 export default function ManageCheckOrder() {
   // 버튼 비활성화
   const [correctDisabled, setCorrectDisabled] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
+  const { orderId } = useParams(); // URL에서 orderId 가져오기
 
   // 주문 정정 요청
-  const handleCorrectClick = () => {
+  const handleCorrectClick = async () => {
     setConfirmDisabled(true);
     setCorrectDisabled(false);
     console.log("주문 정정 클릭");
+    // api 연동
+    try {
+      const response = await orderPatchCorr(orderId);
+      console.log("정정 요청 성공:", response);
+      // 성공적으로 정정 요청이 완료되었을 때의 처리
+    } catch (error) {
+      console.error("정정 요청 실패:", error);
+      // 정정 요청이 실패했을 때의 처리
+    }
   };
 
   // 주문 확인 요청
-  const handleConfirmClick = () => {
+  const handleConfirmClick = async () => {
     setConfirmDisabled(false);
     setCorrectDisabled(true);
     console.log("주문 확인 클릭");
+    // api 연동
+    try {
+      const response = await orderPatchConfirm(orderId);
+      console.log("확인 요청 성공:", response);
+      // 성공적으로 확인 요청이 완료되었을 때의 처리
+    } catch (error) {
+      console.error("확인 요청 실패:", error);
+      // 확인 요청이 실패했을 때의 처리
+    }
   };
 
   return (

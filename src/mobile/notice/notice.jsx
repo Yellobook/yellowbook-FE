@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text } from "./order"; // color, size, weight
+import { Text } from "../calendar/order.jsx"; // color, size, weight
 //import mention from "../../style/mention.js";
 import mentionInput from "../../style/mentionInput.js";
 import { MentionsInput, Mention } from "react-mentions";
-import mention from "../../style/mention";
+import mention from "../../style/mention.js";
 
 export default function Notice() {
   const [value, setValue] = useState("");
