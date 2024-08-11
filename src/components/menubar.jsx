@@ -16,7 +16,9 @@ export default function MenuBar() {
     try {
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`, {
-          headers: { Authorization: localStorage.getItem("accessToken") },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         })
         .then((res) => {
           console.log(res);
