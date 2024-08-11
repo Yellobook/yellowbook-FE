@@ -26,17 +26,23 @@ export default function Loading() {
           setUserInfo(res.data);
           if (res.data.data.teams) {
             console.log(res.data.data.teams);
-            navigate("/");
+            return true;
           } else {
-            navigate("/login/create-team");
+            return false;
           }
         })
         .catch((e) => {
           console.error(e);
+          return false;
         });
     } catch (e) {
-      err = e;
       console.log(e);
+    } finally {
+      if (err) {
+        navigate("/");
+      } else {
+        navigate("/login/create-team");
+      }
     }
   }, []);
   return (
