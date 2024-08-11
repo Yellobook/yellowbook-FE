@@ -32,6 +32,7 @@ export default function Loading() {
       console.log(e);
     } finally {
       if (!userInfo) {
+        console.log("go to create-team");
         navigate("/login/create-team");
       } else {
         navigate("/");
