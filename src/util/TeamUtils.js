@@ -15,7 +15,7 @@ export async function MakeTeam(act, makeTeamProps) {
       }
     )
     .then((res) => {
-      console.log(res.data.data);
+      return true;
     })
     .catch((e) => console.log("여기가 에러! makeTeam!", e));
 }

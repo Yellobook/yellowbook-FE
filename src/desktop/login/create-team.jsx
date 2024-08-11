@@ -18,8 +18,9 @@ export default function DesktopCreateTeam() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     let tempInfo = teamInfo;
-
+    let team = false;
     try {
       tempInfo = { ...tempInfo, name: e.target[0].value };
       if (e.target[2].checked) {
@@ -37,12 +38,19 @@ export default function DesktopCreateTeam() {
         address: e.target[7].value,
       };
 
-      console.log(tempInfo);
-      await MakeTeam(localStorage.getItem("accessToken"), tempInfo);
+      team = await MakeTeam(localStorage.getItem("accessToken"), tempInfo);
     } catch (error) {
       console.log(error);
       alert("정보를 확인해주세요");
     } finally {
+      if (team) {
+        navigate("/");
+      } else {
+        alert(
+          "새로 고침 후 다시 이용해주세요 \n 문제가 반복되면 yellobook@admin.kr로 문의해주세요"
+        );
+      }
+      setLoading(false);
     }
   };
 
