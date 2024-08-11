@@ -5,6 +5,11 @@ export const isMobile = atom({
   default: true,
 });
 
+export const profile = atom({
+  key: "userInfo",
+  default: {},
+});
+
 export const initEvents = atom({
   key: "isMobile",
   default: [

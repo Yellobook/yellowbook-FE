@@ -1,7 +1,15 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function DesktopHome() {
+  const navigate = useNavigate("");
+  useEffect(() => {
+    if (!localStorage.getItem("accessToken")) {
+      navigate("/login");
+    }
+  }, []);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
