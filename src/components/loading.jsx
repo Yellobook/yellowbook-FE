@@ -23,9 +23,9 @@ export default function Loading() {
           },
         })
         .then((res) => {
-          console.log(res.data.data.teams);
           setUserInfo(res.data);
           if (res.data.data.teams) {
+            console.log(res.data.data.teams);
             navigate("/");
           } else {
             navigate("/login/create-team");
