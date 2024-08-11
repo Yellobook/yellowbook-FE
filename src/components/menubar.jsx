@@ -15,7 +15,9 @@ export default function MenuBar() {
   const onLogout = async () => {
     try {
       await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`)
+        .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`, {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+        })
         .then((res) => {
           console.log(res);
           const ok = window.confirm("정말로 로그아웃 하시겠어요?");
