@@ -4,12 +4,39 @@ import { isMobile } from "../atom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cookie, , removeCookie] = useCookies(["tokens"]);
   const navigate = useNavigate();
-
+  const onLogout = async () => {
+    try {
+      await axios
+        .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          const ok = window.confirm("정말로 로그아웃 하시겠어요?");
+          if (ok) {
+            if (cookie) {
+              removeCookie("accessToken");
+              removeCookie("refreshToken");
+            }
+            localStorage.clear();
+            navigate("/login");
+          }
+        })
+        .catch((err) => console.error(err));
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
       <div
@@ -75,7 +102,16 @@ export default function MenuBar() {
           <li
             className="menuBtn"
             onClick={() => {
-              navigate("/login");
+              navigate("/notice");
+              setIsMenuOpen(false);
+            }}
+          >
+            공지사항
+          </li>
+          <li
+            className="menuBtn"
+            onClick={() => {
+              onLogout();
               setIsMenuOpen(false);
             }}
           >

@@ -7,10 +7,11 @@ import MobileMyPage from "./mobile/mypage/mypage";
 import MobileLogin from "./mobile/login/login";
 import DesktopHome from "./desktop/home/home";
 import DestkopCalendar from "./desktop/calendar/calendar";
+import DesktopNotice from "./desktop/calendar/notice";
 import DesktopManageInventory from "./desktop/manage-inventory/magage-inventory";
 import DesktopCheckInventory from "./desktop/check-inventory/check-inventory";
 import DesktopMyPage from "./desktop/mypage/mypage";
-import DesktopExitTeam from './desktop/mypage/ExitTeam';
+import DesktopExitTeam from "./desktop/mypage/ExitTeam";
 import DesktopLogin from "./desktop/login/login";
 import Navigator from "./navigator";
 import { useEffect } from "react";
@@ -26,6 +27,7 @@ import DesktopCreateTeam from "./desktop/login/create-team";
 import MobileCreateTeam from "./mobile/login/create-team";
 import DesktopEditInventory from "./desktop/manage-inventory/EditInventory";
 import DesktopPlusProduct from "./desktop/manage-inventory/PlusProduct";
+import Loading from "./components/loading";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -40,12 +42,13 @@ const DesktopRouter = createBrowserRouter([
     children: [
       { path: "/", element: <DesktopHome /> },
       { path: "/calendar", element: <DestkopCalendar /> },
+      { path: "/notice", element: <DesktopNotice /> },
       { path: "/manage-inventory", element: <DesktopManageInventory /> },
-      { path: "/manage-inventory/edit", element:<DesktopEditInventory/>},
-      {path: "/manage-inventory/edit/plus", element:<DesktopPlusProduct/>},
+      { path: "/manage-inventory/edit", element: <DesktopEditInventory /> },
+      { path: "/manage-inventory/edit/plus", element: <DesktopPlusProduct /> },
       { path: "/check-inventory", element: <DesktopCheckInventory /> },
       { path: "/mypage", element: <DesktopMyPage /> },
-      { path: '/exitTeam', element: <DesktopExitTeam/>},
+      { path: "/exitTeam", element: <DesktopExitTeam /> },
       { path: "/about", element: <DesktopAbout /> },
     ],
   },
@@ -58,6 +61,7 @@ const DesktopRouter = createBrowserRouter([
       { path: "/login/create-team", element: <DesktopCreateTeam /> },
     ],
   },
+  { path: "/loading", element: <Loading /> },
 ]);
 
 const MobileRouter = createBrowserRouter([
@@ -82,6 +86,7 @@ const MobileRouter = createBrowserRouter([
       { path: "/login/create-team", element: <MobileCreateTeam /> },
     ],
   },
+  { path: "/loading", element: <Loading /> },
 ]);
 
 function App() {

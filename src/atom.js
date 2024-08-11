@@ -5,6 +5,11 @@ export const isMobile = atom({
   default: true,
 });
 
+export const profile = atom({
+  key: "userInfo",
+  default: null,
+});
+
 export const initEvents = atom({
   key: "isMobile",
   default: [
@@ -34,16 +39,9 @@ export const initEvents = atom({
 export const teamBuild = atom({
   key: "teamBuild",
   default: {
-    teamName: "",
-    mode: "",
-    companyInfo: {
-      companyName: "",
-      companyNumber: "",
-      companyAddress: "",
-    },
-    user: {
-      userName: "username",
-      userEmail: "",
-    },
+    name: "test by yc",
+    phoneNumber: "012345678",
+    address: "idk",
+    role: "ADMIN",
   },
 });

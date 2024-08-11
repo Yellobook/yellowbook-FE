@@ -36,12 +36,15 @@ export default function MobileLogin() {
           <img src={kakao} alt="kakao" className="size-12" />
           <span className="flex items-center">카카오 로그인</span>
         </Link>
-        <div className="grid grid-cols-[1fr_4fr] gap-5 h-[48px] px-8 rounded-xl bg-[#03c63c] w-full cursor-pointer hover:bg-opacity-65 transition">
+        <Link
+          to="https://api.yellobook.site/oauth2/authorization/naver"
+          className="grid grid-cols-[1fr_4fr] gap-5 h-[48px] px-8 rounded-xl bg-[#03c63c] w-full cursor-pointer hover:bg-opacity-65 transition"
+        >
           <div className="flex items-center">
             <img src={naver} alt="naver" className="size-6 flex items-center" />
           </div>
           <span className="text-white flex items-center">네이버 로그인</span>
-        </div>
+        </Link>
       </div>
     </div>
   );
