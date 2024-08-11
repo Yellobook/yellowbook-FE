@@ -11,32 +11,32 @@ export default function Loading() {
   const [userInfo, setUserInfo] = useRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
-    let err;
+    let err = false;
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
 
-      axios
+      err = axios
         .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         })
         .then((res) => {
-          console.log(res.data);
+          console.log(res.data.data.teams);
           setUserInfo(res.data);
+          if (res.data.data.teams) {
+            navigate("/");
+          } else {
+            navigate("/login/create-team");
+          }
         })
-        .catch((e) => console.error(e));
+        .catch((e) => {
+          console.error(e);
+        });
     } catch (e) {
       err = e;
       console.log(e);
-    } finally {
-      if (!userInfo) {
-        console.log("go to create-team");
-        navigate("/login/create-team");
-      } else {
-        navigate("/");
-      }
     }
   }, []);
   return (
