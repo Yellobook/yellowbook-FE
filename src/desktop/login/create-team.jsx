@@ -43,11 +43,11 @@ export default function DesktopCreateTeam() {
       console.log(error);
       alert("정보를 확인해주세요");
     } finally {
-      if (team) {
+      if (team.status) {
         navigate("/");
       } else {
         alert(
-          "새로 고침 후 다시 이용해주세요 \n 문제가 반복되면 yellobook@admin.kr로 문의해주세요"
+          `${team.errMessage} \n 문제가 반복되면 yellobook@admin.kr로 문의해주세요`
         );
       }
       setLoading(false);

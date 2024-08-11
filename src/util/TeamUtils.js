@@ -15,11 +15,11 @@ export async function MakeTeam(act, makeTeamProps) {
       }
     )
     .then((res) => {
-      return true;
+      return { status: true, errMessage: "" };
     })
     .catch((e) => {
       console.log("여기가 에러! makeTeam!", e);
-      return false;
+      return { status: false, errMessage: e.response.data.message };
     });
   return ok;
 }
