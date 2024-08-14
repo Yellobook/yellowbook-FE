@@ -1,11 +1,11 @@
 import axios from "axios";
 
-export async function getUpComing(tempToken) {
+export async function getUpComing(act) {
   const res = await axios
     .get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
       {
-        token: tempToken,
+        headers: { Authorization: `Bearer ${act}` },
       },
       { withCredentials: true }
     )
@@ -17,12 +17,12 @@ export async function getUpComing(tempToken) {
   return res;
 }
 
-export async function getMonth(tempToken) {
+export async function getMonth(act) {
   const res = await axios
     .get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/monthly`,
       {
-        token: tempToken,
+        headers: { Authorization: `Bearer ${act}` },
       },
       { withCredentials: true }
     )
@@ -34,12 +34,12 @@ export async function getMonth(tempToken) {
   return res;
 }
 
-export async function getDaily(tempToken) {
+export async function getDaily(act) {
   const res = await axios
     .get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/daily`,
       {
-        token: tempToken,
+        headers: { Authorization: `Bearer ${act}` },
       },
       { withCredentials: true }
     )
