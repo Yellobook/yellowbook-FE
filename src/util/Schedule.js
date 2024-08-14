@@ -11,7 +11,7 @@ export async function getUpComing(act) {
     )
     .then((res) => {
       console.log(res.data.data);
-      return res.data;
+      return res.data.data;
     })
     .catch((e) => console.log("upcoming err", e));
   return res;
