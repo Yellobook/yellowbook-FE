@@ -7,6 +7,7 @@ export default function DesktopHome() {
   const navigate = useNavigate("");
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
+      console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
   }, []);
