@@ -15,6 +15,7 @@ export default function MobileHome() {
     }
     const schedule = getUpComing(localStorage.getItem("accessToken"));
     setUpComing(schedule);
+    console.log(schedule);
   }, []);
   return (
     <div className="flex flex-col gap-3">
@@ -45,12 +46,12 @@ export default function MobileHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">{upcoming.data.scheduleTitle}</div>
-          {/* <div className="text-[15px] flex justify-between ">
+          <div className="text-lg font-bold">{}</div>
+          <div className="text-[15px] flex justify-between ">
             <span>5월 20일</span>
             <span>|</span>
             <span>제품B 20개에 관한 게시글</span>
-          </div> */}
+          </div>
         </div>
       </div>
 
