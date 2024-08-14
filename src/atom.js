@@ -36,6 +36,11 @@ export const initEvents = atom({
   ],
 });
 
+export const upcomingSchedule = atom({
+  key: "upcoming schedule",
+  default: null,
+});
+
 export const teamBuild = atom({
   key: "teamBuild",
   default: {
