@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getUpComing(act) {
+export async function getUpComing(act, setUpComing) {
   const res = await axios
     .get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
@@ -14,7 +14,7 @@ export async function getUpComing(act) {
       return res.data.data;
     })
     .catch((e) => console.log("upcoming err", e));
-  return res;
+  setUpComing(res);
 }
 
 export async function getMonth(act) {
