@@ -5,18 +5,31 @@ import { useEffect } from "react";
 import { getUpComing } from "../../util/Schedule";
 import { useRecoilState } from "recoil";
 import { upcomingSchedule } from "../../atom";
+import axios from "axios";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useRecoilState(upcomingSchedule);
-  useEffect(async () => {
+  useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
-    const schedule = await getUpComing(localStorage.getItem("accessToken"));
-    setUpComing(schedule);
-    console.log(upcoming);
-  }, [upcoming]);
+    axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setUpComing(res.data.data);
+      })
+      .catch((e) => console.log("upcoming err", e));
+  }, []);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
@@ -46,7 +59,7 @@ export default function DesktopHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">{}</div>
+          <div className="text-lg font-bold">{upcoming}</div>
           <div className="text-[15px] flex justify-start gap-3 ">
             <span>5월 20일</span>
             <span>|</span>
