@@ -9,11 +9,11 @@ import { getUpComing } from "../../util/Schedule";
 export default function MobileHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useRecoilState(upcomingSchedule);
-  useEffect(() => {
+  useEffect(async () => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
-    const schedule = getUpComing(localStorage.getItem("accessToken"));
+    const schedule = await getUpComing(localStorage.getItem("accessToken"));
     setUpComing(schedule);
     console.log(schedule);
   }, []);
