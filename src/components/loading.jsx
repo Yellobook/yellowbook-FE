@@ -26,7 +26,7 @@ export default function Loading() {
         .then((res) => {
           setUserInfo(res.data);
           if (res.data.data.teams.length > 0) {
-            console.log(res.data.data.teams);
+            console.log(res.data.data.teams.length);
             err = true;
           } else {
             console.log("create로 가라");
