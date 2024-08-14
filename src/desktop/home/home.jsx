@@ -12,7 +12,10 @@ export default function DesktopHome() {
   const [upcoming, setUpComing] = useState({});
   const [userInfo, setUserInfo] = useRecoilState(profile);
   useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
+    if (
+      !localStorage.getItem("accessToken") ||
+      localStorage.getItem("accessToken") === undefined
+    ) {
       navigate("/login");
     }
     console.log("user", userInfo);

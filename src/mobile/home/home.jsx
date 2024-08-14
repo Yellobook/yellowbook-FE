@@ -11,7 +11,10 @@ export default function MobileHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
   useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
+    if (
+      !localStorage.getItem("accessToken") ||
+      localStorage.getItem("accessToken") === undefined
+    ) {
       navigate("/login");
     }
     axios
