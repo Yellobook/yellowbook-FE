@@ -4,16 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUpComing } from "../../util/Schedule";
 import { useRecoilState } from "recoil";
-import { upcomingSchedule } from "../../atom";
+import { profile, upcomingSchedule } from "../../atom";
 import axios from "axios";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
+  const [userInfo, setUserInfo] = useRecoilState(profile);
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
+    console.log("user", userInfo);
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
