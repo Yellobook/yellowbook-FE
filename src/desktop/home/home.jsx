@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getUpComing } from "../../util/Schedule";
 import { useRecoilState } from "recoil";
 import { upcomingSchedule } from "../../atom";
@@ -9,12 +9,12 @@ import axios from "axios";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
-  const [upcoming, setUpComing] = useRecoilState(upcomingSchedule);
+  const [upcoming, setUpComing] = useState();
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
-    axios
+    const res = axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
         {
@@ -26,9 +26,10 @@ export default function DesktopHome() {
       )
       .then((res) => {
         console.log(res.data.data);
-        setUpComing(res.data.data);
       })
       .catch((e) => console.log("upcoming err", e));
+
+    setUpComing(res);
   }, []);
   return (
     <div className="flex flex-col gap-3">
