@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getUpComing } from "../../util/Schedule";
 import { useRecoilState } from "recoil";
 import { upcomingSchedule } from "../../atom";
@@ -9,7 +9,7 @@ import axios from "axios";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
-  const [upcoming, setUpComing] = useRecoilState(upcomingSchedule);
+  const [upcoming, setUpComing] = useState({});
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
@@ -59,11 +59,11 @@ export default function DesktopHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">{upcoming}</div>
+          <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
           <div className="text-[15px] flex justify-start gap-3 ">
-            <span>5월 20일</span>
+            {/* <span>5월 20일</span>
             <span>|</span>
-            <span>제품B 20개에 관한 게시글</span>
+            <span>제품B 20개에 관한 게시글</span> */}
           </div>
         </div>
       </div>

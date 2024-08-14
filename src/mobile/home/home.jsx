@@ -1,22 +1,35 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { upcomingSchedule } from "../../atom";
 import { getUpComing } from "../../util/Schedule";
+import axios from "axios";
 
 export default function MobileHome() {
   const navigate = useNavigate("");
-  const [upcoming, setUpComing] = useRecoilState(upcomingSchedule);
-  useEffect(async () => {
+  const [upcoming, setUpComing] = useState({});
+  useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
-    const schedule = await getUpComing(localStorage.getItem("accessToken"));
-    setUpComing(schedule);
-    console.log(schedule);
-  }, [upcoming]);
+    axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setUpComing(res.data.data);
+      })
+      .catch((e) => console.log("upcoming err", e));
+  }, []);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
@@ -46,12 +59,12 @@ export default function MobileHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">{}</div>
-          <div className="text-[15px] flex justify-between ">
+          <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
+          {/* <div className="text-[15px] flex justify-between ">
             <span>5월 20일</span>
             <span>|</span>
             <span>제품B 20개에 관한 게시글</span>
-          </div>
+          </div> */}
         </div>
       </div>
 
