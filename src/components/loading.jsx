@@ -17,7 +17,7 @@ export default function Loading() {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
 
-      err = axios
+      axios
         .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -27,15 +27,15 @@ export default function Loading() {
           setUserInfo(res.data);
           if (res.data.data.teams.length > 0) {
             console.log(res.data.data.teams);
-            return true;
+            err = true;
           } else {
             console.log("create로 가라");
-            return false;
+            err = false;
           }
         })
         .catch((e) => {
           console.error(e);
-          return false;
+          err = false;
         });
     } catch (e) {
       console.log(e);
