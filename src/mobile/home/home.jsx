@@ -46,7 +46,7 @@ export default function MobileHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
+          <div className="text-lg font-bold">{}</div>
           <div className="text-[15px] flex justify-between ">
             <span>5월 20일</span>
             <span>|</span>
