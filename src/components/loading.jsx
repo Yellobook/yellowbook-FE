@@ -12,6 +12,7 @@ export default function Loading() {
   const navigate = useNavigate();
   useEffect(() => {
     let err = false;
+    console.log("loading");
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
