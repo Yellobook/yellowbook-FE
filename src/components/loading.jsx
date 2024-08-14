@@ -26,7 +26,7 @@ export default function Loading() {
         .then((res) => {
           setUserInfo(res.data);
           if (res.data.data.teams.length > 0) {
-            console.log(res.data.data.teams.length);
+            console.log(res.data.data.teams);
             err = true;
           } else {
             console.log("create로 가라");
@@ -39,16 +39,14 @@ export default function Loading() {
         });
     } catch (e) {
       console.log(e);
-    } finally {
-      console.log(true);
-      if (err) {
-        // navigate("/");
-        console.log("true");
-        navigate("/");
-      } else {
-        // navigate("/login/create-team");
-        console.log("false");
-      }
+    }
+    if (err) {
+      // navigate("/");
+      console.log("true");
+      navigate("/");
+    } else {
+      // navigate("/login/create-team");
+      console.log("false");
     }
   }, []);
   return (
