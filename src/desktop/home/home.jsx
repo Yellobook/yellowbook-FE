@@ -2,14 +2,20 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { getUpComing } from "../../util/Schedule";
+import { useRecoilState } from "recoil";
+import { upcomingSchedule } from "../../atom";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
-  useEffect(() => {
+  const [upcoming, setUpComing] = useRecoilState(upcomingSchedule);
+  useEffect(async () => {
     if (!localStorage.getItem("accessToken")) {
-      console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
+    const schedule = await getUpComing(localStorage.getItem("accessToken"));
+    setUpComing(schedule);
+    console.log(schedule);
   }, []);
   return (
     <div className="flex flex-col gap-3">
@@ -40,7 +46,7 @@ export default function DesktopHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">다가오는 일정</div>
+          <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
           <div className="text-[15px] flex justify-start gap-3 ">
             <span>5월 20일</span>
             <span>|</span>
