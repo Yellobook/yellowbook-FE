@@ -29,6 +29,7 @@ export default function Loading() {
             console.log(res.data.data.teams);
             return true;
           } else {
+            console.log("create로 가라");
             return false;
           }
         })
