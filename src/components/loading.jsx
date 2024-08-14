@@ -24,7 +24,7 @@ export default function Loading() {
         })
         .then((res) => {
           setUserInfo(res.data);
-          if (res.data.data.teams) {
+          if (res.data.data.teams.length > 0) {
             console.log(res.data.data.teams);
             return true;
           } else {
