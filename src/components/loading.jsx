@@ -11,13 +11,13 @@ export default function Loading() {
   const [userInfo, setUserInfo] = useRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
-    let err = false;
+    let err;
     console.log("loading");
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
 
-      axios
+      err = axios
         .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -27,26 +27,25 @@ export default function Loading() {
           setUserInfo(res.data);
           if (res.data.data.teams.length > 0) {
             console.log(res.data.data.teams);
-            err = true;
+            return true;
           } else {
-            console.log("create로 가라");
-            err = false;
+            return false;
           }
         })
         .catch((e) => {
           console.error(e);
-          err = false;
+          return false;
         });
     } catch (e) {
       console.log(e);
-    }
-    if (err) {
-      // navigate("/");
-      console.log("true");
-      navigate("/");
-    } else {
-      // navigate("/login/create-team");
-      console.log("false");
+    } finally {
+      if (err) {
+        console.log("true");
+        navigate("/");
+      } else {
+        console.log("false");
+        navigate("/login/create-team");
+      }
     }
   }, []);
   return (
