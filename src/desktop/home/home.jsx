@@ -15,8 +15,8 @@ export default function DesktopHome() {
     }
     const schedule = await getUpComing(localStorage.getItem("accessToken"));
     setUpComing(schedule);
-    console.log(schedule);
-  }, []);
+    console.log(upcoming);
+  }, [upcoming]);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
