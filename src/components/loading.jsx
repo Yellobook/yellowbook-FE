@@ -40,6 +40,7 @@ export default function Loading() {
     } catch (e) {
       console.log(e);
     } finally {
+      console.log(err);
       if (err) {
         navigate("/");
       } else {
