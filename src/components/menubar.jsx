@@ -14,6 +14,7 @@ export default function MenuBar() {
   const navigate = useNavigate();
   const onLogout = async () => {
     try {
+      console.log(localStorage.getItem("accessToken"));
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`, {
           headers: {
