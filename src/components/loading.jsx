@@ -44,6 +44,7 @@ export default function Loading() {
       if (err) {
         // navigate("/");
         console.log("true");
+        navigate("/");
       } else {
         // navigate("/login/create-team");
         console.log("false");
