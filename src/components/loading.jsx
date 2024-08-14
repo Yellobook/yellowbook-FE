@@ -40,10 +40,13 @@ export default function Loading() {
     } catch (e) {
       console.log(e);
     } finally {
+      console.log(true);
       if (err) {
-        navigate("/");
+        // navigate("/");
+        console.log("true");
       } else {
-        navigate("/login/create-team");
+        // navigate("/login/create-team");
+        console.log("false");
       }
     }
   }, []);
