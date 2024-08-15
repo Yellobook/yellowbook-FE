@@ -11,7 +11,8 @@ export default function Loading() {
   const [userInfo, setUserInfo] = useRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
-    let err = false;
+    let err;
+    console.log("loading");
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
@@ -24,7 +25,8 @@ export default function Loading() {
         })
         .then((res) => {
           setUserInfo(res.data);
-          if (res.data.data.teams) {
+          console.log(res.data.data);
+          if (res.data.data.teams.length > 0) {
             console.log(res.data.data.teams);
             return true;
           } else {
@@ -38,11 +40,13 @@ export default function Loading() {
     } catch (e) {
       console.log(e);
     } finally {
-      if (err) {
-        navigate("/");
-      } else {
-        navigate("/login/create-team");
-      }
+      // if (err) {
+      //   console.log("true");
+      //   navigate("/");
+      // } else {
+      //   console.log("false");
+      //   navigate("/login/create-team");
+      // }
     }
   }, []);
   return (

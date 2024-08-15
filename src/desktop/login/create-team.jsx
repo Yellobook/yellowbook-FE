@@ -44,7 +44,7 @@ export default function DesktopCreateTeam() {
       alert("정보를 확인해주세요");
     } finally {
       if (team.status) {
-        navigate("/");
+        navigate("/loading");
       } else {
         alert(
           `${team.errMessage} \n 문제가 반복되면 yellobook@admin.kr로 문의해주세요`

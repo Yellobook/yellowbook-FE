@@ -1,14 +1,37 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getUpComing } from "../../util/Schedule";
+import { useRecoilState } from "recoil";
+import { profile, upcomingSchedule } from "../../atom";
+import axios from "axios";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
+  const [upcoming, setUpComing] = useState({});
+  const [userInfo, setUserInfo] = useRecoilState(profile);
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
+      console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
+    console.log("user", userInfo);
+    axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setUpComing(res.data.data);
+      })
+      .catch((e) => console.log("upcoming err", e));
   }, []);
   return (
     <div className="flex flex-col gap-3">
@@ -39,11 +62,11 @@ export default function DesktopHome() {
 
       <div className="homeCard">
         <div className="w-full">
-          <div className="text-lg font-bold">다가오는 일정</div>
+          <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
           <div className="text-[15px] flex justify-start gap-3 ">
-            <span>5월 20일</span>
+            {/* <span>5월 20일</span>
             <span>|</span>
-            <span>제품B 20개에 관한 게시글</span>
+            <span>제품B 20개에 관한 게시글</span> */}
           </div>
         </div>
       </div>
