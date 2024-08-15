@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
 import axios from "axios";
-import { tr } from "date-fns/locale";
 
 const MyPage = () => {
   const navigate = useNavigate();
