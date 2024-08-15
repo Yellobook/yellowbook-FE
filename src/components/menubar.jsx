@@ -1,6 +1,6 @@
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
-import { useRecoilValue } from "recoil";
-import { isMobile } from "../atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isMobile, profile } from "../atom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -11,7 +11,9 @@ export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cookie, , removeCookie] = useCookies(["tokens"]);
+  const [userInfo, setUserInfo] = useRecoilState(profile);
   const navigate = useNavigate();
+
   const onLogout = async () => {
     try {
       console.log(localStorage.getItem("accessToken"));
@@ -52,7 +54,9 @@ export default function MenuBar() {
           onClick={() => setIsMenuOpen(false)}
         />
         <img alt="logo" src={logo} className="w-10" />
-        <div className="text-2xl font-bold">Username 님!</div>
+        <div className="text-2xl font-bold">
+          {userInfo.nickname ? userInfo.nickname : null} 님!
+        </div>
 
         <ul>
           <li
