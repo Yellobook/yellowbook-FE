@@ -8,7 +8,6 @@ import { profile } from "../atom";
 
 export default function Loading() {
   const [cookie, setCookies] = useCookies(["tokens"]);
-  const [userInfo, setUserInfo] = useRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
     let err;
@@ -24,7 +23,6 @@ export default function Loading() {
           },
         })
         .then((res) => {
-          setUserInfo(res.data);
           console.log(res.data.data);
           if (res.data.data.teams.length > 0) {
             console.log(res.data.data.teams);
@@ -40,13 +38,13 @@ export default function Loading() {
     } catch (e) {
       console.log(e);
     } finally {
-      // if (err) {
-      //   console.log("true");
-      //   navigate("/");
-      // } else {
-      //   console.log("false");
-      //   navigate("/login/create-team");
-      // }
+      if (err) {
+        console.log("true");
+        navigate("/");
+      } else {
+        console.log("false");
+        navigate("/login/create-team");
+      }
     }
   }, []);
   return (

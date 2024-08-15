@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "../style/calendar.css";
 import dayjs from "dayjs";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { initEvents, isMobile } from "../atom";
 import EventLists from "./eventLists";
+import axios from "axios";
 
 const ReactCalendar = () => {
-  const isUserMobile = useRecoilValue(isMobile);
   const [events, setEvents] = useRecoilState(initEvents);
   const [listProps, setListProps] = useState(null);
+
   const tileContent = ({ date, view }) => {
     let event = [];
     if (view === "month") {

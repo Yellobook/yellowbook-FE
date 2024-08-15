@@ -46,7 +46,7 @@
   }
 
   .homeCard {
-    @apply flex items-center justify-between rounded-2xl px-5 py-3 h-20 bg-yellow;
+    @apply flex items-center justify-between rounded-2xl px-5 py-3 h-20 bg-yellow cursor-pointer hover:scale-[1.01] transition;
   }
 
   .iconHover {
@@ -97,7 +97,7 @@ input {
 }
 
 .mentions-input-custom textarea {
-  padding-left: 5px; 
+  padding-left: 5px;
 }
 .mentions-mention {
   background-color: rgba(0, 126, 255, 0.1);
@@ -111,4 +111,3 @@ input {
 .mention--focused {
   background-color: #ccc !important;
 }
-
