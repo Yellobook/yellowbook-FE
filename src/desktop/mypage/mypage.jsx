@@ -99,8 +99,12 @@ const MyPage = () => {
           <div className="text-xl" style={{ color: "#FFAB08" }}>
             {profile ? profile.nickname : "로딩 중..."}
           </div>
-          <div style={{ color: "#697675" }}>관리자 | 딸기네 딸기농장</div>
-          <div style={{ color: "#697675" }}>주문자 | 피그마 플라스틱 공장</div>
+          {profile.teams.map((team, index) => (
+            <div style={{ color: "#697675" }}>
+              {" "}
+              {team.role} | {team.teamName}{" "}
+            </div>
+          ))}
         </div>
       </div>
       {/*협업 팀 관리*/}
