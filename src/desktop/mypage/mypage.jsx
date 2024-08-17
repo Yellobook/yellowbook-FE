@@ -3,22 +3,37 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { teamIdState } from "../../atom"; // teamIdState 가져오기
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [profile, setProfile] = useState(null);
+  const teamId = useRecoilValue(teamIdState);
+  const accessToken =
+    "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzIzOTE1NTE0LCJleHAiOjE3MjM5MjI3MTR9.K9Rc3glDrvfjoyhKf72b5mGyWzB2KxTNLAJ6wSsrAdg";
 
   useEffect(() => {
+    if (teamId) {
+      console.log("팀 ID:", teamId);
+    }
     getProfile();
-  }, []);
+  }, [teamId]);
 
   const getProfile = async () => {
     try {
       const getProfile_res = await axios.get(
-        "https://api.yellobook.site/api/v1/members/profile"
+        "https://api.yellobook.site/api/v1/members/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
+
+      // 프로필 상태 업데이트
       setProfile(getProfile_res.data.data);
     } catch (error) {
       console.error("프로필 불러오기 중 오류 발생", error);
@@ -30,6 +45,7 @@ const MyPage = () => {
       const deactivateUser_res = await axios.post(
         "https://api.yellobook.site/api/v1/auth/deactivate"
       );
+      console.log(deactivateUser_res.data.message);
     } catch (error) {
       alert("회원 탈퇴 중 오류 발생", error);
     }
