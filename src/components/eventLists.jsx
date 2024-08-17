@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 export default function EventLists({ listProps }) {
+  const calendarMonth = document.getElementsByClassName(
+    "react-calendar__navigation__label__labelText react-calendar__navigation__label__labelText--from"
+  );
+  useEffect(() => {
+    console.log(Number(calendarMonth[0].innerText.replace("월", "")));
+  }, []);
   return (
     <div className="flex flex-col gap-4 py-5">
       {listProps

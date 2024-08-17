@@ -7,7 +7,7 @@ export const isMobile = atom({
 
 export const profile = atom({
   key: "userInfo",
-  default: null,
+  default: {},
 });
 
 export const initEvents = atom({

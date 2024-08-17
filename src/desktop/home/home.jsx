@@ -6,17 +6,18 @@ import { getUpComing } from "../../util/Schedule";
 import { useRecoilState } from "recoil";
 import { profile, upcomingSchedule } from "../../atom";
 import axios from "axios";
+import dayjs from "dayjs";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
   const [userInfo, setUserInfo] = useRecoilState(profile);
+  const date = new Date();
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
-    console.log("user", userInfo);
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
@@ -32,13 +33,35 @@ export default function DesktopHome() {
         setUpComing(res.data.data);
       })
       .catch((e) => console.log("upcoming err", e));
+
+    axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setUserInfo(res.data.data);
+      })
+      .catch((e) => console.log("upcoming err", e));
   }, []);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
         <div>
-          <div>팀 이름</div>
-          <div className="text-orange text-[12px]">멤버 9</div>
+          <div>
+            {userInfo.teams ? userInfo.teams[0].teamName : "정보가 없습니다."}
+          </div>
+          <div className="text-orange text-[12px]">
+            {userInfo.teams
+              ? `${userInfo.teams[0].role} 모드`
+              : "정보가 없습니다."}
+          </div>
         </div>
         <div className="text-orange">
           <ChevronUpIcon className="text-xl size-7" />
@@ -46,13 +69,16 @@ export default function DesktopHome() {
         </div>
       </div>
 
-      <div className="homeCard bg-opacity-50">
+      <div
+        className="homeCard bg-opacity-50"
+        onClick={() => navigate("/manage-inventory")}
+      >
         <div>
           <div className="font-extrabold text-lg">
             관리자가 게시한 재고 현황
           </div>
           <div className="font-thin text-[13px]">
-            2024년 05월 09일 재고 현황
+            {dayjs(date).format("YYYY년 MM월 DD일")} 재고 현황
           </div>
         </div>
         <div className="text-orange text-[10px] h-full flex flex-col justify-end">
@@ -60,7 +86,7 @@ export default function DesktopHome() {
         </div>
       </div>
 
-      <div className="homeCard">
+      <div className="homeCard" onClick={() => navigate("/calendar")}>
         <div className="w-full">
           <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
           <div className="text-[15px] flex justify-start gap-3 ">
