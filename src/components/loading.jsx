@@ -8,10 +8,10 @@ import { profile } from "../atom";
 
 export default function Loading() {
   const [cookie, setCookies] = useCookies(["tokens"]);
-  const [err, setErr] = useState(0);
   const setPro = useSetRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
+    let err;
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
@@ -24,7 +24,7 @@ export default function Loading() {
         })
         .then((res) => {
           setPro(res.data.data);
-          setErr(res.data.data.teams.length);
+          err = res.data.data.teams.length;
         })
         .catch((e) => {
           console.error(e);
@@ -33,7 +33,7 @@ export default function Loading() {
       console.log(e);
     } finally {
       console.log("err", err);
-      if (err) {
+      if (err > 0) {
         navigate("/");
       } else {
         navigate("/login/create-team");
