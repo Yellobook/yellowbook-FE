@@ -1,24 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const DesktopPlusProduct = () => {
+  const location = useLocation();
   const [name, setName] = useState("");
   const [subProduct, setSubProduct] = useState("");
   const [sku, setSku] = useState("");
   const [purchasePrice, setPurchasePrice] = useState("");
   const [salePrice, setSalePrice] = useState("");
   const [amount, setAmount] = useState("");
+  const [id, setId] = useState("");
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const idParams = params.get("id");
+    setId(idParams);
+  }, [location.search]);
 
   const postInventories = async () => {
     try {
-      await axios.post(`https://api.yellobook.site/api/v1/inventories`, {
-        name: name,
-        subProduct: subProduct,
-        sku: sku,
-        purchasePrice: purchasePrice,
-        salePrice: salePrice,
-        amount: amount,
-      });
+      await axios.post(
+        `https://api.yellobook.site/api/v1/inventories/${id}`,
+        {
+          name: name,
+          subProduct: subProduct,
+          sku: sku,
+          purchasePrice: purchasePrice,
+          salePrice: salePrice,
+          amount: amount,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
     } catch (error) {
       alert("제품 추가 중 오류 발생", error);
     }

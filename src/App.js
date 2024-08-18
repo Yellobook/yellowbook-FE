@@ -8,7 +8,7 @@ import MobileLogin from "./mobile/login/login";
 import DesktopHome from "./desktop/home/home";
 import DestkopCalendar from "./desktop/calendar/calendar";
 import DesktopNotice from "./desktop/calendar/notice";
-import DesktopManageInventory from "./desktop/manage-inventory/magage-inventory";
+import DesktopManageInventory from "./desktop/manage-inventory/manage-inventory";
 import DesktopCheckInventory from "./desktop/check-inventory/check-inventory";
 import DesktopMyPage from "./desktop/mypage/mypage";
 import DesktopExitTeam from "./desktop/mypage/ExitTeam";
