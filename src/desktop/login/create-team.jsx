@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { teamBuild } from "../../atom";
+import { profile, teamBuild } from "../../atom";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";

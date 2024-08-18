@@ -12,12 +12,15 @@ export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
   const [userInfo, setUserInfo] = useState({});
+  const [user, setUser] = useRecoilState(profile);
+
   const date = new Date();
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
+    console.log(user);
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
