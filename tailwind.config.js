@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         yellow: "#FFDE33",
         yellowDisable: "#FFDE334D",
+        yellow50: "#FFDE3350",
         orange: "#FFAB08",
         gray: "#697675",
         subOrange: "#FF7008",
@@ -22,8 +23,8 @@ module.exports = {
         lg: "1375px",
       },
       maxWidth: {
-        'max': '18.1875rem',
-      }
+        max: "18.1875rem",
+      },
     },
     fontFamily: {
       gmarket: ["gmarket"],

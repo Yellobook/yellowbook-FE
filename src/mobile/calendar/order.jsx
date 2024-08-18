@@ -2,10 +2,103 @@ import React, { useState } from "react";
 import { ReactComponent as Close } from "../../assets/mobile/calendar/close.svg";
 import { ReactComponent as DropButton } from "../../assets/mobile/calendar/dropdown.svg";
 import { ReactComponent as Search } from "../../assets/mobile/calendar/search.svg";
+import orderWrite from "./orderApi/orderWrite";
+import PostNotice from "../notice/postNotice";
+import { useNavigate } from "react-router-dom";
 
 const OrderContainer = () => {
   // 임시 목록
+  const yearList = ["2024"];
+  const monthList = ["08"];
+  const dayList = ["11"];
+  const memberList = [
+    { id: 1, name: "Member1" },
+    { id: 2, name: "Member2" },
+  ];
   const list = ["2024", "5", "20"];
+  //const [informId, setInformId] = useState(null);
+  const navigate = useNavigate();
+
+  // 공지사항 or 주문
+  const OrderNotice = ["주문", "공지사항"];
+
+  // 제품 ID, 메모, 날짜, 주문 수량을 상태로 관리
+  const [productId, setProductId] = useState(0);
+  const [memo, setMemo] = useState("");
+  const [orderAmount, setOrderAmount] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  // 공지사항인 경우
+  const [title, setTitle] = useState("");
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [mentionedId, setMentionedId] = useState(null);
+
+  // Dropdown 선택 핸들러
+  const handleYearSelect = (item) => setYear(item);
+  const handleMonthSelect = (item) => setMonth(item);
+  const handleDaySelect = (item) => setDay(item);
+  const handleMemberSelect = (item) => setMentionedId(item.id);
+
+  const formattedDate = `${year}-${month}-${day}`;
+
+  // 공지사항 -> 일정 게시하기 버튼 핸들러
+  const handleNotice = async () => {
+    try {
+      const noticeData = {
+        title,
+        memo,
+        mentionedId: [],
+        date: formattedDate,
+      };
+
+      console.log("NoticeData:", noticeData); // API 호출 전 확인용
+
+      const response = await PostNotice(noticeData);
+
+      console.log("공지사항 작성 성공:", response);
+      //setInformId(response.data.informId);
+      if (response && response.data.informId) {
+        navigate(`/notice/${response.data.informId}`);
+      }
+
+      // 주문 작성 성공 시의 추가 처리
+    } catch (error) {
+      console.error("공지사항 작성 실패:", error);
+      // 주문 작성 실패 시의 추가 처리
+    }
+  };
+
+  const handleSelect = (item) => {
+    setSelectedItem(item);
+  };
+
+  // 일정 게시하기 버튼 핸들러
+  const handleOrder = async () => {
+    try {
+      const response = await orderWrite(
+        productId,
+        memo,
+        formattedDate,
+        orderAmount
+      );
+      console.log("주문 작성 성공:", response);
+      // 주문 작성 성공 시의 추가 처리
+    } catch (error) {
+      console.error("주문 작성 실패:", error);
+      // 주문 작성 실패 시의 추가 처리
+    }
+  };
+
+  // 일정 게시하기 버튼 클릭 핸들러
+  const handleButtonClick = () => {
+    if (selectedItem === "공지사항") {
+      handleNotice();
+    } else if (selectedItem === "주문") {
+      handleOrder();
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -24,9 +117,10 @@ const OrderContainer = () => {
                   width="4.25rem"
                   height="1.5rem"
                   size="0.9375rem"
-                  items={list}
+                  items={yearList}
                   wid="4rem"
                   hei="1.5rem"
+                  onSelect={handleYearSelect}
                 />
                 <Text size="text-sm" color="text-dateGray">
                   년
@@ -36,10 +130,11 @@ const OrderContainer = () => {
                 <DropDown
                   width="2.75rem"
                   height="1.5rem"
-                  items={list}
+                  items={monthList}
                   size="0.9375rem"
                   wid="2rem"
                   hei="1.5rem"
+                  onSelect={handleMonthSelect}
                 />
                 <Text size="text-sm" color="text-dateGray">
                   월
@@ -49,10 +144,11 @@ const OrderContainer = () => {
                 <DropDown
                   width="2.75rem"
                   height="1.5rem"
-                  items={list}
+                  items={dayList}
                   size="0.9375rem"
                   wid="2rem"
                   hei="1.5rem"
+                  onSelect={handleDaySelect}
                 />
                 <Text size="text-sm" color="text-dateGray">
                   일
@@ -66,11 +162,12 @@ const OrderContainer = () => {
             hint="일정 종류"
             weight="font-median"
             className="z-40"
-            items={list}
+            items={OrderNotice}
             size="0.9375rem"
             hintColor="text-dateGray"
             wid="13rem"
             hei="1.5rem"
+            onSelect={handleSelect}
           />
           <div className="mt-[1.25rem] mb-[1.5rem]">
             <h1>공지 제목</h1>
@@ -78,6 +175,8 @@ const OrderContainer = () => {
               <input
                 className="w-full h-full m-0 p-1 placeholder-customGray1"
                 placeholder="공지 또는 업무 타이틀을 입력해주세요."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
           </div>
@@ -116,6 +215,8 @@ const OrderContainer = () => {
               <textarea
                 className="w-full h-full text-xs font-light p-1 placeholder-customGray1"
                 placeholder="주문 또는 공지와 업무에 관한 상세 정보나 메모를 입력해주세요."
+                value={memo}
+                onChange={(e) => setMemo(e.target.value)}
               />
             </div>
           </div>
@@ -124,14 +225,20 @@ const OrderContainer = () => {
             <DropDown
               width="8.25rem"
               height="1.5rem"
-              items={list}
+              items={memberList.map((member) => member.name)}
               size="0.75rem"
               wid="8rem"
               hei="1.5rem"
+              onSelect={(item) =>
+                handleMemberSelect(memberList.find((m) => m.name === item))
+              }
             />
           </div>
         </div>
-        <button className="w-[15rem] h-[2.3125rem] bg-[#FFDE33] rounded-[1.875rem] text-lg">
+        <button
+          className="w-[15rem] h-[2.3125rem] bg-[#FFDE33] rounded-[1.875rem] text-lg"
+          onClick={handleButtonClick}
+        >
           일정 게시하기
         </button>
       </div>
@@ -152,6 +259,7 @@ const DropDown = ({
   hintColor = "text-customGray1",
   wid,
   hei,
+  onSelect,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -165,6 +273,9 @@ const DropDown = ({
   const handleItemClick = (item) => {
     setSelectedItem(item);
     setIsOpen(false); // 선택 후 드롭다운 닫기
+    if (onSelect) {
+      onSelect(item); // 선택한 아이템 부모 컴포넌트에 전달
+    }
   };
 
   return (
@@ -178,7 +289,7 @@ const DropDown = ({
       <div
         className={`bg-white border border-[#FFDE33] flex items-center p-[0.0625rem] ${color} ${weight} cursor-pointer text-[${size}] pl-1`}
         onClick={toggleDropdown}
-        style={{ boxSizing: "border-box", minHeight: hei, minWidth: wid}}
+        style={{ boxSizing: "border-box", minHeight: hei, minWidth: wid }}
       >
         {selectedItem ? (
           <span>{selectedItem}</span>

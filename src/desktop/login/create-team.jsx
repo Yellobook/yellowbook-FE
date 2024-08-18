@@ -12,6 +12,7 @@ import { MakeTeam } from "../../util/TeamUtils";
 
 export default function DesktopCreateTeam() {
   const [teamInfo, setTeamInfo] = useRecoilState(teamBuild);
+  const setTeamId = useSetRecoilState(teamIdState);
   const [modeNum, setModeNum] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -38,7 +39,11 @@ export default function DesktopCreateTeam() {
         address: e.target[7].value,
       };
 
-      team = await MakeTeam(localStorage.getItem("accessToken"), tempInfo);
+      team = await MakeTeam(
+        localStorage.getItem("accessToken"),
+        tempInfo,
+        setTeamId
+      );
     } catch (error) {
       console.log(error);
       alert("정보를 확인해주세요");

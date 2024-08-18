@@ -50,3 +50,8 @@ export const teamBuild = atom({
     role: "ADMIN",
   },
 });
+
+export const teamIdState=atom({
+  key:'teamIdState',
+  default:null,
+})

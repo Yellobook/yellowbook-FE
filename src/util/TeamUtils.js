@@ -1,6 +1,8 @@
 import axios from "axios";
+import { teamIdState } from '../atom';
+import { useSetRecoilState } from 'recoil';
 
-export async function MakeTeam(act, makeTeamProps) {
+export async function MakeTeam(act, makeTeamProps, setTeamId) {
   const ok = await axios
     .post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/teams`,
@@ -15,6 +17,9 @@ export async function MakeTeam(act, makeTeamProps) {
       }
     )
     .then((res) => {
+      const teamId = res.data.data.teamId;
+      setTeamId(teamId);
+
       return { status: true, errMessage: "" };
     })
     .catch((e) => {
