@@ -8,7 +8,7 @@ import { profile } from "../atom";
 
 export default function Loading() {
   const [cookie, setCookies] = useCookies(["tokens"]);
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState(0);
   const setPro = useSetRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
@@ -24,18 +24,10 @@ export default function Loading() {
         })
         .then((res) => {
           setPro(res.data.data);
-          if (res.data.data.teams.length > 0) {
-            console.log("what");
-            console.log(res.data.data.teams);
-            setErr(true);
-          } else {
-            console.log("no");
-            setErr(false);
-          }
+          setErr(res.data.data.teams.length);
         })
         .catch((e) => {
           console.error(e);
-          setErr(false);
         });
     } catch (e) {
       console.log(e);
