@@ -9,6 +9,7 @@ import { profile } from "../atom";
 export default function Loading() {
   const [cookie, setCookies] = useCookies(["tokens"]);
   const [err, setErr] = useState(false);
+  const setPro = useSetRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
     try {
@@ -22,7 +23,7 @@ export default function Loading() {
           },
         })
         .then((res) => {
-          console.log(res.data.data);
+          setPro(res.data.data);
           if (res.data.data.teams.length > 0) {
             console.log("what");
             console.log(res.data.data.teams);
