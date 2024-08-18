@@ -9,8 +9,8 @@ const DesktopCheckInventory = () => {
   const [quantity, setQuantity] = useState("");
   const [memo, setMemo] = useState("");
   const [orderId, setOrderId] = useState(null);
-  const [correctBtnClicked, setCorrectBtnClicked] = useState(false);
-  const [checkBtnClicked, setCheckBtnClicked] = useState(false);
+  const [isCorrectBtnDisabled, setIsCorrectBtnDisabled] = useState(false);
+  const [isCheckBtnDisabled, setIsCheckBtnDisabled] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const accessToken = localStorage.getItem("accessToken");
@@ -25,10 +25,9 @@ const DesktopCheckInventory = () => {
     }
   }, [location.search]);
 
-  // todo : orderId 넣어서 하는거로 바꿔야 됨
   const correctOrder = async (orderId) => {
     try {
-      await axios.post(
+      await axios.patch(
         `https://api.yellobook.site/api/v1/${orderId}/correction`,
         {
           headers: {
@@ -36,8 +35,10 @@ const DesktopCheckInventory = () => {
           },
         }
       );
+      setIsCheckBtnDisabled(false); // 요청 완료 후 '주문 확인하기' 버튼 다시 활성화
     } catch (error) {
       alert("주문 정정 요청 중 오류 발생", error);
+      setIsCheckBtnDisabled(false); // 오류 발생 시에도 버튼 상태 초기화
     }
   };
 
@@ -57,7 +58,7 @@ const DesktopCheckInventory = () => {
     }
   };
 
-  const writeChat = async () => {
+  const postComment = async () => {
     try {
       await axios.post(
         `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
@@ -78,15 +79,15 @@ const DesktopCheckInventory = () => {
   };
 
   const handleCorrectBtnClick = async () => {
-    try {
-      await correctOrder(orderId);
-    } catch (error) {
-      alert("주문 정정 요청 중 오류 발생", error);
-    }
+    setIsCheckBtnDisabled(true); // '주문 확인하기' 버튼 비활성화
+    await correctOrder(orderId);
+    setIsCheckBtnDisabled(false); // '주문 확인하기' 버튼 활성화
   };
 
   const handleCheckBtnClick = async () => {
-    alert("주문");
+    setIsCorrectBtnDisabled(true); // '주문 정정 요청' 버튼 비활성화
+    alert("주문 확인");
+    setIsCorrectBtnDisabled(false); // '주문 정정 요청' 버튼 활성화
   };
 
   return (
@@ -159,16 +160,18 @@ const DesktopCheckInventory = () => {
           <button
             onClick={handleCorrectBtnClick}
             className={`px-20 py-3 rounded-xl ${
-              correctBtnClicked ? "bg-yellowDisable" : "bg-yellow"
+              isCorrectBtnDisabled ? "bg-yellowDisable" : "bg-yellow"
             }`}
+            disabled={isCheckBtnDisabled}
           >
             주문 정정 요청
           </button>
           <button
             onClick={handleCheckBtnClick}
             className={`px-20 py-3 rounded-xl ${
-              checkBtnClicked ? "bg-yellowDisable" : "bg-yellow"
+              isCheckBtnDisabled ? "bg-yellowDisable" : "bg-yellow"
             }`}
+            disabled={isCorrectBtnDisabled}
           >
             주문 확인하기
           </button>
@@ -196,7 +199,7 @@ const DesktopCheckInventory = () => {
             onChange={(e) => setNewComment(e.target.value)}
           />
           <button
-            onClick={writeChat}
+            onClick={postComment}
             className="ml-4 bg-yellow rounded-md px-8 py-2"
           >
             입력
