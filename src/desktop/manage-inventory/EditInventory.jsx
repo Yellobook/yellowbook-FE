@@ -66,6 +66,7 @@ const DesktopEditInventory = () => {
   const [memberId, setMemberId] = useState(null);
   const [teamId, setTeamId] = useState(null);
   const [role, setRole] = useState("");
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -84,9 +85,14 @@ const DesktopEditInventory = () => {
       await axios.delete(
         `https://api.yellobook.site/api/v1/inventories/products/${selectedProductId}`,
         {
-          memberId: memberId,
-          teamId: teamId,
-          role: role,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          data: {
+            memberId: memberId,
+            teamId: teamId,
+            role: role,
+          },
         }
       );
     } catch (error) {
@@ -101,12 +107,13 @@ const DesktopEditInventory = () => {
       </div>
       <div className="flex justify-end">
         <button
-          onClick={() => navigate("/manage-inventory/edit/plus")}
+          onClick={() => navigate(`/manage-inventory/edit/plus?id=${id}`)}
           className="rounded px-3 py-1 mr-4 text-xs"
           style={{ backgroundColor: "#FFDE33" }}
         >
           + 제품 추가
         </button>
+
         <button
           className="rounded px-3 py-1 text-xs"
           style={{ backgroundColor: "#FFDE33" }}

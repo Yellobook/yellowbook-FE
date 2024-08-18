@@ -12,13 +12,10 @@ const MyPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [profile, setProfile] = useState(null);
   const teamId = useRecoilValue(teamIdState);
-  const accessToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzIzOTE1NTE0LCJleHAiOjE3MjM5MjI3MTR9.K9Rc3glDrvfjoyhKf72b5mGyWzB2KxTNLAJ6wSsrAdg";
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (teamId) {
-      console.log("팀 ID:", teamId);
-    }
+    console.log("팀 ID:", teamId);
     getProfile();
   }, [teamId]);
 
@@ -99,9 +96,8 @@ const MyPage = () => {
           <div className="text-xl" style={{ color: "#FFAB08" }}>
             {profile ? profile.nickname : "로딩 중..."}
           </div>
-          {profile.teams.map((team, index) => (
-            <div style={{ color: "#697675" }}>
-              {" "}
+          {profile?.teams.map((team, index) => (
+            <div key={team.id || index} style={{ color: "#697675" }}>
               {team.role} | {team.teamName}{" "}
             </div>
           ))}

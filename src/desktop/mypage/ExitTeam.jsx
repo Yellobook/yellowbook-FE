@@ -6,8 +6,7 @@ const ExitTeam = () => {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
-  const accessToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzIzOTE1NTE0LCJleHAiOjE3MjM5MjI3MTR9.K9Rc3glDrvfjoyhKf72b5mGyWzB2KxTNLAJ6wSsrAdg";
+  const accessToken = localStorage.getItem("accessToken");
 
   const handleSelectChange = (e) => {
     setSelectedTeam(e.target.value);
