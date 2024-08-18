@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
@@ -8,15 +8,14 @@ import { profile } from "../atom";
 
 export default function Loading() {
   const [cookie, setCookies] = useCookies(["tokens"]);
+  const [err, setErr] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    let err;
-    console.log("loading");
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
 
-      err = axios
+      axios
         .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -27,15 +26,15 @@ export default function Loading() {
           if (res.data.data.teams.length > 0) {
             console.log("what");
             console.log(res.data.data.teams);
-            return true;
+            setErr(true);
           } else {
             console.log("no");
-            return false;
+            setErr(false);
           }
         })
         .catch((e) => {
           console.error(e);
-          return false;
+          setErr(false);
         });
     } catch (e) {
       console.log(e);
