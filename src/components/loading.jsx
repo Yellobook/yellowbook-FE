@@ -16,7 +16,7 @@ export default function Loading() {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
 
-      axios
+      err = axios
         .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -24,7 +24,7 @@ export default function Loading() {
         })
         .then((res) => {
           setPro(res.data.data);
-          err = res.data.data.teams.length;
+          return res.data.data.teams.length;
         })
         .catch((e) => {
           console.error(e);
