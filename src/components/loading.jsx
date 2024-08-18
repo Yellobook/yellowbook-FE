@@ -25,9 +25,11 @@ export default function Loading() {
         .then((res) => {
           console.log(res.data.data);
           if (res.data.data.teams.length > 0) {
+            console.log("what");
             console.log(res.data.data.teams);
             return true;
           } else {
+            console.log("no");
             return false;
           }
         })
@@ -39,10 +41,8 @@ export default function Loading() {
       console.log(e);
     } finally {
       if (err) {
-        console.log("true");
         navigate("/");
       } else {
-        console.log("false");
         navigate("/login/create-team");
       }
     }

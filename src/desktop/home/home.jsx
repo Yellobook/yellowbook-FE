@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
-  const [userInfo, setUserInfo] = useRecoilState(profile);
+  const [userInfo, setUserInfo] = useState({});
   const date = new Date();
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
@@ -54,13 +54,9 @@ export default function DesktopHome() {
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
         <div>
-          <div>
-            {userInfo.teams ? userInfo.teams[0].teamName : "정보가 없습니다."}
-          </div>
+          <div>{userInfo.teams ? userInfo.teams : "정보가 없습니다."}</div>
           <div className="text-orange text-[12px]">
-            {userInfo.teams
-              ? `${userInfo.teams[0].role} 모드`
-              : "정보가 없습니다."}
+            {userInfo.teams ? `${userInfo.teams} 모드` : "정보가 없습니다."}
           </div>
         </div>
         <div className="text-orange">
