@@ -3,78 +3,43 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import axios from "axios";
 
-const dateInventorySampleData = {
-  isSuccess: true,
-  message: "요청이 성공적으로 처리되었습니다.",
-  data: {
-    products: [
-      {
-        productId: 1,
-        name: "Row1",
-        subProduct: "red",
-        sku: 2018102,
-        purchasePrice: 100000,
-        salePrice: 150000,
-        amount: 5000,
-      },
-      {
-        productId: 2,
-        name: "Row2",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 650,
-      },
-      {
-        productId: 3,
-        name: "Row3",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 150,
-      },
-      {
-        productId: 4,
-        name: "Row4",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 100,
-      },
-      {
-        productId: 5,
-        name: "Row5",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 0,
-      },
-    ],
-  },
-};
-
 const DesktopEditInventory = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [date, setDate] = useState("");
   const [id, setId] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const [memberId, setMemberId] = useState(null);
-  const [teamId, setTeamId] = useState(null);
-  const [role, setRole] = useState("");
+  const [inventoryData, setInventoryData] = useState([]);
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const idParams = params.get("id");
     const dateParams = params.get("date");
-    setDate(format(dateParams, "yyyy년 MM월 dd일"));
+    setDate(format(new Date(dateParams), "yyyy년 MM월 dd일"));
     setId(idParams);
-  }, [location.search]);
+
+    // API 호출을 통한 데이터 가져오기
+    const fetchInventoryData = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.yellobook.site/api/v1/inventories/${idParams}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setInventoryData(response.data.data.products);
+      } catch (error) {
+        console.error("재고 데이터를 불러오는 중 오류 발생", error);
+      }
+    };
+
+    if (idParams) {
+      fetchInventoryData();
+    }
+  }, [location.search, accessToken]);
 
   const handleCheckboxChange = (productId) => {
     setSelectedProductId(productId);
@@ -88,13 +53,12 @@ const DesktopEditInventory = () => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-          data: {
-            memberId: memberId,
-            teamId: teamId,
-            role: role,
-          },
         }
       );
+      setInventoryData((prevData) =>
+        prevData.filter((product) => product.productId !== selectedProductId)
+      );
+      location.reload();
     } catch (error) {
       console.error("제품 삭제 중 오류 발생", error);
     }
@@ -148,7 +112,7 @@ const DesktopEditInventory = () => {
             </tr>
           </thead>
           <tbody className="text-xs">
-            {dateInventorySampleData.data.products.map((inventory) => (
+            {inventoryData.map((inventory) => (
               <tr
                 className="text-center items-center"
                 key={inventory.productId}
