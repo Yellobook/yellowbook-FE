@@ -1,14 +1,23 @@
-import axios from 'axios';
+import axios from "axios";
 
 // 공지 삭제
-const deleteNotice = async (informId) => {
+const DeleteNotice = async (informId) => {
   try {
-    const response = await axios.delete(`/api/v1/informs/${informId}`);
+    // 로컬에서 토큰 가져오기
+    const accessToken = localStorage.getItem("accessToken");
+    const response = await axios.delete(
+      `https://api.yellobook.site/api/v1/informs/${informId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error('Error deleting notice:', error);
+    console.error("Error deleting notice:", error);
     throw error;
   }
 };
 
-export default deleteNotice;
+export default DeleteNotice;

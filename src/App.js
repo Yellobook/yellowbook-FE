@@ -28,6 +28,8 @@ import MobileCreateTeam from "./mobile/login/create-team";
 import DesktopEditInventory from "./desktop/manage-inventory/EditInventory";
 import DesktopPlusProduct from "./desktop/manage-inventory/PlusProduct";
 import Loading from "./components/loading";
+import MobileNotice from "./mobile/notice/notice";
+import OrderContainer from "./mobile/calendar/order";
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -71,6 +73,8 @@ const MobileRouter = createBrowserRouter([
     children: [
       { path: "/", element: <MobileHome /> },
       { path: "/calendar", element: <MobileCalendar /> },
+      { path: "/order", element: <OrderContainer /> }, // 테스트하기 위한 임시 나중에 지울 것
+      { path: "/notice/:informId", element: <MobileNotice /> },
       { path: "/manage-inventory", element: <MobileManageInventory /> },
       { path: "/check-inventory", element: <MobileCheckInventory /> },
       { path: "/mypage", element: <MobileMyPage /> },

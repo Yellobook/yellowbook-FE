@@ -1,15 +1,23 @@
-import axios from 'axios';
+import axios from "axios";
 
-const postComment = async (informId, content) => {
+const PostComment = async (informId, content) => {
   try {
-    const response = await axios.post(`/api/v1/informs/${informId}/comment`, {
-      content
-    });
+    // 로컬에서 토큰 가져오기
+    const accessToken = localStorage.getItem("accessToken");
+    const response = await axios.post(
+      `https://api.yellobook.site/api/v1/informs/${informId}/comment`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error('Error posting comment:', error);
+    console.error("Error posting comment:", error);
     throw error;
   }
 };
 
-export default postComment;
+export default PostComment;

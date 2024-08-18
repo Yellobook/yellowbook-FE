@@ -1,18 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Text } from "../calendar/order.jsx"; // color, size, weight
 //import mention from "../../style/mention.js";
 import mentionInput from "../../style/mentionInput.js";
 import { MentionsInput, Mention } from "react-mentions";
 import mention from "../../style/mention.js";
+import DeleteNotice from "./delNotice.jsx";
+import GetNotice from "./getNotice.jsx";
+import PostComment from "./postComment.jsx";
+import PostNotice from "./postNotice.jsx";
+import { useParams } from "react-router-dom";
+import debounce from "lodash/debounce";
 
 export default function Notice() {
   const [value, setValue] = useState("");
   const [lastMention, setLastMention] = useState("");
+  const [noticeData, setNoticeData] = useState(null);
+  const { informId } = useParams();
 
   // 일정 삭제
-  const deleteSchedule = () => {
-    // 일정 삭제 로직 추가
+  const DeleteSchedule = async () => {
+    try {
+      const response = await DeleteNotice(informId);
+      console.log("공지 삭제 성공:", response);
+      // 공지 삭제 성공 시의 추가 처리 (예: UI 업데이트, 알림 등)
+    } catch (error) {
+      console.error("공지 삭제 실패:", error);
+      // 공지 삭제 실패 시의 추가 처리 (예: 오류 메시지 표시 등)
+    }
   };
+
+  // 조회
+  const GetNoticeInfo = async () => {
+    try {
+      const response = await GetNotice(informId);
+      if (response.isSuccess) {
+        setNoticeData(response.data);
+        console.log("공지 조회 성공:", response.data);
+      } else {
+        console.error("공지 조회 실패:", response.message);
+      }
+    } catch (error) {
+      console.error("공지 조회 실패:", error);
+    }
+  };
+
+  useEffect(() => {
+    // 페이지가 렌더링되기 전에 공지 정보를 가져옴
+    GetNoticeInfo();
+  }, [informId]);
+
+  // Notice 정보 새로 고침
+  const refreshNoticeInfo = useCallback(() => {
+    GetNoticeInfo();
+  }, []);
 
   // 임시 데이터 - 팀 구성원
   const teamMembers = [
@@ -37,6 +77,10 @@ export default function Notice() {
     }
   }, [lastMention]);
 
+  if (!noticeData) {
+    return <div>Loading...</div>; // 데이터를 불러오는 동안 로딩 표시
+  }
+
   return (
     <div className="w-full p-0 m-0">
       <div className="flex flex-col gap-[1.5rem]">
@@ -48,7 +92,10 @@ export default function Notice() {
             <hr className="border-orange w-full" />
           </div>
           <div className="bg-yellow rounded-[0.6rem] w-[4.6875rem] h-[2.1875rem] flex justify-center items-center leading-5">
-            <button className="w-[3.7rem] h-[1.25rem] text-sm mt-1">
+            <button
+              className="w-[3.7rem] h-[1.25rem] text-sm mt-1"
+              onClick={DeleteSchedule}
+            >
               일정 삭제
             </button>
           </div>
@@ -58,7 +105,7 @@ export default function Notice() {
             <div className="flex justify-between w-full">
               <div className="flex justify-between w-[10rem]">
                 <Text>날짜</Text>
-                <Text color="text-dateGray">2024. 05. 20</Text>
+                <Text color="text-dateGray">{noticeData.date}</Text>
               </div>
               <div className="flex justify-between w-[6rem] mr-1">
                 <Text>작성자</Text>
@@ -67,20 +114,20 @@ export default function Notice() {
             </div>
             <div className="flex flex-col w-[20rem]">
               <Text>공지 제목</Text>
-              <Text size="1.125rem">20일 다나 근무시간 조정</Text>
+              <Text size="1.125rem">{noticeData.title}</Text>
             </div>
           </div>
           <div className="flex flex-col justify-between w-full">
             <Text>메모</Text>
             <div className="w-full h-[4rem] border border-yellow text-xs font-light flex">
-              <textarea className="w-full" />
+              {noticeData.memo}
             </div>
           </div>
           <div className="flex w-full justify-between">
             <Text>함께하는 멤버</Text>
             <div className="w-[14rem] h-[1.5rem] border border-yellow text-xs font-light flex justify-center items-center">
               {/* <input className="w-full h-full m-0 p-1" /> */}
-              <MentionsInput
+              {/* <MentionsInput
                 style={mentionInput}
                 value={value}
                 onChange={handleChange}
@@ -93,58 +140,45 @@ export default function Notice() {
                   data={teamMembers}
                   onAdd={handleAdd}
                 />
-              </MentionsInput>
+              </MentionsInput> */}
+              {/* {noticeData.mentions.map((mention) => (
+                <div key={mention.id}>{mention.memberNickname}</div>
+              ))} */}
             </div>
           </div>
         </div>
       </div>
       <hr className="border-yellow mt-[1.5rem] mb-[1rem]" />
-      <Chat />
-      <Comment />
+      <Chat comments={noticeData.comments} />
+      <Comment informId={informId} refreshNoticeInfo={refreshNoticeInfo} />
     </div>
   );
 }
 
 // 댓글 목록
-const Chat = () => {
-  // 임시 데이터
-  const orders = [
-    {
-      id: 1,
-      author: "생산자",
-      message: "20일까지 20개는 불가할 것 같아요! 15개로 정정해주세요.",
-      time: "시간",
-    },
-    {
-      id: 2,
-      author: "생산자",
-      message: "20일까지 30개는 가능합니다.",
-      time: "시간",
-    },
-  ];
-
+const Chat = ({ comments }) => {
   return (
     <div>
-      {orders.map((order) => (
+      {comments.map((comment) => (
         <div
-          key={order.id}
+          key={comment.id}
           className="relative w-full h-[3.1875rem] flex items-center border border-borderGray rounded-lg p-1 mb-[0.5rem]"
         >
           <div className="flex gap-[1.25rem] items-center">
             <div className="w-[2.5625rem] h-[1rem]">
               <Text size="0.875rem" weight="300">
-                {order.author}
+                {comment.memberId}
               </Text>
             </div>
             <div className="w-[13.875rem] h-[2rem]">
               <Text size="0.875rem" weight="300">
-                {order.message}
+                {comment.content}
               </Text>
             </div>
           </div>
           <div className="absolute right-[0rem] bottom-[0rem] w-[2rem] h-[1rem] flex justify-center">
             <Text size="0.625rem" weight="500" color="text-dateGray">
-              {order.time}
+              {comment.createdAt}
             </Text>
           </div>
         </div>
@@ -154,15 +188,52 @@ const Chat = () => {
 };
 
 // 댓글 쓰기
-const Comment = () => {
+const Comment = ({ informId, refreshNoticeInfo }) => {
+  const [comment, setComment] = useState("");
+
+  const handleSubmit = async () => {
+    if (comment.trim() === "") {
+      alert("댓글을 입력하세요.");
+      return;
+    }
+
+    console.log("댓글 제출 확인용: ", comment);
+
+    try {
+      const response = await PostComment(informId, comment);
+      console.log("Comment posted successfully:", response);
+      setComment(""); // Clear the input after successful submission
+      refreshNoticeInfo();
+    } catch (error) {
+      console.error("Failed to post comment:", error);
+    }
+  };
+
+  // 디바운스된 입력 변경 핸들러
+  const debouncedHandleSubmit = useCallback(
+    debounce(() => {
+      handleSubmit();
+    }, 1000),
+    [comment] // This dependency should be an empty array if handleSubmit does not depend on comment
+  );
+
+  const handleInputChange = (e) => {
+    setComment(e.target.value);
+  };
+
   return (
     <div className="fixed left-0 bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center justify-center">
       <div className="w-[22rem] h-[2.75rem] flex items-center border border-yellow rounded-[1.25rem] p-1">
         <input
           className="w-[18.75rem] h-[100%] placeholder-borderGray"
           placeholder="댓글 쓰기"
+          value={comment}
+          onChange={handleInputChange}
         />
-        <button className="w-[3.4375rem] h-[1.8125rem] bg-yellow rounded-[0.625rem] mr-2">
+        <button
+          className="w-[3.4375rem] h-[1.8125rem] bg-yellow rounded-[0.625rem] mr-2"
+          onClick={debouncedHandleSubmit}
+        >
           입력
         </button>
       </div>
