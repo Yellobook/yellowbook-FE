@@ -40,7 +40,12 @@ const MyPage = () => {
   const deactivateUser = async () => {
     try {
       const deactivateUser_res = await axios.post(
-        "https://api.yellobook.site/api/v1/auth/deactivate"
+        "https://api.yellobook.site/api/v1/auth/deactivate",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       console.log(deactivateUser_res.data.message);
     } catch (error) {
@@ -51,7 +56,12 @@ const MyPage = () => {
   const logout = async () => {
     try {
       const logout_res = await axios.post(
-        "https://api.yellobook.site/api/v1/auth/logout"
+        "https://api.yellobook.site/api/v1/auth/logout",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
     } catch (error) {
       alert("로그아웃 중 오류 발생", error);
@@ -150,6 +160,7 @@ const MyPage = () => {
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
           className="cursor-pointer border-b flex items-center p-2"
+          onClick={() => window.open("https://forms.gle/orAjV62f3jdMWg9a9")}
         >
           문의하기
         </div>
