@@ -33,11 +33,7 @@ export default function Loading() {
       console.log(e);
     } finally {
       console.log("err", err);
-      if (err > 0) {
-        navigate("/");
-      } else {
-        navigate("/login/create-team");
-      }
+      navigate("/");
     }
   }, []);
   return (
