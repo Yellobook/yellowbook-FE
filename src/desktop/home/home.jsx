@@ -22,8 +22,15 @@ export default function DesktopHome() {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       })
-      .then((res) => setTeam(res.data.data.teams))
-      .catch((e) => console.log(e));
+      .then((res) => {
+        setTeam(res.data.data.teams);
+        console.log(res.data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert("오류가 발생했습니다");
+        navigate("/login");
+      });
 
     axios
       .get(
@@ -39,7 +46,11 @@ export default function DesktopHome() {
         console.log(res.data.data);
         setUpComing(res.data.data);
       })
-      .catch((e) => console.log("upcoming err", e));
+      .catch((e) => {
+        console.log(e);
+        alert("오류가 발생했습니다");
+        navigate("/login");
+      });
   }, []);
   return (
     <div className="flex flex-col gap-3">

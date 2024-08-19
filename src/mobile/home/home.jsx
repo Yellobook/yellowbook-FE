@@ -10,10 +10,25 @@ import axios from "axios";
 export default function MobileHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
+  const [team, setTeam] = useState([]);
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => {
+        setTeam(res.data.data.teams);
+      })
+      .catch((e) => {
+        alert("오류가 발생했습니다");
+        navigate("/login");
+      });
+
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
@@ -25,17 +40,21 @@ export default function MobileHome() {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data.data);
         setUpComing(res.data.data);
       })
-      .catch((e) => console.log("upcoming err", e));
+      .catch((e) => {
+        alert("오류가 발생했습니다");
+        navigate("/login");
+      });
   }, []);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
         <div>
-          <div>팀 이름</div>
-          <div className="text-orange text-[12px]">멤버 9</div>
+          <div>{team.length > 0 ? team[0].teamName : "정보가 없습니다."}</div>
+          <div className="text-orange text-[12px]">
+            {team.length > 0 ? `${team[0].role} 모드` : "정보가 없습니다."}
+          </div>
         </div>
         <div className="text-orange">
           <ChevronUpIcon className="text-xl size-7" />
