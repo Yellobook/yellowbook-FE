@@ -12,6 +12,7 @@ export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
   const [team, setTeam] = useState([]);
+  const date = new Date();
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
@@ -35,7 +36,6 @@ export default function DesktopHome() {
         navigate("/login");
       });
 
-
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
@@ -55,7 +55,6 @@ export default function DesktopHome() {
         alert("오류가 발생했습니다");
         navigate("/login");
       });
-
   }, []);
   return (
     <div className="flex flex-col gap-3">
@@ -66,7 +65,6 @@ export default function DesktopHome() {
           </div>
           <div className="text-orange text-[12px]">
             {team.length > 0 ? `${team[0].role} 역할` : "팀 정보가 없습니다."}
-
           </div>
         </div>
         <div className="text-orange">
