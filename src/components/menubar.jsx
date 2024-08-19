@@ -1,7 +1,7 @@
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
-import { useRecoilValue } from "recoil";
-import { isMobile } from "../atom";
-import { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isMobile, profile } from "../atom";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import axios from "axios";
@@ -11,7 +11,19 @@ export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cookie, , removeCookie] = useCookies(["tokens"]);
+  const [name, setName] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setName(res.data.data.nickname))
+      .catch((e) => console.log(e));
+  }, []);
   const onLogout = async () => {
     try {
       console.log(localStorage.getItem("accessToken"));
@@ -52,7 +64,7 @@ export default function MenuBar() {
           onClick={() => setIsMenuOpen(false)}
         />
         <img alt="logo" src={logo} className="w-10" />
-        <div className="text-2xl font-bold">Username 님!</div>
+        <div className="text-2xl font-bold">{name ? `${name}님!` : null}</div>
 
         <ul>
           <li

@@ -10,10 +10,21 @@ import axios from "axios";
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
+  const [team, setTeam] = useState([]);
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
+
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => setTeam(res.data.data.teams))
+      .catch((e) => console.log(e));
+
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
@@ -34,8 +45,12 @@ export default function DesktopHome() {
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
         <div>
-          <div>팀 이름</div>
-          <div className="text-orange text-[12px]">멤버 9</div>
+          <div>
+            {team.length > 0 ? team[0].teamName : "팀 정보가 없습니다."}
+          </div>
+          <div className="text-orange text-[12px]">
+            {team.length > 0 ? `${team[0].role} 역할` : "팀 정보가 없습니다."}
+          </div>
         </div>
         <div className="text-orange">
           <ChevronUpIcon className="text-xl size-7" />
@@ -43,7 +58,10 @@ export default function DesktopHome() {
         </div>
       </div>
 
-      <div className="homeCard bg-opacity-50">
+      <div
+        className="homeCard bg-opacity-50"
+        onClick={() => navigate("/manage-inventory")}
+      >
         <div>
           <div className="font-extrabold text-lg">
             관리자가 게시한 재고 현황
@@ -57,7 +75,7 @@ export default function DesktopHome() {
         </div>
       </div>
 
-      <div className="homeCard">
+      <div className="homeCard" onClick={() => navigate("/calendar")}>
         <div className="w-full">
           <div className="text-lg font-bold">{upcoming.scheduleTitle}</div>
           <div className="text-[15px] flex justify-start gap-3 ">
