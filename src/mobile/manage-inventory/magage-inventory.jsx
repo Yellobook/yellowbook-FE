@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
 import InventoryDetails from "./manageInventoryDetail";
 
 // 메인 컴포넌트
@@ -9,6 +9,7 @@ function MobileManageInventory() {
       <InventoryHeader />
       <InventoryInfo />
       <InventoryList />
+      <Outlet />
     </div>
   );
 }
@@ -87,6 +88,8 @@ function InventoryList() {
 // 개별 재고 현황 아이템 컴포넌트
 function InventoryItem({ item }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
