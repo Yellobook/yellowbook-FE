@@ -3,114 +3,15 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import ko from "date-fns/locale/ko";
-
-const sampleData = {
-  isSuccess: true,
-  message: "요청이 성공적으로 처리되었습니다.",
-  data: {
-    page: 0,
-    size: 5,
-    inventories: [
-      {
-        inventoryId: 1,
-        title: "2024년 03월 25일 재고현황",
-        createdAt: "2024-03-25",
-        updatedAt: "2024-03-26",
-        view: 20,
-      },
-      {
-        inventoryId: 2,
-        title: "2024년 04월 29일 재고현황",
-        createdAt: "2024-04-29",
-        updatedAt: "2024-04-30",
-        view: 20,
-      },
-      {
-        inventoryId: 3,
-        title: "2024년 04월 15일 재고현황",
-        createdAt: "2024-04-15",
-        updatedAt: "2024-04-16",
-        view: 20,
-      },
-      {
-        inventoryId: 4,
-        title: "2024년 04월 29일 재고현황",
-        createdAt: "2024-04-29",
-        updatedAt: "2024-04-30",
-        view: 20,
-      },
-      {
-        inventoryId: 5,
-        title: "2024년 05월 09일 재고현황",
-        createdAt: "2024-05-09",
-        updatedAt: "2024-05-10",
-        view: 20,
-      },
-    ],
-  },
-};
-
-const dateInventorySampleData = {
-  isSuccess: true,
-  message: "요청이 성공적으로 처리되었습니다.",
-  data: {
-    products: [
-      {
-        productId: 1,
-        name: "row1",
-        subProduct: "red",
-        sku: 2018102,
-        purchasePrice: 100000,
-        salePrice: 150000,
-        amount: 5000,
-      },
-      {
-        productId: 2,
-        name: "row2",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 650,
-      },
-      {
-        productId: 3,
-        name: "row3",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 150,
-      },
-      {
-        productId: 4,
-        name: "row4",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 100,
-      },
-      {
-        productId: 5,
-        name: "row5",
-        subProduct: "123",
-        sku: 456,
-        purchasePrice: 456,
-        salePrice: 456,
-        amount: 0,
-      },
-    ],
-  },
-};
+import axios from "axios";
 
 const DesktopManageInventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inventories, setInventories] = useState([]);
   const [selectedInventory, setSelectedInventory] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
-  const dateInventory = dateInventorySampleData.data.products;
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -121,22 +22,45 @@ const DesktopManageInventory = () => {
   };
 
   useEffect(() => {
-    const fetchInventories = () => {
-      const inventories = sampleData.data.inventories;
-      setInventories(inventories);
-    };
+    getAllInventories();
+  });
 
-    fetchInventories();
-  }, []);
-
-  const openModal = (inventory) => {
-    setSelectedInventory(inventory);
-    setIsModalOpen(true);
+  const openModal = async (inventory) => {
+    try {
+      const inventoryDetails_res = await axios.get(
+        `https://api.yellobook.site/api/v1/inventories/${inventory.inventoryId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setSelectedInventory(inventoryDetails_res.data.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      alert("재고 상세 정보를 불러오는 중 오류 발생");
+    }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedInventory(null);
+  };
+
+  const getAllInventories = async () => {
+    try {
+      const AllInventories_res = await axios.get(
+        `https://api.yellobook.site/api/v1/inventories?page=1&size=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setInventories(AllInventories_res.data.data.inventories);
+    } catch (error) {
+      alert("전체 재고 현황 글 조회 중 오류 발생");
+    }
   };
 
   return (
@@ -252,30 +176,30 @@ const DesktopManageInventory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dateInventorySampleData.data.products.map((inventory) => (
-                    <tr className="text-center" key={inventory.productId}>
+                  {selectedInventory.products.map((product) => (
+                    <tr className="text-center" key={product.productId}>
                       <td className="py-2 pr-20 text-lg font-bold">
-                        {inventory.name}
+                        {product.name}
                       </td>
                       <td className="py-2 px-4 text-gray">
-                        {inventory.subProduct}
+                        {product.subProduct}
                       </td>
-                      <td className="py-2 px-4 text-gray">{inventory.sku}</td>
+                      <td className="py-2 px-4 text-gray">{product.sku}</td>
                       <td className="py-2 px-4 text-gray">
-                        {inventory.purchasePrice.toLocaleString()}
+                        {product.purchasePrice.toLocaleString()}
                       </td>
                       <td className="py-2 px-4 text-gray">
-                        {inventory.salePrice.toLocaleString()}
+                        {product.salePrice.toLocaleString()}
                       </td>
                       <td className="py-2 px-4 text-gray">
                         <div className="flex items-center">
                           <span className="text-sm">
-                            {inventory.amount.toLocaleString()}
+                            {product.amount.toLocaleString()}
                           </span>
                           <div className="">
                             <div
                               style={{
-                                width: `${(inventory.amount / 5000) * 100}%`,
+                                width: `${(product.amount / 5000) * 100}%`,
                               }}
                             ></div>
                           </div>

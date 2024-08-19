@@ -1,68 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { tr } from "date-fns/locale";
-
-const chatSampleData = [
-  {
-    id: 1,
-    author: "생산자",
-    message: "20일까지 20개는 불가할 것 같아요! 15개로 정정해주세요",
-    time: "시간",
-  },
-  {
-    id: 2,
-    author: "주문자",
-    message: "네, 확인했어요~",
-    time: "시간",
-  },
-];
 
 const DesktopCheckInventory = () => {
+  const location = useLocation();
   const [product, setProduct] = useState("");
   const [subProduct, setSubProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const [memo, setMemo] = useState("");
-  const [correctBtnClicked, setCorrectBtnClicked] = useState(false);
-  const [checkBtnClicked, setCheckBtnClicked] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+  const [isCorrectBtnDisabled, setIsCorrectBtnDisabled] = useState(false);
+  const [isCheckBtnDisabled, setIsCheckBtnDisabled] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const accessToken = localStorage.getItem("accessToken");
 
-  // todo : orderId 넣어서 하는거로 바꿔야 됨
-  const correctOrder = async () => {
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const idParams = params.get("id");
+    setOrderId(idParams);
+
+    if (idParams) {
+      fetchComments(idParams);
+    }
+  }, [location.search]);
+
+  const correctOrder = async (orderId) => {
     try {
-      await axios.post(
-        `https://api.yellobook.site/api/v1/orders/orderId/correction`
+      await axios.patch(
+        `https://api.yellobook.site/api/v1/${orderId}/correction`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
+      setIsCheckBtnDisabled(false);
     } catch (error) {
       alert("주문 정정 요청 중 오류 발생", error);
+      setIsCheckBtnDisabled(false);
     }
   };
 
-  // todo : parameter informId 추가해야 됨
-  const writeChat = async () => {
+  const fetchComments = async (orderId) => {
     try {
-      await axios.post(`https://api.yellobook.site/api/v1/informs/1/comment`, {
-        content: "댓글",
-      });
+      const response = await axios.get(
+        `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setComments(response.data.data.comments);
+    } catch (error) {
+      console.error("댓글 조회 중 오류 발생", error);
+    }
+  };
+
+  const postComment = async () => {
+    try {
+      await axios.post(
+        `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
+        {
+          content: newComment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setNewComment(""); // 입력란 초기화
+      fetchComments(orderId); // 댓글 작성 후 새로고침
     } catch (error) {
       alert("댓글 작성 중 오류 발생", error);
     }
   };
 
   const handleCorrectBtnClick = async () => {
-    try {
-      setCorrectBtnClicked(true);
-      await correctOrder();
-      setCorrectBtnClicked(false);
-    } catch (error) {
-      alert("주문 정정 요청 중 오류 발생", error);
-      setCorrectBtnClicked(false);
-    }
+    setIsCheckBtnDisabled(true); // '주문 확인하기' 버튼 비활성화
+    await correctOrder(orderId);
+    setIsCheckBtnDisabled(false); // '주문 확인하기' 버튼 활성화
   };
 
-  const handleCheckBtnClick = async () => {
-    setTimeout(() => {
-      setCheckBtnClicked(false);
-    }, 500);
-    setCheckBtnClicked(true);
+  const handleCheckBtnClick = () => {
+    setIsCorrectBtnDisabled(true); // '주문 정정 요청' 버튼 비활성화
+    alert("주문 확인");
+    setIsCorrectBtnDisabled(false); // '주문 정정 요청' 버튼 활성화
   };
 
   return (
@@ -135,16 +160,18 @@ const DesktopCheckInventory = () => {
           <button
             onClick={handleCorrectBtnClick}
             className={`px-20 py-3 rounded-xl ${
-              correctBtnClicked ? "bg-yellowDisable" : "bg-yellow"
+              isCorrectBtnDisabled ? "bg-yellowDisable" : "bg-yellow"
             }`}
+            disabled={isCheckBtnDisabled}
           >
             주문 정정 요청
           </button>
           <button
             onClick={handleCheckBtnClick}
             className={`px-20 py-3 rounded-xl ${
-              checkBtnClicked ? "bg-yellowDisable" : "bg-yellow"
+              isCheckBtnDisabled ? "bg-yellowDisable" : "bg-yellow"
             }`}
+            disabled={isCorrectBtnDisabled}
           >
             주문 확인하기
           </button>
@@ -152,17 +179,14 @@ const DesktopCheckInventory = () => {
       </div>
       {/* 댓글 */}
       <div className="mt-6">
-        {chatSampleData.map((chat) => (
+        {comments?.map((chat) => (
           <div
-            key={chat.id}
+            key={chat.commentId}
             style={{ borderColor: "#D9D9D9" }}
             className="py-3 pl-3 pr-3 rounded border flex relative"
           >
-            <div className="mr-8">{chat.author}</div>
-            <div className="flex-1">{chat.message}</div>
-            <div className="absolute bottom-1 right-3 text-gray text-xs">
-              {chat.time}
-            </div>
+            <div className="mr-8">{chat.role}</div>
+            <div className="flex-1">{chat.content}</div>
           </div>
         ))}
       </div>
@@ -171,9 +195,11 @@ const DesktopCheckInventory = () => {
           <input
             className="flex-grow bg-transparent border-none outline-none"
             placeholder="댓글 쓰기"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
           />
           <button
-            onClick={writeChat}
+            onClick={postComment}
             className="ml-4 bg-yellow rounded-md px-8 py-2"
           >
             입력
