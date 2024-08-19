@@ -1,8 +1,14 @@
 import React from 'react';
 import { ReactComponent as BackIcon } from '../../assets/mobile/calendar/back.svg'; 
+import { useNavigate } from 'react-router-dom';
 
 function InventoryDetails({ isOpen, onClose, date }) {
+  const navigate = useNavigate();
   if (!isOpen) return null;
+  
+  const handleNavigateToEditInventory = () => {
+    navigate('/manage-inventory/edit-inventory' , { state: { inventoryData, date } });
+  };
 
   // 임시 데이터
   const inventoryData = [
@@ -39,6 +45,7 @@ function InventoryDetails({ isOpen, onClose, date }) {
   // 최대 수량 값을 기준으로 막대 그래프의 너비를 백분율로 계산
   const maxStockQuantity = Math.max(...inventoryData.map(item => item.stockQuantity));
 
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-slate-50 pt-3 pb-3 rounded-lg w-full max-w-sm"> 
@@ -54,7 +61,7 @@ function InventoryDetails({ isOpen, onClose, date }) {
           <InventoryTable data={inventoryData} maxStockQuantity={maxStockQuantity} />
         </div>
         <div className="flex justify-end items-end m-4">
-          <button onClick={onClose} className="px-3 py-2 bg-yellow text-black text-sm font-gmarket font-thin rounded-xl">
+          <button  onClick={handleNavigateToEditInventory} className="px-3 py-2 bg-yellow text-black text-sm font-gmarket font-thin rounded-xl">
             재고현황 수정하기
           </button>
         </div>

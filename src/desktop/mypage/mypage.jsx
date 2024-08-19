@@ -3,23 +3,34 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
 import axios from "axios";
-import { tr } from "date-fns/locale";
+import { useRecoilValue } from "recoil";
+import { teamIdState } from "../../atom"; // teamIdState 가져오기
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [profile, setProfile] = useState(null);
+  const teamId = useRecoilValue(teamIdState);
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
+    console.log("팀 ID:", teamId);
     getProfile();
-  }, []);
+  }, [teamId]);
 
   const getProfile = async () => {
     try {
       const getProfile_res = await axios.get(
-        "https://api.yellobook.site/api/v1/members/profile"
+        "https://api.yellobook.site/api/v1/members/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
+
+      // 프로필 상태 업데이트
       setProfile(getProfile_res.data.data);
     } catch (error) {
       console.error("프로필 불러오기 중 오류 발생", error);
@@ -29,8 +40,14 @@ const MyPage = () => {
   const deactivateUser = async () => {
     try {
       const deactivateUser_res = await axios.post(
-        "https://api.yellobook.site/api/v1/auth/deactivate"
+        "https://api.yellobook.site/api/v1/auth/deactivate",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
+      console.log(deactivateUser_res.data.message);
     } catch (error) {
       alert("회원 탈퇴 중 오류 발생", error);
     }
@@ -39,7 +56,12 @@ const MyPage = () => {
   const logout = async () => {
     try {
       const logout_res = await axios.post(
-        "https://api.yellobook.site/api/v1/auth/logout"
+        "https://api.yellobook.site/api/v1/auth/logout",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
     } catch (error) {
       alert("로그아웃 중 오류 발생", error);
@@ -84,8 +106,11 @@ const MyPage = () => {
           <div className="text-xl" style={{ color: "#FFAB08" }}>
             {profile ? profile.nickname : "로딩 중..."}
           </div>
-          <div style={{ color: "#697675" }}>관리자 | 딸기네 딸기농장</div>
-          <div style={{ color: "#697675" }}>주문자 | 피그마 플라스틱 공장</div>
+          {profile?.teams.map((team, index) => (
+            <div key={team.id || index} style={{ color: "#697675" }}>
+              {team.role} | {team.teamName}{" "}
+            </div>
+          ))}
         </div>
       </div>
       {/*협업 팀 관리*/}
@@ -135,6 +160,7 @@ const MyPage = () => {
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
           className="cursor-pointer border-b flex items-center p-2"
+          onClick={() => window.open("https://forms.gle/orAjV62f3jdMWg9a9")}
         >
           문의하기
         </div>

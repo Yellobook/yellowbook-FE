@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
@@ -8,7 +8,7 @@ import { profile } from "../atom";
 
 export default function Loading() {
   const [cookie, setCookies] = useCookies(["tokens"]);
-  const [userInfo, setUserInfo] = useRecoilState(profile);
+  const setPro = useSetRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
     try {
@@ -17,6 +17,7 @@ export default function Loading() {
     } catch (e) {
       console.log(e);
     } finally {
+
       navigate("/");
     }
   }, []);

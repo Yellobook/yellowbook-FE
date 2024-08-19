@@ -2,6 +2,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isMobile, profile } from "../atom";
 import { useEffect, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import axios from "axios";
@@ -24,6 +25,7 @@ export default function MenuBar() {
       .then((res) => setName(res.data.data.nickname))
       .catch((e) => console.log(e));
   }, []);
+
   const onLogout = async () => {
     try {
       console.log(localStorage.getItem("accessToken"));
@@ -65,6 +67,7 @@ export default function MenuBar() {
         />
         <img alt="logo" src={logo} className="w-10" />
         <div className="text-2xl font-bold">{name ? `${name}님!` : null}</div>
+
 
         <ul>
           <li

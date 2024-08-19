@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { teamBuild } from "../../atom";
+import { profile, teamBuild } from "../../atom";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { MakeTeam } from "../../util/TeamUtils";
 
 export default function DesktopCreateTeam() {
   const [teamInfo, setTeamInfo] = useRecoilState(teamBuild);
+  const setTeamId = useSetRecoilState(teamIdState);
   const [modeNum, setModeNum] = useState(0);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -38,13 +39,17 @@ export default function DesktopCreateTeam() {
         address: e.target[7].value,
       };
 
-      team = await MakeTeam(localStorage.getItem("accessToken"), tempInfo);
+      team = await MakeTeam(
+        localStorage.getItem("accessToken"),
+        tempInfo,
+        setTeamId
+      );
     } catch (error) {
       console.log(error);
       alert("정보를 확인해주세요");
     } finally {
       if (team.status) {
-        navigate("/");
+        navigate("/loading");
       } else {
         alert(
           `${team.errMessage} \n 문제가 반복되면 yellobook@admin.kr로 문의해주세요`

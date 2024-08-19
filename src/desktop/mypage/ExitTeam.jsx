@@ -1,13 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ExitTeam = () => {
   const [selectedTeam, setSelectedTeam] = useState("");
+  const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
+  const accessToken = localStorage.getItem("accessToken");
 
   const handleSelectChange = (e) => {
     setSelectedTeam(e.target.value);
+  };
+
+  useEffect(() => {
+    getProfile();
+  });
+
+  const getProfile = async () => {
+    try {
+      const getProfile_res = await axios.get(
+        "https://api.yellobook.site/api/v1/members/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      // 프로필 상태 업데이트
+      setProfile(getProfile_res.data.data);
+    } catch (error) {
+      console.error("프로필 불러오기 중 오류 발생", error);
+    }
   };
 
   const doExit = async () => {
@@ -45,9 +69,13 @@ const ExitTeam = () => {
           <option value="" disabled style={{ color: "#d1d5db" }}>
             팀 이름 선택
           </option>
-          <option value="1">팀 이름 1</option>
-          <option value="2">팀 이름 2</option>
-          <option value="3">팀 이름 3</option>
+          {profile &&
+            profile.teams &&
+            profile.teams.map((team, index) => (
+              <option key={index} value={team.teamName}>
+                {team.teamName}
+              </option>
+            ))}
         </select>
         <div className="flex flex-col justify-center items-center mt-48">
           <div className="text-xs mb-2" style={{ color: "#97A5A4" }}>
