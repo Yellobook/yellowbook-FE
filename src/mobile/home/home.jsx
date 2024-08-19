@@ -28,7 +28,6 @@ export default function MobileHome() {
         setTeam(res.data.data.teams);
       })
       .catch((e) => {
-        alert("오류가 발생했습니다");
         navigate("/login");
       });
 
@@ -46,7 +45,6 @@ export default function MobileHome() {
         setUpComing(res.data.data);
       })
       .catch((e) => {
-        alert("오류가 발생했습니다");
         navigate("/login");
       });
   }, []);

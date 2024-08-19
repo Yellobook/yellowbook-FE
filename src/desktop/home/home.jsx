@@ -32,7 +32,6 @@ export default function DesktopHome() {
       })
       .catch((e) => {
         console.log(e);
-        alert("오류가 발생했습니다");
         navigate("/login");
       });
 
@@ -52,7 +51,6 @@ export default function DesktopHome() {
       })
       .catch((e) => {
         console.log(e);
-        alert("오류가 발생했습니다");
         navigate("/login");
       });
   }, []);
