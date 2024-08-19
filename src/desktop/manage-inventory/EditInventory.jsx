@@ -99,9 +99,9 @@ const DesktopEditInventory = () => {
         style={{ color: "#97A5A4" }}
         className="border border-yellow rounded-xl text-center mt-10 p-4 overflow-x-auto"
       >
-        <table className="">
+        <table className="flex justify-center">
           <thead>
-            <tr className="text-xs text-gray">
+            <tr className="text-base text-gray">
               <th className="py-2 px-4"></th>
               <th className="py-2 px-4">제품이름</th>
               <th className="py-2 px-4">하위제품</th>
@@ -111,7 +111,7 @@ const DesktopEditInventory = () => {
               <th className="py-2 px-4">수량</th>
             </tr>
           </thead>
-          <tbody className="text-xs">
+          <tbody className="text-base">
             {inventoryData.map((inventory) => (
               <tr
                 className="text-center items-center"

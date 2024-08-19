@@ -35,10 +35,10 @@ const DesktopCheckInventory = () => {
           },
         }
       );
-      setIsCheckBtnDisabled(false); // 요청 완료 후 '주문 확인하기' 버튼 다시 활성화
+      setIsCheckBtnDisabled(false);
     } catch (error) {
       alert("주문 정정 요청 중 오류 발생", error);
-      setIsCheckBtnDisabled(false); // 오류 발생 시에도 버튼 상태 초기화
+      setIsCheckBtnDisabled(false);
     }
   };
 
@@ -84,7 +84,7 @@ const DesktopCheckInventory = () => {
     setIsCheckBtnDisabled(false); // '주문 확인하기' 버튼 활성화
   };
 
-  const handleCheckBtnClick = async () => {
+  const handleCheckBtnClick = () => {
     setIsCorrectBtnDisabled(true); // '주문 정정 요청' 버튼 비활성화
     alert("주문 확인");
     setIsCorrectBtnDisabled(false); // '주문 정정 요청' 버튼 활성화
