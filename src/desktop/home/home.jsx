@@ -11,16 +11,31 @@ import dayjs from "dayjs";
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
-  const [userInfo, setUserInfo] = useState({});
-  const [user, setUser] = useRecoilState(profile);
+  const [team, setTeam] = useState([]);
 
-  const date = new Date();
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
       console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
-    console.log(user);
+
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => {
+        setTeam(res.data.data.teams);
+        console.log(res.data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert("오류가 발생했습니다");
+        navigate("/login");
+      });
+
+
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
@@ -35,31 +50,23 @@ export default function DesktopHome() {
         console.log(res.data.data);
         setUpComing(res.data.data);
       })
-      .catch((e) => console.log("upcoming err", e));
+      .catch((e) => {
+        console.log(e);
+        alert("오류가 발생했습니다");
+        navigate("/login");
+      });
 
-    axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res.data.data);
-        setUserInfo(res.data.data);
-      })
-      .catch((e) => console.log("upcoming err", e));
   }, []);
   return (
     <div className="flex flex-col gap-3">
       <div className="homeCard bg-opacity-15">
         <div>
-          <div>{userInfo.teams ? userInfo.teams : "정보가 없습니다."}</div>
+          <div>
+            {team.length > 0 ? team[0].teamName : "팀 정보가 없습니다."}
+          </div>
           <div className="text-orange text-[12px]">
-            {userInfo.teams ? `${userInfo.teams} 모드` : "정보가 없습니다."}
+            {team.length > 0 ? `${team[0].role} 역할` : "팀 정보가 없습니다."}
+
           </div>
         </div>
         <div className="text-orange">

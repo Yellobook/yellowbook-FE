@@ -11,28 +11,13 @@ export default function Loading() {
   const setPro = useSetRecoilState(profile);
   const navigate = useNavigate();
   useEffect(() => {
-    let err;
     try {
       localStorage.setItem("accessToken", cookie.ac_t);
       localStorage.setItem("refreshToken", cookie.rf_t);
-
-      err = axios
-        .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        })
-        .then((res) => {
-          setPro(res.data.data);
-          return res.data.data.teams.length;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
     } catch (e) {
       console.log(e);
     } finally {
-      console.log("err", err);
+
       navigate("/");
     }
   }, []);
