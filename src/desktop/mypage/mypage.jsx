@@ -4,7 +4,8 @@ import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
-import { teamIdState } from "../../atom"; // teamIdState 가져오기
+import { teamIdState } from "../../atom";
+import { getProfile } from "../../util/ProfileUtils";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -15,26 +16,12 @@ const MyPage = () => {
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    console.log("팀 ID:", teamId);
-    getProfile();
-  }, [teamId]);
+    fetchProfile();
+  }, []);
 
-  const getProfile = async () => {
-    try {
-      const getProfile_res = await axios.get(
-        "https://api.yellobook.site/api/v1/members/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      // 프로필 상태 업데이트
-      setProfile(getProfile_res.data.data);
-    } catch (error) {
-      console.error("프로필 불러오기 중 오류 발생", error);
-    }
+  const fetchProfile = async () => {
+    const profileData = await getProfile();
+    setProfile(profileData);
   };
 
   const deactivateUser = async () => {
