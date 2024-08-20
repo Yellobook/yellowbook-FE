@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { teamIdState } from "../../atom";
 import { useRecoilValue } from "recoil";
+import { getProfile } from "../../util/ProfileUtils";
+import { leaveTeam } from "../../util/TeamUtils";
 
 const ExitTeam = () => {
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -17,40 +19,16 @@ const ExitTeam = () => {
   };
 
   useEffect(() => {
-    getProfile();
-  });
+    fetchProfile();
+  }, []);
 
-  const getProfile = async () => {
-    try {
-      const getProfile_res = await axios.get(
-        "https://api.yellobook.site/api/v1/members/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      // 프로필 상태 업데이트
-      setProfile(getProfile_res.data.data);
-    } catch (error) {
-      console.error("프로필 불러오기 중 오류 발생", error);
-    }
+  const fetchProfile = async () => {
+    const profileData = await getProfile();
+    setProfile(profileData);
   };
 
-  const doExit = async () => {
-    try {
-      const response = await axios.delete(
-        `https://api.yellobook.site/api/v1/teams/${selectedTeam}/leave`
-      );
-      if (response.status === 200) {
-        alert("협업 팀에서 성공적으로 나가졌습니다.");
-        navigate("/mypage");
-      }
-    } catch (error) {
-      console.error("팀 나가기 요청 중 오류 발생:", error);
-      alert("팀 나가기 요청 중 오류가 발생했습니다. 다시 시도해 주세요.");
-    }
+  const doExit = async (teamId) => {
+    leaveTeam(teamId);
   };
 
   return (
