@@ -3,7 +3,7 @@ import { Product } from './InventoryModels'; // 모델을 불러옵니다
 
 // 특정 인벤토리에 대한 제품 목록을 가져오는 함수
 export const fetchProductsByInventoryId = async (inventoryId,) => {
-    const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzI0MTMzNDU5LCJleHAiOjE3MjQxNDA2NTl9.ehZGIr_iWFe-_8dwSN6ksbrDiBWvhmlBIS2Gsx4hJ70";
+    const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwiaWF0IjoxNzI0MTc3MDAzLCJleHAiOjE3MjQxODQyMDN9.2sosEJr1kTRTFOezkcgbogSOhtJRWb4JGxxDsiAa2ac";
      //localStorage.getItem("accessToken");
   try {
     const response = await axios.get(`https://api.yellobook.site/api/v1/inventories/${inventoryId}`, {
