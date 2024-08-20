@@ -45,7 +45,11 @@ export default function MobileHome() {
         setUpComing(res.data.data);
       })
       .catch((e) => {
-        navigate("/login");
+        if (e.response.data.code === "TEAM-001") {
+          navigate("/login/create-team");
+        } else {
+          navigate("/login");
+        }
       });
   }, []);
   return (
