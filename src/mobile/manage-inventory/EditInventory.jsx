@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Product } from './InventoryApi/InventoryModels';
 
 function EditInventory() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
-  const { inventoryData = [], date = '' } = state || {};
+  const { inventoryData = [], date = '', newProduct } = state || {};
+
+  const [products, setProducts] = useState(inventoryData);
+
+  useEffect(() => {
+    if (newProduct) {
+      setProducts((prevProducts) => [
+        ...prevProducts, 
+        { ...Product, ...newProduct } // Product 모델 사용하여 기본값 설정
+      ]);
+    }
+  }, [newProduct]);
 
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  // 제품 선택 토글
   const toggleProductSelection = (index) => {
     setSelectedProducts((prevSelectedProducts) => {
       if (prevSelectedProducts.includes(index)) {
@@ -20,28 +31,29 @@ function EditInventory() {
     });
   };
 
-  // 선택된 제품 삭제
   const deleteSelectedProducts = () => {
-    const updatedInventory = inventoryData.filter(
+    const updatedInventory = products.filter(
       (item, idx) => !selectedProducts.includes(idx) 
     );
-    console.log('Updated Inventory:', updatedInventory);
+    setProducts(updatedInventory);
     // TODO: 서버 업데이트 로직을 여기에 추가
   };
 
-  // 제품 추가 함수
-  const addProduct = () => {
-    navigate('/manage-inventory/productCreationForm'); 
-  };
+// EditInventory 컴포넌트에서 inventoryId를 전달
+const addProduct = () => {
+  const inventoryId = products[0]?.inventoryId; 
+  navigate('/manage-inventory/productCreationForm', { state: { inventoryId } });
+};
 
-  if (!inventoryData.length) {
+
+  if (!products.length) {
     return <div>재고 데이터가 없습니다.</div>;
   }
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-orange font-gmarket text-xl font-black">{date} 재고현황</h2>
+        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2>
       </div>
 
       <div>
@@ -71,8 +83,6 @@ function EditInventory() {
         </div>
       </div>
 
-      
-
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead className="bg-gray-100">
@@ -85,19 +95,18 @@ function EditInventory() {
             </tr>
           </thead>
           <tbody>
-            {inventoryData.map((item, index) => (
-              <tr key={index} className="border-b  border-gray" >
+            {products.map((item, index) => (
+              <tr key={index} className="border-b border-gray">
                 <td className="py-4 px-1">
                   <input
                     type="checkbox"
-                    checked={selectedProducts.includes(index)} // 인덱스를 사용하여 상태 관리
+                    checked={selectedProducts.includes(index)}
                     onChange={() => toggleProductSelection(index)}
                   />
                 </td>
-                
-                <td className="text-sm py-2 px-1">{item.productName}</td>
+                <td className="text-sm py-2 px-1">{item.name}</td>
                 <td className="text-sm py-2 px-4">{item.sku}</td>
-                <td className="text-sm py-2 px-4">{item.unitPrice}</td>
+                <td className="text-sm py-2 px-4">{item.purchasePrice}</td>
                 <td className="text-sm py-2 px-4">{item.stockQuantity}</td>
               </tr>
             ))}

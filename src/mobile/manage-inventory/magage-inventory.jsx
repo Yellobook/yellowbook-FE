@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import { Link, useNavigate, Outlet } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Outlet } from "react-router-dom";
 import InventoryDetails from "./manageInventoryDetail";
+import { fetchInventories } from './InventoryApi/InventoryApi'; // API 함수 import
+
+
 
 // 메인 컴포넌트
 function MobileManageInventory() {
@@ -17,10 +20,10 @@ function MobileManageInventory() {
 // 재고 현황 헤더 컴포넌트
 function InventoryHeader() {
   return (
-    <div className="w-full sm:w-330 h-29 flex justify-between items-center p-5 pb-0 pt-18 ">
-      <text class="text-orange font-gmarket text-2xl font-black ">
+    <div className="w-full sm:w-330 h-29 flex justify-between items-center p-5 pb-0 pt-18">
+      <span className="text-orange font-gmarket text-2xl font-black">
         재고 현황 게시글
-      </text>
+      </span>
       <button className="bg-yellow text-black text-xs w-21 h-10 p-2 rounded-lg justify-center items-center font-gmarket">
         파일 불러오기 +
       </button>
@@ -28,7 +31,7 @@ function InventoryHeader() {
   );
 }
 
-//TODO:- 이용가이드 바로가기 연결
+// 재고 정보 안내 컴포넌트
 function InventoryInfo() {
   return (
     <div className="flex-col w-full sm:w-330 h-30 items-center p-6 pb-10">
@@ -48,38 +51,33 @@ function InventoryInfo() {
 
 // 재고 현황 리스트 컴포넌트
 function InventoryList() {
-  //임시 데이터
-  const inventoryData = [
-    {
-      date: "2024년 07월 17일",
-      creationDate: "2024년 07월 17일",
-      lastUpdated: "2024년 07월 17일",
-      views: 150,
-    },
-    {
-      date: "2024년 07월 16일",
-      creationDate: "2024년 07월 16일",
-      lastUpdated: "2024년 07월 16일",
-      views: 120,
-    },
-    {
-      date: "2024년 07월 16일",
-      creationDate: "2024년 07월 16일",
-      lastUpdated: "2024년 07월 16일",
-      views: 120,
-    },
-    {
-      date: "2024년 07월 16일",
-      creationDate: "2024년 07월 16일",
-      lastUpdated: "2024년 07월 16일",
-      views: 120,
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadInventories = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchInventories(1, 1); // API 호출
+        setData(response); // 받아온 데이터를 상태로 업데이트
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadInventories();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
-      {inventoryData.map((item, index) => (
-        <InventoryItem key={index} item={item} />
+      {data.map((item) => (
+        <InventoryItem key={item.inventoryId} item={item} />
       ))}
     </div>
   );
@@ -88,8 +86,6 @@ function InventoryList() {
 // 개별 재고 현황 아이템 컴포넌트
 function InventoryItem({ item }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -105,27 +101,29 @@ function InventoryItem({ item }) {
         className="border-t border-gray-200 py-2 px-4 mt-2 first:mt-0 cursor-pointer"
         onClick={handleOpenModal}
       >
-        <div className="font-bold font-gmarket">{item.date} 재고 현황</div>
+        <div className="font-bold font-gmarket">{item.title}</div>
 
         <div className="flex justify-end items-center mt-1">
-          <div className="text-sm text-gray font-gmarket font-thin">작성일자: {item.creationDate}</div>
+          <div className="text-sm text-gray font-gmarket font-thin">작성일자: {item.createdAt}</div>
         </div>
 
         <div className="flex justify-between items-center mt-1">
-          <div className="text-sm text-gray font-gmarket font-thin">조회수: {item.views}</div>
-          <div className="text-sm text-gray font-gmarket font-thin">마지막 업데이트: {item.lastUpdated}</div>
+          <div className="text-sm text-gray font-gmarket font-thin">조회수: {item.view}</div>
+          <div className="text-sm text-gray font-gmarket font-thin">마지막 업데이트: {item.updatedAt}</div>
         </div>
       </div>
 
-      <InventoryDetails isOpen={isModalOpen} onClose={handleCloseModal} date={item.date}>
-        <div>
-          <strong>재고 현황 상세</strong>
-          <p>날짜: {item.date}</p>
-          <p>작성일자: {item.creationDate}</p>
-          <p>마지막 업데이트: {item.lastUpdated}</p>
-          <p>조회수: {item.views}</p>
-        </div>
-      </InventoryDetails>
+      {isModalOpen && (
+        <InventoryDetails isOpen={isModalOpen} onClose={handleCloseModal} date={item.title} inventoryId={item.inventoryId} >
+          <div>
+            <strong>재고 현황 상세</strong>
+            <p>날짜: {item.createdAt}</p>
+            <p>작성일자: {item.createdAt}</p>
+            <p>마지막 업데이트: {item.updatedAt}</p>
+            <p>조회수: {item.view}</p>
+          </div>
+        </InventoryDetails>
+      )}
     </div>
   );
 }
