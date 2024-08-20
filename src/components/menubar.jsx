@@ -68,7 +68,6 @@ export default function MenuBar() {
         <img alt="logo" src={logo} className="w-10" />
         <div className="text-2xl font-bold">{name ? `${name}님!` : null}</div>
 
-
         <ul>
           <li
             className="menuBtn"
@@ -114,15 +113,6 @@ export default function MenuBar() {
             }}
           >
             Info
-          </li>
-          <li
-            className="menuBtn"
-            onClick={() => {
-              navigate("/notice");
-              setIsMenuOpen(false);
-            }}
-          >
-            공지사항
           </li>
           <li
             className="menuBtn"

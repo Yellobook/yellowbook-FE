@@ -15,7 +15,11 @@ const DesktopNotice = () => {
   // todo : informId로 바꿔야 됨
   const informDelete = async () => {
     try {
-      await axios.delete(`https://api.yellobook.site/api/v1/informs/1`);
+      await axios.delete(`https://api.yellobook.site/api/v1/informs/1`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       navigate("/calendar");
     } catch (error) {
       console.error("공지 삭제 중 오류 발생", error);
@@ -104,7 +108,7 @@ const DesktopNotice = () => {
           <div className="mr-10 whitespace-nowrap">함께하는 멤버</div>
           <div className="flex-grow border-yellow text-gray">
             {inform?.mentions?.map((mention) => (
-              <span key={mention.memberId} className="text-gray-500 mr-2">
+              <span key={mention.memberNickname} className="text-gray-500 mr-2">
                 @{mention.memberNickname}
               </span>
             ))}
@@ -118,7 +122,7 @@ const DesktopNotice = () => {
             style={{ borderColor: "#D9D9D9" }}
             className="py-3 pl-3 pr-3 rounded border flex flex-row justify-between items-start relative"
           >
-            <div className="mr-8">{comment.memberId}</div>
+            <div className="mr-8">ID: {comment.memberId}</div>
             <div className="flex-1">{comment.content}</div>
             <div className="absolute bottom-1 right-3 text-gray text-xs">
               {new Date(comment.createdAt).toLocaleString()}
