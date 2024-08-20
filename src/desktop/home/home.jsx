@@ -51,7 +51,11 @@ export default function DesktopHome() {
       })
       .catch((e) => {
         console.log(e);
-        navigate("/login");
+        if (e.response.data.code === "TEAM-001") {
+          navigate("/login/create-team");
+        } else {
+          navigate("/login");
+        }
       });
   }, []);
   return (
