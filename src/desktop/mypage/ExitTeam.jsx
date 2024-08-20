@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { teamIdState } from "../../atom";
+import { useRecoilValue } from "recoil";
 
 const ExitTeam = () => {
   const [selectedTeam, setSelectedTeam] = useState("");
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
+  const teamId = useRecoilValue(teamIdState);
+
   const accessToken = localStorage.getItem("accessToken");
 
   const handleSelectChange = (e) => {

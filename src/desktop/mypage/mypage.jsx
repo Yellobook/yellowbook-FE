@@ -55,14 +55,11 @@ const MyPage = () => {
 
   const logout = async () => {
     try {
-      const logout_res = await axios.post(
-        "https://api.yellobook.site/api/v1/auth/logout",
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await axios.post("https://api.yellobook.site/api/v1/auth/logout", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
     } catch (error) {
       alert("로그아웃 중 오류 발생", error);
     }

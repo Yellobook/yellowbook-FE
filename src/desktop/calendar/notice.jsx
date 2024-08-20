@@ -103,8 +103,8 @@ const DesktopNotice = () => {
         <div className="mt-5 flex flex-row items-center">
           <div className="mr-10 whitespace-nowrap">함께하는 멤버</div>
           <div className="flex-grow border-yellow text-gray">
-            {inform.mentions.map((mention) => (
-              <span key={mention.memberNickname} className="text-gray-500 mr-2">
+            {inform?.mentions?.map((mention) => (
+              <span key={mention.memberId} className="text-gray-500 mr-2">
                 @{mention.memberNickname}
               </span>
             ))}
@@ -112,13 +112,13 @@ const DesktopNotice = () => {
         </div>
       </div>
       <div className="mt-6">
-        {inform.comments.map((comment) => (
+        {inform?.comments?.map((comment) => (
           <div
             key={comment.id}
             style={{ borderColor: "#D9D9D9" }}
             className="py-3 pl-3 pr-3 rounded border flex flex-row justify-between items-start relative"
           >
-            <div className="mr-8">ID: {comment.memberId}</div>
+            <div className="mr-8">{comment.memberId}</div>
             <div className="flex-1">{comment.content}</div>
             <div className="absolute bottom-1 right-3 text-gray text-xs">
               {new Date(comment.createdAt).toLocaleString()}
