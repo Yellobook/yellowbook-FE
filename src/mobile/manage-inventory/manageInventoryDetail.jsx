@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ReactComponent as BackIcon } from '../../assets/mobile/calendar/back.svg'; 
 import { useNavigate } from 'react-router-dom';
-import { fetchProductsByInventoryId } from './InventoryApi/InventoryDetailApi'; 
+import { fetchProductsByInventoryId } from '../../util/InventoryDetailApi'; 
 
 function InventoryDetails({ isOpen, onClose, date, inventoryId }) {
   const navigate = useNavigate();
