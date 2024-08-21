@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { addProductToInventory } from './InventoryApi/InventoryAddApi';
-import { Product } from './InventoryApi/InventoryModels';
+import { addProductToInventory } from '../../util/InventoryAddApi';
+import { Product } from '../../util/InventoryModels';
 
 function ProductCreationForm() {
   const [product, setProduct] = useState({ ...Product });
@@ -35,12 +35,12 @@ function ProductCreationForm() {
       const productId = await addProductToInventory(inventoryId, product);
       const newProduct = { ...product, productId };
 
-      // navigate back to EditInventory with the new product added to the inventoryData
+
       navigate('/manage-inventory/edit-inventory', {
         state: { 
           inventoryId, 
-          inventoryData: [...inventoryData, newProduct], // 기존 데이터에 새 제품 추가
-          date // date 포함
+          inventoryData: [...inventoryData, newProduct], 
+          date 
         },
       });
     } catch (error) {

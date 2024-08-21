@@ -34,14 +34,14 @@ function EditInventory() {
 
   const navigateToAddProduct = () => {
     navigate('/manage-inventory/add-product', { 
-      state: { inventoryId, inventoryData: products, date } // date 포함
+      state: { inventoryId, inventoryData: products, date } 
     });
   };
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2> {/* 제목 표시 */}
+        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2> 
       </div>
 
       <div>

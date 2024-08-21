@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import InventoryDetails from "./manageInventoryDetail";
-import { fetchInventories } from './InventoryApi/InventoryApi'; // API 함수 import
-
+import { fetchInventories } from '../../util/InventoryApi'; 
 
 
 // 메인 컴포넌트
