@@ -1,25 +1,26 @@
-import React, { useState,useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Product } from './InventoryApi/InventoryModels';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function EditInventory() {
   const location = useLocation();
-  const navigate = useNavigate();
   const { state } = location;
-  const { inventoryData = [], date = '', newProduct } = state || {};
+  const { inventoryData = [], date = '', inventoryId, newProduct } = state || {};
 
   const [products, setProducts] = useState(inventoryData);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const navigate = useNavigate();
 
+  // 새로운 제품이 추가된 경우, 기존 목록에 추가
   useEffect(() => {
     if (newProduct) {
-      setProducts((prevProducts) => [
-        ...prevProducts, 
-        { ...Product, ...newProduct } // Product 모델 사용하여 기본값 설정
-      ]);
+      setProducts((prevProducts) => [...prevProducts, newProduct]);
     }
   }, [newProduct]);
 
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const deleteSelectedProducts = () => {
+    const updatedInventory = products.filter((item, idx) => !selectedProducts.includes(idx));
+    setProducts(updatedInventory);
+  };
 
   const toggleProductSelection = (index) => {
     setSelectedProducts((prevSelectedProducts) => {
@@ -31,29 +32,16 @@ function EditInventory() {
     });
   };
 
-  const deleteSelectedProducts = () => {
-    const updatedInventory = products.filter(
-      (item, idx) => !selectedProducts.includes(idx) 
-    );
-    setProducts(updatedInventory);
-    // TODO: 서버 업데이트 로직을 여기에 추가
+  const navigateToAddProduct = () => {
+    navigate('/manage-inventory/add-product', { 
+      state: { inventoryId, inventoryData: products, date } // date 포함
+    });
   };
-
-// EditInventory 컴포넌트에서 inventoryId를 전달
-const addProduct = () => {
-  const inventoryId = products[0]?.inventoryId; 
-  navigate('/manage-inventory/productCreationForm', { state: { inventoryId } });
-};
-
-
-  if (!products.length) {
-    return <div>재고 데이터가 없습니다.</div>;
-  }
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-5">
-        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2>
+        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2> {/* 제목 표시 */}
       </div>
 
       <div>
@@ -67,7 +55,7 @@ const addProduct = () => {
               - 제품 삭제
             </button>
             <button
-              onClick={addProduct}
+              onClick={navigateToAddProduct}
               className="px-2 py-1 bg-yellow text-black text-xs font-gmarket font-thin rounded-xl"
             >
               + 제품 추가
@@ -107,7 +95,7 @@ const addProduct = () => {
                 <td className="text-sm py-2 px-1">{item.name}</td>
                 <td className="text-sm py-2 px-4">{item.sku}</td>
                 <td className="text-sm py-2 px-4">{item.purchasePrice}</td>
-                <td className="text-sm py-2 px-4">{item.stockQuantity}</td>
+                <td className="text-sm py-2 px-4">{item.amount}</td>
               </tr>
             ))}
           </tbody>
