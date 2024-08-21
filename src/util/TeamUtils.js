@@ -32,6 +32,78 @@ export async function MakeTeam(act, makeTeamProps, setTeamId) { // setTeamId를 
   return ok;
 }
 
+// 팀 초대
+export const inviteTeam =async(teamId)=>{
+  try{
+    const inviteTeam_res = await axios.post(
+      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/${teamId}/invite`,{
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }
+    )
+   return inviteTeam_res.data.data.inviteUrl
+  } catch(e){
+    console.error("팀 초대 중 오류 발생")
+  }
+}
+
+// 팀 전환
+export const getTeamInfo=async(teamId)=>{
+  try{
+    const teamInfo_res = await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/${teamId}`,{
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+    return teamInfo_res.data.data;
+  } catch(e){
+    console.error("팀 전환 중 오류 발생")
+  }
+}
+
+// 팀 내의 모든 멤버 조회
+export const getMembers = async()=>{
+  try{
+    const members_res = await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/members`,{
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+    return members_res.data.members;
+  } catch(e){
+    console.error("팀 내의 모든 멤버 조회 중 오류 발생")
+  }
+}
+
+// 팀 내의 멤버 검색
+export const memberSearch = async (name) => {
+  try {
+    const memberSearch_res = await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/members/search`, {
+      params: {
+        name: name
+      }
+    });
+    return memberSearch_res.data.ids;
+  } catch (error) {
+    console.error('팀 내의 멤버 검색 중 오류 발생', error);
+  }
+};
+
+// 팀 참가
+export const joinTeam=async(code)=>{
+ try{
+  const joinTeam_res = await axios.get(
+    `${process.env.REACT_APP_BASE_URL}/api/v1/teams/invitation`, {
+      params: {
+        code: code
+      }
+    }
+  );
+  return joinTeam_res.data.data;
+ } catch (error){
+  console.error('팀 참가 중 오류 발생');
+ }
+}
+
+// 팀 나가기
 export const leaveTeam = async (teamId) => {
   if (!teamId) {
     console.error("Team ID가 없습니다.");
@@ -51,4 +123,3 @@ export const leaveTeam = async (teamId) => {
     alert("팀 나가기 요청 중 오류가 발생했습니다. 다시 시도해 주세요.");
   }
 };
-
