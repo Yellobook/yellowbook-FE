@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
-import axios from "axios";
+import { fetchProductsByInventoryId } from "../../mobile/manage-inventory/InventoryApi/InventoryDetailApi";
+import { deleteProduct } from "../../util/InventoryDelete";
 
 const DesktopEditInventory = () => {
   const location = useLocation();
@@ -10,7 +11,6 @@ const DesktopEditInventory = () => {
   const [id, setId] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [inventoryData, setInventoryData] = useState([]);
-  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -19,27 +19,19 @@ const DesktopEditInventory = () => {
     setDate(format(new Date(dateParams), "yyyy년 MM월 dd일"));
     setId(idParams);
 
-    // API 호출을 통한 데이터 가져오기
-    const fetchInventoryData = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.yellobook.site/api/v1/inventories/${idParams}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setInventoryData(response.data.data.products);
-      } catch (error) {
-        console.error("재고 데이터를 불러오는 중 오류 발생", error);
-      }
-    };
-
     if (idParams) {
+      const fetchInventoryData = async () => {
+        try {
+          const products = await fetchProductsByInventoryId(idParams);
+          setInventoryData(products);
+        } catch (error) {
+          console.error("재고 데이터를 불러오는 중 오류 발생", error);
+        }
+      };
+
       fetchInventoryData();
     }
-  }, [location.search, accessToken]);
+  }, [location.search]);
 
   const handleCheckboxChange = (productId) => {
     setSelectedProductId(productId);
@@ -47,14 +39,7 @@ const DesktopEditInventory = () => {
 
   const handleDelete = async (selectedProductId) => {
     try {
-      await axios.delete(
-        `https://api.yellobook.site/api/v1/inventories/products/${selectedProductId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await deleteProduct(selectedProductId);
       setInventoryData((prevData) =>
         prevData.filter((product) => product.productId !== selectedProductId)
       );

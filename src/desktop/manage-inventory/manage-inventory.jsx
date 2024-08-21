@@ -3,14 +3,15 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import ko from "date-fns/locale/ko";
-import axios from "axios";
+
+import { fetchInventories } from "../../mobile/manage-inventory/InventoryApi/InventoryApi";
+import { fetchProductsByInventoryId } from "../../mobile/manage-inventory/InventoryApi/InventoryDetailApi";
 
 const DesktopManageInventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inventories, setInventories] = useState([]);
   const [selectedInventory, setSelectedInventory] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
-  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {
@@ -23,22 +24,15 @@ const DesktopManageInventory = () => {
 
   useEffect(() => {
     getAllInventories();
-  });
+  }, []);
 
   const openModal = async (inventory) => {
     try {
-      const inventoryDetails_res = await axios.get(
-        `https://api.yellobook.site/api/v1/inventories/${inventory.inventoryId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setSelectedInventory(inventoryDetails_res.data.data);
+      const products = await fetchProductsByInventoryId(inventory.inventoryId);
+      setSelectedInventory({ ...inventory, products });
       setIsModalOpen(true);
     } catch (error) {
-      alert("재고 상세 정보를 불러오는 중 오류 발생");
+      //alert("재고 상세 정보를 불러오는 중 오류 발생: " + error.message);
     }
   };
 
@@ -49,23 +43,17 @@ const DesktopManageInventory = () => {
 
   const getAllInventories = async () => {
     try {
-      const AllInventories_res = await axios.get(
-        `https://api.yellobook.site/api/v1/inventories?page=1&size=5`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setInventories(AllInventories_res.data.data.inventories);
+      const inventoriesData = await fetchInventories(1, 5);
+      setInventories(inventoriesData);
     } catch (error) {
-      alert("전체 재고 현황 글 조회 중 오류 발생");
+      //alert("전체 재고 현황 글 조회 중 오류 발생: " + error.message);
     }
   };
 
   return (
     <div>
       <div className="mt-20 flex justify-between">
+        <div onClick={() => navigate("/manage-inventory/edit")}>edit</div>
         <div
           style={{ color: "#FFAB08" }}
           className="inline-block border-b text-xl"
