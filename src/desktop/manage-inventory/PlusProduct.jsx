@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import { addProductToInventory } from "../../mobile/manage-inventory/InventoryApi/InventoryAddApi"; // 함수 불러오기
 
 const DesktopPlusProduct = () => {
   const location = useLocation();
@@ -12,37 +12,32 @@ const DesktopPlusProduct = () => {
   const [amount, setAmount] = useState("");
   const [id, setId] = useState("");
 
-  const accessToken = localStorage.getItem("accessToken");
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const idParams = params.get("id");
     setId(idParams);
   }, [location.search]);
 
-  const postInventories = async () => {
+  const handleButton = async () => {
     try {
-      await axios.post(
-        `https://api.yellobook.site/api/v1/inventories/${id}`,
-        {
-          name: name,
-          subProduct: subProduct,
-          sku: sku,
-          purchasePrice: purchasePrice,
-          salePrice: salePrice,
-          amount: amount,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const productData = {
+        name: name,
+        subProduct: subProduct,
+        sku: sku,
+        purchasePrice: purchasePrice,
+        salePrice: salePrice,
+        amount: amount,
+      };
+
+      // 인벤토리에 제품 추가
+      await addProductToInventory(id, productData);
+      alert("제품이 성공적으로 추가되었습니다!");
     } catch (error) {
-      alert("제품 추가 중 오류 발생", error);
+      alert("제품 추가 중 오류 발생: " + error.message);
     }
   };
 
+  // 이하 코드 그대로 유지
   const handleName = (e) => {
     setName(e.target.value);
   };
@@ -65,10 +60,6 @@ const DesktopPlusProduct = () => {
 
   const handleAmount = (e) => {
     setAmount(e.target.value);
-  };
-
-  const handleButton = () => {
-    postInventories();
   };
 
   return (

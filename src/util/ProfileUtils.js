@@ -1,8 +1,7 @@
 import axios from "axios";
 
 export const getProfile = async () => {
-    // const accessToken = localStorage.getItem('accessToken');
-    const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwiaWF0IjoxNzI0MTc5NTg2LCJleHAiOjE3MjQxODY3ODZ9.paHl44ocXwmMR3xnQ1qCGHEYOsMVL7b7xGtZTWb4fA8';
+    const accessToken = localStorage.getItem('accessToken');
     try {
         const response = await axios.get('https://api.yellobook.site/api/v1/members/profile', {
             headers: { Authorization: `Bearer ${accessToken}` },

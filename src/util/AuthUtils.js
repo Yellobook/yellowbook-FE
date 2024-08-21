@@ -1,8 +1,7 @@
 import axios from "axios";  
 
-// const accessToken = localStorage.getItem('accessToken');
-const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwiaWF0IjoxNzI0MTc5NTg2LCJleHAiOjE3MjQxODY3ODZ9.paHl44ocXwmMR3xnQ1qCGHEYOsMVL7b7xGtZTWb4fA8';
-    
+const accessToken = localStorage.getItem('accessToken');
+
 export const logoutUser = async () => {
     try {
       await axios.post(

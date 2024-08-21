@@ -2,8 +2,7 @@ import axios from "axios";
 import { teamIdState } from '../atom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
-// const accessToken = localStorage.getItem('accessToken');
-const accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwiaWF0IjoxNzI0MTc5NTg2LCJleHAiOjE3MjQxODY3ODZ9.paHl44ocXwmMR3xnQ1qCGHEYOsMVL7b7xGtZTWb4fA8';
+const accessToken = localStorage.getItem('accessToken');
 
 export async function MakeTeam(act, makeTeamProps, setTeamId) { // setTeamId를 인자로 받아옴
   const ok = await axios
