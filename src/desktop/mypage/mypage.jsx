@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
-import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { teamIdState } from "../../atom";
 import { getProfile } from "../../util/ProfileUtils";
@@ -14,7 +13,6 @@ const MyPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [profile, setProfile] = useState(null);
   const teamId = useRecoilValue(teamIdState);
-  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     fetchProfile();

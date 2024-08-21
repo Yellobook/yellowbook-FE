@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// 특정 제품을 삭제하는 함수
+// 제품 삭제
 export const deleteProduct = async (productId) => {
   const accessToken = localStorage.getItem("accessToken");
 

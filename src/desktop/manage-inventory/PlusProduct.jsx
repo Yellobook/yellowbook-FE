@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { addProductToInventory } from "../../mobile/manage-inventory/InventoryApi/InventoryAddApi"; // 함수 불러오기
+import { addProductToInventory } from "../../util/InventoryAddApi";
 
 const DesktopPlusProduct = () => {
   const location = useLocation();

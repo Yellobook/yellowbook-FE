@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// 특정 키워드로 제품을 검색하는 함수
+// 재고 검색
 export const searchProducts = async (inventoryId, keyword) => {
   const accessToken = localStorage.getItem("accessToken");
 

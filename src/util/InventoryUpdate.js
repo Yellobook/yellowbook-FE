@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// 특정 제품의 수량을 수정하는 함수
+// 제품 수량 수정
 export const updateProductAmount = async (productId, amount) => {
   const accessToken = localStorage.getItem("accessToken");
 
@@ -14,9 +14,9 @@ export const updateProductAmount = async (productId, amount) => {
     });
 
     if (response.data.isSuccess) {
-      return response.data.data; // 업데이트된 제품 데이터를 반환
+      return response.data.data;
     } else {
-      throw new Error(response.data.message); // API 응답에 문제가 있을 경우 예외 처리
+      throw new Error(response.data.message);
     }
   } catch (error) {
     throw new Error('Failed to update product amount: ' + error.message);
