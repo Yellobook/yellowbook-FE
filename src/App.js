@@ -80,7 +80,7 @@ const MobileRouter = createBrowserRouter([
       { path: "/notice/:informId", element: <MobileNotice /> },
       { path: "/manage-inventory", element: <MobileManageInventory /> },
       { path: "/manage-inventory/edit-inventory", element: <EditInventory /> }, 
-      { path: "/manage-inventory/productCreationForm", element: <ProductCreationForm /> },
+      { path: "/manage-inventory/add-product", element: <ProductCreationForm /> },
       { path: "/check-inventory", element: <MobileCheckInventory /> },
       { path: "/mypage", element: <MobileMyPage /> },
       { path: "/about", element: <MobileAbout /> },

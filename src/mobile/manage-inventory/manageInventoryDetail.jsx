@@ -30,7 +30,7 @@ function InventoryDetails({ isOpen, onClose, date, inventoryId }) {
   if (!isOpen) return null; 
 
   const handleNavigateToEditInventory = () => {
-    navigate('/manage-inventory/edit-inventory', { state: { inventoryData, date } });
+    navigate('/manage-inventory/edit-inventory', { state: { inventoryData, date,inventoryId } });
   };
 
   const maxStockQuantity = Math.max(...inventoryData.map(item => item.amount));
