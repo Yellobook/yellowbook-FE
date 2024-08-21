@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import InventoryDetails from "./manageInventoryDetail";
-import { fetchInventories } from './InventoryApi/InventoryApi'; // API 함수 import
-
+import { fetchInventories } from '../../util/InventoryApi'; 
 
 
 // 메인 컴포넌트
@@ -59,8 +58,8 @@ function InventoryList() {
     const loadInventories = async () => {
       try {
         setLoading(true);
-        const response = await fetchInventories(1, 1); // API 호출
-        setData(response); // 받아온 데이터를 상태로 업데이트
+        const response = await fetchInventories(1, 1); 
+        setData(response); 
       } catch (error) {
         setError(error.message);
       } finally {
@@ -83,6 +82,15 @@ function InventoryList() {
   );
 }
 
+// 날짜 형식 변환 함수
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}년 ${month}월 ${day}일`;
+};
+
 // 개별 재고 현황 아이템 컴포넌트
 function InventoryItem({ item }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,12 +112,12 @@ function InventoryItem({ item }) {
         <div className="font-bold font-gmarket">{item.title}</div>
 
         <div className="flex justify-end items-center mt-1">
-          <div className="text-sm text-gray font-gmarket font-thin">작성일자: {item.createdAt}</div>
+          <div className="text-sm text-gray font-gmarket font-thin">작성일자: {formatDate(item.createdAt)}</div> 
         </div>
 
         <div className="flex justify-between items-center mt-1">
           <div className="text-sm text-gray font-gmarket font-thin">조회수: {item.view}</div>
-          <div className="text-sm text-gray font-gmarket font-thin">마지막 업데이트: {item.updatedAt}</div>
+          <div className="text-sm text-gray font-gmarket font-thin">마지막 업데이트: {formatDate(item.updatedAt)}</div> 
         </div>
       </div>
 
@@ -117,9 +125,9 @@ function InventoryItem({ item }) {
         <InventoryDetails isOpen={isModalOpen} onClose={handleCloseModal} date={item.title} inventoryId={item.inventoryId} >
           <div>
             <strong>재고 현황 상세</strong>
-            <p>날짜: {item.createdAt}</p>
-            <p>작성일자: {item.createdAt}</p>
-            <p>마지막 업데이트: {item.updatedAt}</p>
+            <p>날짜: {formatDate(item.createdAt)}</p>
+            <p>작성일자: {formatDate(item.createdAt)}</p>
+            <p>마지막 업데이트: {formatDate(item.updatedAt)}</p>
             <p>조회수: {item.view}</p>
           </div>
         </InventoryDetails>

@@ -1,25 +1,26 @@
-import React, { useState,useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Product } from './InventoryApi/InventoryModels';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function EditInventory() {
   const location = useLocation();
-  const navigate = useNavigate();
   const { state } = location;
-  const { inventoryData = [], date = '', newProduct } = state || {};
+  const { inventoryData = [], date = '', inventoryId, newProduct } = state || {};
 
   const [products, setProducts] = useState(inventoryData);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const navigate = useNavigate();
 
+  // 새로운 제품이 추가된 경우, 기존 목록에 추가
   useEffect(() => {
     if (newProduct) {
-      setProducts((prevProducts) => [
-        ...prevProducts, 
-        { ...Product, ...newProduct } // Product 모델 사용하여 기본값 설정
-      ]);
+      setProducts((prevProducts) => [...prevProducts, newProduct]);
     }
   }, [newProduct]);
 
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const deleteSelectedProducts = () => {
+    const updatedInventory = products.filter((item, idx) => !selectedProducts.includes(idx));
+    setProducts(updatedInventory);
+  };
 
   const toggleProductSelection = (index) => {
     setSelectedProducts((prevSelectedProducts) => {
@@ -31,29 +32,16 @@ function EditInventory() {
     });
   };
 
-  const deleteSelectedProducts = () => {
-    const updatedInventory = products.filter(
-      (item, idx) => !selectedProducts.includes(idx) 
-    );
-    setProducts(updatedInventory);
-    // TODO: 서버 업데이트 로직을 여기에 추가
+  const navigateToAddProduct = () => {
+    navigate('/manage-inventory/add-product', { 
+      state: { inventoryId, inventoryData: products, date } 
+    });
   };
 
-// EditInventory 컴포넌트에서 inventoryId를 전달
-const addProduct = () => {
-  const inventoryId = products[0]?.inventoryId; 
-  navigate('/manage-inventory/productCreationForm', { state: { inventoryId } });
-};
-
-
-  if (!products.length) {
-    return <div>재고 데이터가 없습니다.</div>;
-  }
-
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-5">
-        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2>
+    <div>
+      <div className="flex justify-between items-center mb-5 mt-5">
+        <h2 className="text-orange font-gmarket text-2xl font-black">{date}</h2> 
       </div>
 
       <div>
@@ -67,7 +55,7 @@ const addProduct = () => {
               - 제품 삭제
             </button>
             <button
-              onClick={addProduct}
+              onClick={navigateToAddProduct}
               className="px-2 py-1 bg-yellow text-black text-xs font-gmarket font-thin rounded-xl"
             >
               + 제품 추가
@@ -83,35 +71,41 @@ const addProduct = () => {
         </div>
       </div>
 
+
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-100">
-            <tr className="border-b border-gray py-2 px-4 mt-2">
-              <th className="py-2 px-4 text-left"></th>
-              <th className="py-2 px-0 text-left">제품 이름</th>
-              <th className="py-2 px-7 text-left">SKU</th>
-              <th className="py-2 px-4 text-left">기본 단가</th>
-              <th className="py-2 px-4 text-left">수량</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((item, index) => (
-              <tr key={index} className="border-b border-gray">
-                <td className="py-4 px-1">
-                  <input
-                    type="checkbox"
-                    checked={selectedProducts.includes(index)}
-                    onChange={() => toggleProductSelection(index)}
-                  />
-                </td>
-                <td className="text-sm py-2 px-1">{item.name}</td>
-                <td className="text-sm py-2 px-4">{item.sku}</td>
-                <td className="text-sm py-2 px-4">{item.purchasePrice}</td>
-                <td className="text-sm py-2 px-4">{item.stockQuantity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <table className="min-w-full bg-white">
+  <thead className="bg-gray-100">
+    <tr className="border-b border-gray py-2 px-4 mt-2">
+      <th className="py-2 px-4 text-left"></th>
+      <th className="py-2 px-4  font-gmarket text-sm font-black text-gray text-left min-w-[100px]">제품 이름</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">하위 제품</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">SKU</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">구매가</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">판매가</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">수량</th> {/* 최소 너비 설정 */}
+    </tr>
+  </thead>
+  <tbody>
+    {products.map((item, index) => (
+      <tr key={index} className="border-b border-gray">
+        <td className="py-4 px-4">
+          <input
+            type="checkbox"
+            checked={selectedProducts.includes(index)}
+            onChange={() => toggleProductSelection(index)}
+          />
+        </td>
+        <td className="text-lg py-2 px-4 min-w-[100px]">{item.name}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[150px]">{item.subProduct}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[150px]">{item.sku}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[100px]">{item.purchasePrice}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[100px]">{item.salePrice}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[100px]">{item.amount}</td> {/* 최소 너비 설정 */}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
       </div>
     </div>
   );

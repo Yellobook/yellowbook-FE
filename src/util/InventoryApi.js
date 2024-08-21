@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { Inventory, ApiResponse } from './InventoryModels'; // Inventory와 ApiResponse 가져오기
-
+import { Inventory, ApiResponse } from './InventoryModels'; 
 
 // API를 호출하여 재고 데이터를 받아오는 함수
 export const fetchInventories = async (page = 1, size = 1) => {
         // 로컬에서 토큰 가져오기
-  const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6NCwiaWF0IjoxNzI0MTc3MDAzLCJleHAiOjE3MjQxODQyMDN9.2sosEJr1kTRTFOezkcgbogSOhtJRWb4JGxxDsiAa2ac";
+  const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzI0MjIzNjk5LCJleHAiOjE3MjQyMzA4OTl9.6wMiN77vVJd5UYVK9cmuU6hHWT0ybeFQjR8TmPVehcQ";
   //localStorage.getItem("accessToken");
   try {
     const response = await axios.get('https://api.yellobook.site/api/v1/inventories', {
@@ -21,12 +20,11 @@ export const fetchInventories = async (page = 1, size = 1) => {
     // API 응답을 ApiResponse 형태로 받기
     const apiResponse = { ...ApiResponse, ...response.data };
 
-    // 성공적으로 데이터를 받았는지 확인
     if (apiResponse.isSuccess) {
       // 각 인벤토리를 Inventory 형태로 매핑
       const inventories = apiResponse.data.inventories.map(item => ({
-        ...Inventory, // Inventory 기본 구조를 복사
-        ...item       // API로부터 받은 데이터를 덮어씀
+        ...Inventory, 
+        ...item       
       }));
       
       return inventories;
