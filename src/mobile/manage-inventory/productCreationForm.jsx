@@ -4,7 +4,15 @@ import { addProductToInventory } from '../../util/InventoryAddApi';
 import { Product } from '../../util/InventoryModels';
 
 function ProductCreationForm() {
-  const [product, setProduct] = useState({ ...Product });
+  const [product, setProduct] = useState({ 
+    name: '', 
+    subProduct: '', 
+    sku: '', 
+    purchasePrice: '', 
+    salePrice: '', 
+    amount: '' 
+  });
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 

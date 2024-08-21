@@ -39,9 +39,9 @@ function EditInventory() {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-5">
-        <h2 className="text-orange font-gmarket text-xl font-black">{date}</h2> 
+    <div>
+      <div className="flex justify-between items-center mb-5 mt-5">
+        <h2 className="text-orange font-gmarket text-2xl font-black">{date}</h2> 
       </div>
 
       <div>
@@ -71,35 +71,41 @@ function EditInventory() {
         </div>
       </div>
 
+
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-100">
-            <tr className="border-b border-gray py-2 px-4 mt-2">
-              <th className="py-2 px-4 text-left"></th>
-              <th className="py-2 px-0 text-left">제품 이름</th>
-              <th className="py-2 px-7 text-left">SKU</th>
-              <th className="py-2 px-4 text-left">기본 단가</th>
-              <th className="py-2 px-4 text-left">수량</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((item, index) => (
-              <tr key={index} className="border-b border-gray">
-                <td className="py-4 px-1">
-                  <input
-                    type="checkbox"
-                    checked={selectedProducts.includes(index)}
-                    onChange={() => toggleProductSelection(index)}
-                  />
-                </td>
-                <td className="text-sm py-2 px-1">{item.name}</td>
-                <td className="text-sm py-2 px-4">{item.sku}</td>
-                <td className="text-sm py-2 px-4">{item.purchasePrice}</td>
-                <td className="text-sm py-2 px-4">{item.amount}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <table className="min-w-full bg-white">
+  <thead className="bg-gray-100">
+    <tr className="border-b border-gray py-2 px-4 mt-2">
+      <th className="py-2 px-4 text-left"></th>
+      <th className="py-2 px-4  font-gmarket text-sm font-black text-gray text-left min-w-[100px]">제품 이름</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">하위 제품</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">SKU</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">구매가</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">판매가</th> {/* 최소 너비 설정 */}
+      <th className="py-2 px-4 font-gmarket text-sm font-black text-gray text-left min-w-[100px]">수량</th> {/* 최소 너비 설정 */}
+    </tr>
+  </thead>
+  <tbody>
+    {products.map((item, index) => (
+      <tr key={index} className="border-b border-gray">
+        <td className="py-4 px-4">
+          <input
+            type="checkbox"
+            checked={selectedProducts.includes(index)}
+            onChange={() => toggleProductSelection(index)}
+          />
+        </td>
+        <td className="text-lg py-2 px-4 min-w-[100px]">{item.name}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[150px]">{item.subProduct}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[150px]">{item.sku}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[100px]">{item.purchasePrice}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[100px]">{item.salePrice}</td> {/* 최소 너비 설정 */}
+        <td className="text-s font-thin text-gray py-2 px-4 min-w-[100px]">{item.amount}</td> {/* 최소 너비 설정 */}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
       </div>
     </div>
   );
