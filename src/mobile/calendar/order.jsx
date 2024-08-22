@@ -9,7 +9,7 @@ import inventoryName from "./orderApi/inventoryName";
 import { useNavigate } from "react-router-dom";
 import { getMembers } from "../../util/TeamUtils";
 
-const OrderContainer = () => {
+const OrderContainer = ({ setIsModal }) => {
   // 임시 목록
   //const yearList = ["2024"];
   //const monthList = ["08"];
@@ -191,7 +191,12 @@ const OrderContainer = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-[18.75rem] h-[34.625rem] relative bg-white rounded-[2.5rem] flex flex-col items-center">
-        <Close className="absolute top-[1rem] right-[1.75rem]" />
+        <Close
+          className="absolute top-[1rem] right-[1.75rem]"
+          onClick={() => {
+            setIsModal(false);
+          }}
+        />
         <div className="px-[2rem] pt-[3.5rem] pb-[1.5rem]">
           <div className="flex justify-between mb-[1.25rem]">
             <div flex items-center>
