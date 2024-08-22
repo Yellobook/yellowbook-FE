@@ -24,7 +24,7 @@ export default function MobileCalendar() {
 
   return (
     <>
-      {isModal ? <CalendarModal setIsModal={setIsModal} /> : null}
+      {isModal ? <OrderContainer setIsModal={setIsModal} /> : null}
       <div className="flex flex-col gap-3">
         <div className="homeCard bg-yellow50">
           <div className="flex">최신 재고 현황을 확인해보세요!</div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
-import fetchProductsByInventoryId from "../../util/InventoryDetailApi";
+import { fetchProductsByInventoryId } from "../../util/InventoryDetailApi";
 import { deleteProduct } from "../../util/InventoryDelete";
 
 const DesktopEditInventory = () => {
