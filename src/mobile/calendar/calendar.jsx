@@ -24,7 +24,11 @@ export default function MobileCalendar() {
 
   return (
     <>
-      {isModal ? <OrderContainer setIsModal={setIsModal} /> : null}
+      {isModal ? (
+        <div className="relative z-50">
+          <OrderContainer setIsModal={setIsModal} />
+        </div>
+      ) : null}
       <div className="flex flex-col gap-3">
         <div className="homeCard bg-yellow50">
           <div className="flex">최신 재고 현황을 확인해보세요!</div>
@@ -38,7 +42,7 @@ export default function MobileCalendar() {
             />
           </div>
         </div>
-        <div className="relative">
+        <div className="relative z-0">
           <div
             className="bg-orange text-white shadow-md rounded-xl py-1 px-2 absolute top-5 right-6 hover:bg-opacity-50 cursor-pointer transition-colors"
             onClick={() => {
