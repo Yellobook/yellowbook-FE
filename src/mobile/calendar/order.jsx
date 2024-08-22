@@ -1,21 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ReactComponent as Close } from "../../assets/mobile/calendar/close.svg";
 import { ReactComponent as DropButton } from "../../assets/mobile/calendar/dropdown.svg";
-import { ReactComponent as Search } from "../../assets/mobile/calendar/search.svg";
+import Search from "../../assets/mobile/calendar/search.svg";
 import orderWrite from "./orderApi/orderWrite";
 import PostNotice from "../notice/postNotice";
+import inventorySubName from "./orderApi/inventorySubName";
+import inventoryName from "./orderApi/inventoryName";
 import { useNavigate } from "react-router-dom";
+import { getMembers } from "../../util/TeamUtils";
 
 const OrderContainer = () => {
   // 임시 목록
-  const yearList = ["2024"];
-  const monthList = ["08"];
-  const dayList = ["11"];
-  const memberList = [
-    { id: 1, name: "Member1" },
-    { id: 2, name: "Member2" },
-  ];
-  const list = ["2024", "5", "20"];
+  //const yearList = ["2024"];
+  //const monthList = ["08"];
+  //const dayList = ["11"];
+  //const memberList = [
+  //  { id: 1, name: "Member1" },
+  //  { id: 2, name: "Member2" },
+  //];
+
+  // 날짜 dropdown list
+  const currentYear = new Date().getFullYear();
+  const yearList = Array.from({ length: 5 }, (_, i) =>
+    (currentYear - 2 + i).toString()
+  ); // 현재 연도를 기준으로 ±2년
+  const monthList = Array.from({ length: 12 }, (_, i) =>
+    (i + 1).toString().padStart(2, "0")
+  ); // 1~12월
+  const [dayList, setDayList] = useState([]);
+
+  // 선택된 연도와 월에 따라 일 목록 갱신
+  useEffect(() => {
+    if (year && month) {
+      const daysInMonth = new Date(year, month, 0).getDate(); // 해당 월의 일 수 계산
+      const days = Array.from({ length: daysInMonth }, (_, i) =>
+        (i + 1).toString().padStart(2, "0")
+      );
+      setDayList(days);
+    }
+  }, [year, month]);
+
+  //const list = ["2024", "5", "20"];
   //const [informId, setInformId] = useState(null);
   const navigate = useNavigate();
 
@@ -27,6 +52,17 @@ const OrderContainer = () => {
   const [memo, setMemo] = useState("");
   const [orderAmount, setOrderAmount] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+
+  // 제품 이름
+  const [productName, setProductName] = useState("");
+
+  // 제품 하위 이름
+  const [productSubNames, setProductSubNames] = useState([]);
+
+  // 멤버 이름 - 조회
+  const [memberName, setMemberName] = useState([]);
+  // 멤버 이름 넘기는 값
+  const [postName, setPostName] = useState("");
 
   // 공지사항인 경우
   const [title, setTitle] = useState("");
@@ -40,6 +76,7 @@ const OrderContainer = () => {
   const handleMonthSelect = (item) => setMonth(item);
   const handleDaySelect = (item) => setDay(item);
   const handleMemberSelect = (item) => setMentionedId(item.id);
+  const handleItem = (item) => setPostName(item);
 
   const formattedDate = `${year}-${month}-${day}`;
 
@@ -74,7 +111,7 @@ const OrderContainer = () => {
     setSelectedItem(item);
   };
 
-  // 일정 게시하기 버튼 핸들러
+  // 주문 -> 일정 게시하기 버튼 핸들러
   const handleOrder = async () => {
     try {
       const response = await orderWrite(
@@ -99,6 +136,57 @@ const OrderContainer = () => {
       handleOrder();
     }
   };
+
+  // 제품 이름으로 제품 조회
+  const handleName = async () => {
+    try {
+      const response = await inventoryName(productName);
+      console.log("제품 이름 조회: ", response);
+    } catch (error) {
+      console.error("제품 이름 조회 실패: ", error);
+    }
+  };
+
+  // 제품 이름으로 하위 제품 조회
+  const handleSubNameList = async () => {
+    try {
+      const response = await inventorySubName(productName);
+      if (response && response.data.subProducts) {
+        const names = response.data.subProducts.map(
+          (subProduct) => subProduct.subProductName
+        );
+        setProductSubNames(names);
+      }
+      console.log("제품 하위 이름 조회: ", response);
+    } catch (error) {
+      console.error("제품 하위 이름 조회 실패: ", error);
+    }
+  };
+
+  // 팀 내의 모든 멤버 조회 - 공지사항에서 필요함
+  const handleGetMember = async () => {
+    try {
+      const response = await getMembers();
+      if (response && response.data.members) {
+        const members = response.data.members.map((member) => ({
+          id: member.memberId,
+          name: member.nickname,
+        }));
+        setMemberName(members);
+      }
+      console.log("주문 모달에서 팀 멤버 조회: ", response);
+    } catch (error) {
+      console.error("팀 멤버 조회 실패: ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetMember(); // 컴포넌트 마운트 시 멤버 목록 가져오기
+  }, []);
+
+  useEffect(() => {
+    handleSubNameList();
+  }, [handleName]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -187,8 +275,10 @@ const OrderContainer = () => {
                 <input
                   className="placeholder-customGray1 w-[8.0625rem]"
                   placeholder="제품 명을 입력해주세요."
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
                 />
-                <Search />
+                <img src={Search} alt="돋보기 아이콘" onClick={handleName} />
               </div>
             </div>
             <div className="flex justify-between">
@@ -196,16 +286,21 @@ const OrderContainer = () => {
               <DropDown
                 width="10.5625rem"
                 height="1.5rem"
-                items={list}
+                items={productSubNames}
                 size="0.75rem"
                 wid="9rem"
                 hei="1.5rem"
+                onSelect={handleItem}
               />
             </div>
             <div className="flex justify-between">
               <h1>주문수량</h1>
               <div className="w-[10.5625rem] h-[1.5rem] border border-[#FFDE33] flex items-center">
-                <input className="w-full h-full text-xs font-light m-0 p-1" />
+                <input
+                  className="w-full h-full text-xs font-light m-0 p-1"
+                  value={orderAmount}
+                  onChange={(e) => setOrderAmount(e.target.value)}
+                />
               </div>
             </div>
           </div>
@@ -225,12 +320,12 @@ const OrderContainer = () => {
             <DropDown
               width="8.25rem"
               height="1.5rem"
-              items={memberList.map((member) => member.name)}
+              items={memberName}
               size="0.75rem"
               wid="8rem"
               hei="1.5rem"
               onSelect={(item) =>
-                handleMemberSelect(memberList.find((m) => m.name === item))
+                handleMemberSelect(memberName.find((m) => m.name === item))
               }
             />
           </div>
