@@ -1,14 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Text } from "./order"; // color, size, weight
-import orderPatchCorr from "./orderApi/orderPatchCorr";
-import orderPatchConfirm from "./orderApi/orderPatchConfirm";
+import { Chat } from "./orderer-check-order";
+import { Comment } from "./orderer-check-order";
+import { orderPatchCorr, orderPatchConfirm, orderGet, orderGetComment } from "../../util/OrderUtils";
 
 export default function ManageCheckOrder() {
   // 버튼 비활성화
   const [correctDisabled, setCorrectDisabled] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
   const { orderId } = useParams(); // URL에서 orderId 가져오기
+
+  // 댓글 내용
+  const [comments, setComments] = useState([]);
+
+  // 주문 내역 상태관리
+  const [date, setDate] = useState();
+  const [writer, setWriter] = useState();
+  const [productName, setProductName] = useState();
+  const [subProductName, setSubProductName] = useState();
+  const [amount, setAmount] = useState();
+  const [memo, setMemo] = useState();
+
+  // 주문 조회하기
+  const getOrder = async () => {
+    try {
+      const response = await orderGet(orderId);
+      console.log("주문 내용: ", response.data);
+      setDate(response.data.date);
+      setWriter(response.data.writer);
+      setProductName(response.data.productName);
+      setSubProductName(response.data.subProductName);
+      setAmount(response.data.amount);
+      setMemo(response.data.memo);
+    } catch (error) {
+      console.log("주문 조회 실패: ", error);
+    }
+  };
+
+  // 처음 렌더링 했을 때 주문 조회하기
+  useEffect(() => {
+    getOrder();
+    getComment();
+  }, [orderId]);
+
+  // 주문 댓글 조회
+  const getComment = async () => {
+    try {
+      const response = await orderGetComment(orderId);
+      console.log("댓글 내용: ", response.data.comments);
+      setComments(response.data.comments || []);
+    } catch (error) {
+      console.log("댓글 조회 실패: ", error);
+    }
+  };
+
+  // 댓글 새로고침
+  const refreshOrderComment = useCallback(() => {
+    getComment();
+  }, []);
 
   // 주문 정정 요청
   const handleCorrectClick = async () => {
@@ -55,35 +105,35 @@ export default function ManageCheckOrder() {
           <div className="flex flex-col gap-[0.75rem]">
             <div className="flex justify-between w-[15rem]">
               <Text>날짜</Text>
-              <Text>2024. 05. 20</Text>
+              <Text>{date}</Text>
             </div>
             <div className="flex justify-between w-[15rem]">
               <Text>작성자</Text>
-              <Text>다나</Text>
+              <Text>{writer}</Text>
             </div>
             <div className="flex justify-between w-[20rem]">
               <Text>제품</Text>
               <div className="w-[14rem] h-[1.5rem] border border-yellow text-xs font-light p-1 flex">
-                <input className="w-full" />
+                <input className="w-full m-0" value={productName} />
               </div>
             </div>
             <div className="flex justify-between w-[20rem]">
               <Text>하위제품</Text>
               <div className="w-[14rem] h-[1.5rem] border border-yellow text-xs font-light p-1 flex">
-                <input className="w-full" />
+                <input className="w-full m-0" value={subProductName} />
               </div>
             </div>
             <div className="flex justify-between w-[20rem]">
               <Text>주문수량</Text>
               <div className="w-[14rem] h-[1.5rem] border border-yellow text-xs font-light p-1 flex">
-                <input className="w-full" />
+                <input className="w-full m-0" value={amount} />
               </div>
             </div>
           </div>
           <div className="flex flex-col justify-between w-[20rem]">
             <Text>메모</Text>
             <div className="w-full h-[4rem] border border-yellow text-xs font-light p-1 flex">
-              <textarea className="w-full" />
+              <textarea className="w-full" value={memo} />
             </div>
           </div>
           <div className="flex justify-between w-[20rem]">
@@ -97,76 +147,76 @@ export default function ManageCheckOrder() {
         </div>
       </div>
       <hr className="border-yellow mt-[1.5rem] mb-[1rem]" />
-      <Chat />
-      <Comment />
+      <Chat comments={comments} />
+      <Comment orderId={orderId} refreshOrderComment={refreshOrderComment}/>
     </div>
   );
 }
 
-// 댓글 목록
-const Chat = () => {
-  // 임시 데이터
-  const orders = [
-    {
-      id: 1,
-      author: "생산자",
-      message: "20일까지 20개는 불가할 것 같아요! 15개로 정정해주세요.",
-      time: "시간",
-    },
-    {
-      id: 2,
-      author: "생산자",
-      message: "20일까지 30개는 가능합니다.",
-      time: "시간",
-    },
-  ];
+// // 댓글 목록
+// const Chat = () => {
+//   // 임시 데이터
+//   const orders = [
+//     {
+//       id: 1,
+//       author: "생산자",
+//       message: "20일까지 20개는 불가할 것 같아요! 15개로 정정해주세요.",
+//       time: "시간",
+//     },
+//     {
+//       id: 2,
+//       author: "생산자",
+//       message: "20일까지 30개는 가능합니다.",
+//       time: "시간",
+//     },
+//   ];
 
-  return (
-    <div>
-      {orders.map((order) => (
-        <div
-          key={order.id}
-          className="relative w-full h-[3.1875rem] flex items-center border border-borderGray rounded-lg p-1 mb-[0.5rem]"
-        >
-          <div className="flex gap-[1.25rem] items-center">
-            <div className="w-[2.5625rem] h-[1rem]">
-              <Text size="0.875rem" weight="300">
-                {order.author}
-              </Text>
-            </div>
-            <div className="w-[13.875rem] h-[2rem]">
-              <Text size="0.875rem" weight="300">
-                {order.message}
-              </Text>
-            </div>
-          </div>
-          <div className="absolute right-[0rem] bottom-[0rem] w-[2rem] h-[1rem] flex justify-center">
-            <Text size="0.625rem" weight="500" color="text-dateGray">
-              {order.time}
-            </Text>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       {orders.map((order) => (
+//         <div
+//           key={order.id}
+//           className="relative w-full h-[3.1875rem] flex items-center border border-borderGray rounded-lg p-1 mb-[0.5rem]"
+//         >
+//           <div className="flex gap-[1.25rem] items-center">
+//             <div className="w-[2.5625rem] h-[1rem]">
+//               <Text size="0.875rem" weight="300">
+//                 {order.author}
+//               </Text>
+//             </div>
+//             <div className="w-[13.875rem] h-[2rem]">
+//               <Text size="0.875rem" weight="300">
+//                 {order.message}
+//               </Text>
+//             </div>
+//           </div>
+//           <div className="absolute right-[0rem] bottom-[0rem] w-[2rem] h-[1rem] flex justify-center">
+//             <Text size="0.625rem" weight="500" color="text-dateGray">
+//               {order.time}
+//             </Text>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
 
-// 댓글 쓰기
-const Comment = () => {
-  return (
-    <div className="fixed left-0 bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center justify-center">
-      <div className="w-[22rem] h-[2.75rem] flex items-center border border-yellow rounded-[1.25rem] p-1">
-        <input
-          className="w-[18.75rem] h-[100%] placeholder-borderGray"
-          placeholder="댓글 쓰기"
-        />
-        <button className="w-[3.4375rem] h-[1.8125rem] bg-yellow rounded-[0.625rem] mr-2">
-          입력
-        </button>
-      </div>
-    </div>
-  );
-};
+// // 댓글 쓰기
+// const Comment = () => {
+//   return (
+//     <div className="fixed left-0 bottom-0 w-full h-[5.6875rem] shadow-[0px_0px_11.8px_rgba(0,0,0,0.10)] flex items-center justify-center">
+//       <div className="w-[22rem] h-[2.75rem] flex items-center border border-yellow rounded-[1.25rem] p-1">
+//         <input
+//           className="w-[18.75rem] h-[100%] placeholder-borderGray"
+//           placeholder="댓글 쓰기"
+//         />
+//         <button className="w-[3.4375rem] h-[1.8125rem] bg-yellow rounded-[0.625rem] mr-2">
+//           입력
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
 
 // 버튼
 const Button = ({ children, onClick, disabled }) => {

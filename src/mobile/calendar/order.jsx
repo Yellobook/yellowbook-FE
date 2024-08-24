@@ -1,47 +1,91 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ReactComponent as Close } from "../../assets/mobile/calendar/close.svg";
 import { ReactComponent as DropButton } from "../../assets/mobile/calendar/dropdown.svg";
-import { ReactComponent as Search } from "../../assets/mobile/calendar/search.svg";
-import orderWrite from "./orderApi/orderWrite";
-import PostNotice from "../notice/postNotice";
+import Search from "../../assets/mobile/calendar/search.svg";
+import { PostNotice } from "../../util/NoticeUtils";
 import { useNavigate } from "react-router-dom";
+import { getMembers } from "../../util/TeamUtils";
+import {
+  inventoryName,
+  inventorySubName,
+} from "../../util/InventorySearchUtils";
+import { orderWrite } from "../../util/OrderUtils";
 
 const OrderContainer = ({ setIsModal }) => {
-  // 임시 목록
-  const yearList = ["2024"];
-  const monthList = ["08"];
-  const dayList = ["11"];
-  const memberList = [
-    { id: 1, name: "Member1" },
-    { id: 2, name: "Member2" },
-  ];
-  const list = ["2024", "5", "20"];
-  //const [informId, setInformId] = useState(null);
+  //const memberList = [
+  //  { id: 1, name: "Member1" },
+  //  { id: 2, name: "Member2" },
+  //];
+  // 공지사항인 경우
+  const [title, setTitle] = useState("");
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [mentionedIds, setMentionedIds] = useState([]);
+
+  // 날짜 dropdown list
+  const currentYear = new Date().getFullYear();
+  const yearList = Array.from({ length: 5 }, (_, i) =>
+    (currentYear - 2 + i).toString()
+  ); // 현재 연도를 기준으로 ±2년
+  const monthList = Array.from({ length: 12 }, (_, i) =>
+    (i + 1).toString().padStart(2, "0")
+  ); // 1~12월
+  const [dayList, setDayList] = useState([]);
+
+  // 선택된 연도와 월에 따라 일 목록 갱신
+  useEffect(() => {
+    if (year && month) {
+      const daysInMonth = new Date(year, month, 0).getDate(); // 해당 월의 일 수 계산
+      const days = Array.from({ length: daysInMonth }, (_, i) =>
+        (i + 1).toString().padStart(2, "0")
+      );
+      setDayList(days);
+    }
+  }, [year, month]);
+
   const navigate = useNavigate();
 
   // 공지사항 or 주문
   const OrderNotice = ["주문", "공지사항"];
 
   // 제품 ID, 메모, 날짜, 주문 수량을 상태로 관리
-  const [productId, setProductId] = useState(0);
+  const [productId, setProductId] = useState();
   const [memo, setMemo] = useState("");
   const [orderAmount, setOrderAmount] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  // 공지사항인 경우
-  const [title, setTitle] = useState("");
-  const [year, setYear] = useState("");
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
-  const [mentionedId, setMentionedId] = useState(null);
+  // 제품 이름
+  const [productName, setProductName] = useState("");
+
+  // 제품 하위 이름
+  const [productSubNames, setProductSubNames] = useState([]);
+
+  // 멤버 이름 - 조회
+  const [memberName, setMemberName] = useState([]);
+  // 멤버 선택 상태
+  const [selectedMembers, setSelectedMembers] = useState([]);
+
+  // 멤버 이름 넘기는 값
+  const [postName, setPostName] = useState("");
 
   // Dropdown 선택 핸들러
   const handleYearSelect = (item) => setYear(item);
   const handleMonthSelect = (item) => setMonth(item);
   const handleDaySelect = (item) => setDay(item);
-  const handleMemberSelect = (item) => setMentionedId(item.id);
+  //const handleMemberSelect = (item) => setMentionedId(item.id);
+  const handleItem = (item) => setPostName(item);
 
   const formattedDate = `${year}-${month}-${day}`;
+
+  // 여러 멤버 선택 핸들러
+  const handleMemberSelect = (item) => {
+    setMentionedIds((prev) =>
+      prev.includes(item.memberId)
+        ? prev.filter((member) => member !== item.memberId)
+        : [...prev, item.memberId]
+    );
+  };
 
   // 공지사항 -> 일정 게시하기 버튼 핸들러
   const handleNotice = async () => {
@@ -49,7 +93,7 @@ const OrderContainer = ({ setIsModal }) => {
       const noticeData = {
         title,
         memo,
-        mentionedId: [],
+        mentionedIds,
         date: formattedDate,
       };
 
@@ -74,7 +118,22 @@ const OrderContainer = ({ setIsModal }) => {
     setSelectedItem(item);
   };
 
-  // 일정 게시하기 버튼 핸들러
+  // 하위 제품 선택
+  const handleProductSelect = (selectedName) => {
+    console.log("Selected Name: ", selectedName);
+
+    const selectedProduct = productSubNames.find(
+      (subProduct) => subProduct.name === selectedName.name
+    );
+    if (selectedProduct) {
+      setProductId(selectedProduct.id); // 선택한 하위 제품의 ID를 설정
+      console.log("Selected Product ID:", selectedProduct.id);
+    } else {
+      console.log("Product not found.");
+    }
+  };
+
+  // 주문 -> 일정 게시하기 버튼 핸들러
   const handleOrder = async () => {
     try {
       const response = await orderWrite(
@@ -84,9 +143,12 @@ const OrderContainer = ({ setIsModal }) => {
         orderAmount
       );
       console.log("주문 작성 성공:", response);
+      const orderId = response.data.orderId;
+      navigate(`/order/${orderId}`);
       // 주문 작성 성공 시의 추가 처리
     } catch (error) {
       console.error("주문 작성 실패:", error);
+      //console.log("들어간 값: ", productId, memo, formattedDate, orderAmount);
       // 주문 작성 실패 시의 추가 처리
     }
   };
@@ -99,6 +161,84 @@ const OrderContainer = ({ setIsModal }) => {
       handleOrder();
     }
   };
+
+  // 제품 이름으로 제품 조회
+  const handleName = async () => {
+    try {
+      const response = await inventoryName(productName);
+      console.log("제품 데이터:", response.data.names);
+
+      // 제품 이름으로 하위 제품 조회
+      await handleSubNameList();
+    } catch (error) {
+      console.error("제품 이름 조회 실패: ", error);
+    }
+  };
+
+  // 제품 이름으로 하위 제품 조회
+  const handleSubNameList = async () => {
+    try {
+      const response = await inventorySubName(productName);
+      if (response && response.data.subProducts) {
+        const subProducts = response.data.subProducts.map((subProduct) => ({
+          id: subProduct.productId,
+          name: subProduct.subProductName,
+        }));
+        setProductSubNames(subProducts);
+      }
+      console.log("제품 하위 이름 조회: ", response);
+    } catch (error) {
+      console.error("제품 하위 이름 조회 실패: ", error);
+    }
+  };
+
+  // 팀 내의 모든 멤버 조회
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await getMembers();
+        if (response && response.data.members) {
+          const members = response.data.members.map((member) => ({
+            id: member.memberId,
+            name: member.nickname,
+          }));
+          setMemberName(members);
+          console.log("주문 모달에서 팀 멤버 조회:", response);
+        } else {
+          console.log(
+            "멤버가 존재하지 않거나, 데이터를 가져오는데 실패했습니다."
+          );
+        }
+      } catch (error) {
+        console.error("팀 멤버 조회 실패:", error);
+      }
+    };
+
+    fetchMembers(); // 컴포넌트 마운트 시 멤버 목록 가져오기
+  }, []);
+  // const handleGetMember = async () => {
+  //   try {
+  //     const response = await getMembers();
+  //     if (response && response.data.members) {
+  //       const members = response.data.members.map((member) => ({
+  //         id: member.memberId,
+  //         name: member.nickname,
+  //       }));
+  //       setMemberName(members);
+  //     }
+  //     console.log("주문 모달에서 팀 멤버 조회: ", response);
+  //   } catch (error) {
+  //     console.error("팀 멤버 조회 실패: ", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleGetMember(); // 컴포넌트 마운트 시 멤버 목록 가져오기
+  // }, []);
+
+  // useEffect(() => {
+  //   handleSubNameList();
+  // }, [handleName]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -192,8 +332,10 @@ const OrderContainer = ({ setIsModal }) => {
                 <input
                   className="placeholder-customGray1 w-[8.0625rem]"
                   placeholder="제품 명을 입력해주세요."
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
                 />
-                <Search />
+                <img src={Search} alt="돋보기 아이콘" onClick={handleName} />
               </div>
             </div>
             <div className="flex justify-between">
@@ -201,16 +343,21 @@ const OrderContainer = ({ setIsModal }) => {
               <DropDown
                 width="10.5625rem"
                 height="1.5rem"
-                items={list}
+                items={productSubNames}
                 size="0.75rem"
                 wid="9rem"
                 hei="1.5rem"
+                onSelect={handleProductSelect}
               />
             </div>
             <div className="flex justify-between">
               <h1>주문수량</h1>
               <div className="w-[10.5625rem] h-[1.5rem] border border-[#FFDE33] flex items-center">
-                <input className="w-full h-full text-xs font-light m-0 p-1" />
+                <input
+                  className="w-full h-full text-xs font-light m-0 p-1"
+                  value={orderAmount}
+                  onChange={(e) => setOrderAmount(e.target.value)}
+                />
               </div>
             </div>
           </div>
@@ -230,13 +377,12 @@ const OrderContainer = ({ setIsModal }) => {
             <DropDown
               width="8.25rem"
               height="1.5rem"
-              items={memberList.map((member) => member.name)}
+              items={memberName}
               size="0.75rem"
               wid="8rem"
               hei="1.5rem"
-              onSelect={(item) =>
-                handleMemberSelect(memberList.find((m) => m.name === item))
-              }
+              onSelect={handleMemberSelect}
+              selectedMember={selectedMembers}
             />
           </div>
         </div>
@@ -265,6 +411,7 @@ const DropDown = ({
   wid,
   hei,
   onSelect,
+  selectedMember,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -297,7 +444,11 @@ const DropDown = ({
         style={{ boxSizing: "border-box", minHeight: hei, minWidth: wid }}
       >
         {selectedItem ? (
-          <span>{selectedItem}</span>
+          typeof selectedItem === "object" ? (
+            <span>{selectedItem.name}</span>
+          ) : (
+            <span>{selectedItem}</span>
+          )
         ) : (
           <span className={`text-[${size}] ${hintColor}`}>{hint}</span>
         )}
@@ -328,7 +479,7 @@ export const DropDownItem = ({ item, onClick, fontSize }) => {
       onClick={() => onClick(item)}
       style={{ fontSize: fontSize }}
     >
-      {item}
+      {typeof item === "object" ? item.name : item}
     </li>
   );
 };

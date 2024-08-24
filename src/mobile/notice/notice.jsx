@@ -4,12 +4,9 @@ import { Text } from "../calendar/order.jsx"; // color, size, weight
 import mentionInput from "../../style/mentionInput.js";
 import { MentionsInput, Mention } from "react-mentions";
 import mention from "../../style/mention.js";
-import DeleteNotice from "./delNotice.jsx";
-import GetNotice from "./getNotice.jsx";
-import PostComment from "./postComment.jsx";
-import PostNotice from "./postNotice.jsx";
 import { useParams } from "react-router-dom";
 import debounce from "lodash/debounce";
+import { GetNotice, DeleteNotice, PostComment } from "../../util/NoticeUtils.js";
 
 export default function Notice() {
   const [value, setValue] = useState("");
@@ -144,6 +141,7 @@ export default function Notice() {
               {/* {noticeData.mentions.map((mention) => (
                 <div key={mention.id}>{mention.memberNickname}</div>
               ))} */}
+              {noticeData.mentions}
             </div>
           </div>
         </div>
