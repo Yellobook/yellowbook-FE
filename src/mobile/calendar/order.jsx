@@ -2,22 +2,26 @@ import React, { useEffect, useState } from "react";
 import { ReactComponent as Close } from "../../assets/mobile/calendar/close.svg";
 import { ReactComponent as DropButton } from "../../assets/mobile/calendar/dropdown.svg";
 import Search from "../../assets/mobile/calendar/search.svg";
-import orderWrite from "./orderApi/orderWrite";
-import PostNotice from "../notice/postNotice";
-import inventorySubName from "./orderApi/inventorySubName";
-import inventoryName from "./orderApi/inventoryName";
+import { PostNotice } from "../../util/NoticeUtils";
 import { useNavigate } from "react-router-dom";
 import { getMembers } from "../../util/TeamUtils";
+import {
+  inventoryName,
+  inventorySubName,
+} from "../../util/InventorySearchUtils";
+import { orderWrite } from "../../util/OrderUtils";
 
 const OrderContainer = ({ setIsModal }) => {
-  // 임시 목록
-  //const yearList = ["2024"];
-  //const monthList = ["08"];
-  //const dayList = ["11"];
   //const memberList = [
   //  { id: 1, name: "Member1" },
   //  { id: 2, name: "Member2" },
   //];
+  // 공지사항인 경우
+  const [title, setTitle] = useState("");
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [mentionedIds, setMentionedIds] = useState([]);
 
   // 날짜 dropdown list
   const currentYear = new Date().getFullYear();
@@ -40,15 +44,13 @@ const OrderContainer = ({ setIsModal }) => {
     }
   }, [year, month]);
 
-  //const list = ["2024", "5", "20"];
-  //const [informId, setInformId] = useState(null);
   const navigate = useNavigate();
 
   // 공지사항 or 주문
   const OrderNotice = ["주문", "공지사항"];
 
   // 제품 ID, 메모, 날짜, 주문 수량을 상태로 관리
-  const [productId, setProductId] = useState(0);
+  const [productId, setProductId] = useState();
   const [memo, setMemo] = useState("");
   const [orderAmount, setOrderAmount] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -61,24 +63,29 @@ const OrderContainer = ({ setIsModal }) => {
 
   // 멤버 이름 - 조회
   const [memberName, setMemberName] = useState([]);
+  // 멤버 선택 상태
+  const [selectedMembers, setSelectedMembers] = useState([]);
+
   // 멤버 이름 넘기는 값
   const [postName, setPostName] = useState("");
-
-  // 공지사항인 경우
-  const [title, setTitle] = useState("");
-  const [year, setYear] = useState("");
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
-  const [mentionedId, setMentionedId] = useState(null);
 
   // Dropdown 선택 핸들러
   const handleYearSelect = (item) => setYear(item);
   const handleMonthSelect = (item) => setMonth(item);
   const handleDaySelect = (item) => setDay(item);
-  const handleMemberSelect = (item) => setMentionedId(item.id);
+  //const handleMemberSelect = (item) => setMentionedId(item.id);
   const handleItem = (item) => setPostName(item);
 
   const formattedDate = `${year}-${month}-${day}`;
+
+  // 여러 멤버 선택 핸들러
+  const handleMemberSelect = (item) => {
+    setMentionedIds((prev) =>
+      prev.includes(item.memberId)
+        ? prev.filter((member) => member !== item.memberId)
+        : [...prev, item.memberId]
+    );
+  };
 
   // 공지사항 -> 일정 게시하기 버튼 핸들러
   const handleNotice = async () => {
@@ -86,7 +93,7 @@ const OrderContainer = ({ setIsModal }) => {
       const noticeData = {
         title,
         memo,
-        mentionedId: [],
+        mentionedIds,
         date: formattedDate,
       };
 
@@ -111,6 +118,21 @@ const OrderContainer = ({ setIsModal }) => {
     setSelectedItem(item);
   };
 
+  // 하위 제품 선택
+  const handleProductSelect = (selectedName) => {
+    console.log("Selected Name: ", selectedName);
+
+    const selectedProduct = productSubNames.find(
+      (subProduct) => subProduct.name === selectedName.name
+    );
+    if (selectedProduct) {
+      setProductId(selectedProduct.id); // 선택한 하위 제품의 ID를 설정
+      console.log("Selected Product ID:", selectedProduct.id);
+    } else {
+      console.log("Product not found.");
+    }
+  };
+
   // 주문 -> 일정 게시하기 버튼 핸들러
   const handleOrder = async () => {
     try {
@@ -121,9 +143,12 @@ const OrderContainer = ({ setIsModal }) => {
         orderAmount
       );
       console.log("주문 작성 성공:", response);
+      const orderId = response.data.orderId;
+      navigate(`/order/${orderId}`);
       // 주문 작성 성공 시의 추가 처리
     } catch (error) {
       console.error("주문 작성 실패:", error);
+      //console.log("들어간 값: ", productId, memo, formattedDate, orderAmount);
       // 주문 작성 실패 시의 추가 처리
     }
   };
@@ -141,7 +166,10 @@ const OrderContainer = ({ setIsModal }) => {
   const handleName = async () => {
     try {
       const response = await inventoryName(productName);
-      console.log("제품 이름 조회: ", response);
+      console.log("제품 데이터:", response.data.names);
+
+      // 제품 이름으로 하위 제품 조회
+      await handleSubNameList();
     } catch (error) {
       console.error("제품 이름 조회 실패: ", error);
     }
@@ -152,10 +180,11 @@ const OrderContainer = ({ setIsModal }) => {
     try {
       const response = await inventorySubName(productName);
       if (response && response.data.subProducts) {
-        const names = response.data.subProducts.map(
-          (subProduct) => subProduct.subProductName
-        );
-        setProductSubNames(names);
+        const subProducts = response.data.subProducts.map((subProduct) => ({
+          id: subProduct.productId,
+          name: subProduct.subProductName,
+        }));
+        setProductSubNames(subProducts);
       }
       console.log("제품 하위 이름 조회: ", response);
     } catch (error) {
@@ -163,30 +192,53 @@ const OrderContainer = ({ setIsModal }) => {
     }
   };
 
-  // 팀 내의 모든 멤버 조회 - 공지사항에서 필요함
-  const handleGetMember = async () => {
-    try {
-      const response = await getMembers();
-      if (response && response.data.members) {
-        const members = response.data.members.map((member) => ({
-          id: member.memberId,
-          name: member.nickname,
-        }));
-        setMemberName(members);
+  // 팀 내의 모든 멤버 조회
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await getMembers();
+        if (response && response.data.members) {
+          const members = response.data.members.map((member) => ({
+            id: member.memberId,
+            name: member.nickname,
+          }));
+          setMemberName(members);
+          console.log("주문 모달에서 팀 멤버 조회:", response);
+        } else {
+          console.log(
+            "멤버가 존재하지 않거나, 데이터를 가져오는데 실패했습니다."
+          );
+        }
+      } catch (error) {
+        console.error("팀 멤버 조회 실패:", error);
       }
-      console.log("주문 모달에서 팀 멤버 조회: ", response);
-    } catch (error) {
-      console.error("팀 멤버 조회 실패: ", error);
-    }
-  };
+    };
 
-  useEffect(() => {
-    handleGetMember(); // 컴포넌트 마운트 시 멤버 목록 가져오기
+    fetchMembers(); // 컴포넌트 마운트 시 멤버 목록 가져오기
   }, []);
+  // const handleGetMember = async () => {
+  //   try {
+  //     const response = await getMembers();
+  //     if (response && response.data.members) {
+  //       const members = response.data.members.map((member) => ({
+  //         id: member.memberId,
+  //         name: member.nickname,
+  //       }));
+  //       setMemberName(members);
+  //     }
+  //     console.log("주문 모달에서 팀 멤버 조회: ", response);
+  //   } catch (error) {
+  //     console.error("팀 멤버 조회 실패: ", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    handleSubNameList();
-  }, [handleName]);
+  // useEffect(() => {
+  //   handleGetMember(); // 컴포넌트 마운트 시 멤버 목록 가져오기
+  // }, []);
+
+  // useEffect(() => {
+  //   handleSubNameList();
+  // }, [handleName]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -295,7 +347,7 @@ const OrderContainer = ({ setIsModal }) => {
                 size="0.75rem"
                 wid="9rem"
                 hei="1.5rem"
-                onSelect={handleItem}
+                onSelect={handleProductSelect}
               />
             </div>
             <div className="flex justify-between">
@@ -329,9 +381,8 @@ const OrderContainer = ({ setIsModal }) => {
               size="0.75rem"
               wid="8rem"
               hei="1.5rem"
-              onSelect={(item) =>
-                handleMemberSelect(memberName.find((m) => m.name === item))
-              }
+              onSelect={handleMemberSelect}
+              selectedMember={selectedMembers}
             />
           </div>
         </div>
@@ -360,6 +411,7 @@ const DropDown = ({
   wid,
   hei,
   onSelect,
+  selectedMember,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -392,7 +444,11 @@ const DropDown = ({
         style={{ boxSizing: "border-box", minHeight: hei, minWidth: wid }}
       >
         {selectedItem ? (
-          <span>{selectedItem}</span>
+          typeof selectedItem === "object" ? (
+            <span>{selectedItem.name}</span>
+          ) : (
+            <span>{selectedItem}</span>
+          )
         ) : (
           <span className={`text-[${size}] ${hintColor}`}>{hint}</span>
         )}
@@ -423,7 +479,7 @@ export const DropDownItem = ({ item, onClick, fontSize }) => {
       onClick={() => onClick(item)}
       style={{ fontSize: fontSize }}
     >
-      {item}
+      {typeof item === "object" ? item.name : item}
     </li>
   );
 };
