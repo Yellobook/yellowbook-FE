@@ -1,12 +1,13 @@
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isMobile, profile } from "../atom";
+import { useRecoilValue } from "recoil";
+import { isMobile } from "../atom";
 import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { api } from "../util/Axios_Interceptor";
 
 export default function MenuBar() {
   const isUserMobile = useRecoilValue(isMobile);
@@ -27,29 +28,25 @@ export default function MenuBar() {
   }, []);
 
   const onLogout = async () => {
-    try {
+    const ok = window.confirm("정말로 로그아웃 하시겠어요?");
+    if (ok) {
       console.log(localStorage.getItem("accessToken"));
       await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`, {
+        .post(`${process.env.REACT_APP_BASE_URL}/api/v1/auth/logout`, null, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         })
         .then((res) => {
           console.log(res);
-          const ok = window.confirm("정말로 로그아웃 하시겠어요?");
-          if (ok) {
-            if (cookie) {
-              removeCookie("accessToken");
-              removeCookie("refreshToken");
-            }
-            localStorage.clear();
-            navigate("/login");
+          if (cookie) {
+            removeCookie("accessToken");
+            removeCookie("refreshToken");
           }
+          localStorage.clear();
+          navigate("/login");
         })
         .catch((err) => console.error(err));
-    } catch (e) {
-      console.log(e);
     }
   };
   return (
