@@ -203,6 +203,9 @@ const OrderContainer = ({ setIsModal }) => {
             name: member.nickname,
           }));
           setMemberName(members);
+          // 모든 멤버의 ID만 추출해서 setMentionedIds에 저장
+          const memberIds = members.map((member) => member.id);
+          setMentionedIds(memberIds);
           console.log("주문 모달에서 팀 멤버 조회:", response);
         } else {
           console.log(
