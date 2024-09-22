@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { upcomingSchedule } from "../../atom";
 import { getUpComing } from "../../util/Schedule";
 import axios from "axios";
+import { api } from "../../util/Axios_Interceptor";
 
 export default function MobileHome() {
   const navigate = useNavigate("");
@@ -17,40 +18,41 @@ export default function MobileHome() {
       localStorage.getItem("accessToken") === undefined
     ) {
       navigate("/login");
-    }
-    axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-      .then((res) => {
-        setTeam(res.data.data.teams);
-      })
-      .catch((e) => {
-        navigate("/login");
-      });
-
-    axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
-        {
+    } else {
+      axios
+        .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        setUpComing(res.data.data);
-      })
-      .catch((e) => {
-        if (e.response.data.code === "TEAM-001") {
-          navigate("/login/create-team");
-        } else {
+        })
+        .then((res) => {
+          setTeam(res.data.data.teams);
+        })
+        .catch((e) => {
           navigate("/login");
-        }
-      });
+        });
+
+      axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          setUpComing(res.data.data);
+        })
+        .catch((e) => {
+          if (e.response.data.code === "TEAM-001") {
+            navigate("/login/create-team");
+          } else {
+            navigate("/login");
+          }
+        });
+    }
   }, []);
   return (
     <div className="flex flex-col gap-3">
