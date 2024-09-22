@@ -66,7 +66,8 @@ export const getTeamInfo = async (teamId) => {
 // 팀 내의 모든 멤버 조회
 export const getMembers = async () => {
   try {
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    console.log("accessToken: ", accessToken);
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/teams/members`,
       {

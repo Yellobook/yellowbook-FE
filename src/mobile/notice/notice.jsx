@@ -122,7 +122,7 @@ export default function Notice() {
           </div>
           <div className="flex w-full justify-between">
             <Text>함께하는 멤버</Text>
-            <div className="w-[14rem] h-[1.5rem] border border-yellow text-xs font-light flex justify-center items-center">
+            <div className="w-[14rem] h-[1.5rem] border border-yellow text-xs font-light flex justify-start items-center p-1 gap-2">
               {/* <input className="w-full h-full m-0 p-1" /> */}
               {/* <MentionsInput
                 style={mentionInput}
@@ -141,7 +141,9 @@ export default function Notice() {
               {/* {noticeData.mentions.map((mention) => (
                 <div key={mention.id}>{mention.memberNickname}</div>
               ))} */}
-              {noticeData.mentions}
+              {noticeData.mentions.map((mention) => (
+                <span key={mention.memberId}>{mention.memberNickname}</span>  // 특정 필드만 렌더링
+              ))}
             </div>
           </div>
         </div>

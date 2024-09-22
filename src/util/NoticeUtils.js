@@ -3,8 +3,8 @@ import axios from "axios";
 export const GetNotice = async (informId) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/informs/${informId}`,
       {
@@ -24,8 +24,8 @@ export const GetNotice = async (informId) => {
 export const DeleteNotice = async (informId) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.delete(
       `${process.env.REACT_APP_BASE_URL}/api/v1/informs/${informId}`,
       {
@@ -45,8 +45,8 @@ export const DeleteNotice = async (informId) => {
 export const PostComment = async (informId, content) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/informs/${informId}/comment`,
       { content },
@@ -68,8 +68,8 @@ export const PostComment = async (informId, content) => {
 export const PostNotice = async (data) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/informs`,
       data,

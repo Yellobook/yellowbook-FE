@@ -4,8 +4,8 @@ import axios from "axios";
 export const orderGet = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}`,
@@ -26,8 +26,8 @@ export const orderGet = async (orderId) => {
 export const orderDelete = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.delete(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}`,
       {
@@ -47,8 +47,8 @@ export const orderDelete = async (orderId) => {
 export const orderGetComment = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
-    // const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/comment`,
@@ -69,8 +69,8 @@ export const orderGetComment = async (orderId) => {
 export const orderPatchConfirm = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.patch(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/confirm`,
       {},
@@ -91,8 +91,8 @@ export const orderPatchConfirm = async (orderId) => {
 export const orderPatchCorr = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.patch(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/correction`,
       {},
@@ -113,8 +113,8 @@ export const orderPatchCorr = async (orderId) => {
 export const orderPostComment = async (orderId, content) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/comment`,
@@ -138,9 +138,8 @@ export const orderPostComment = async (orderId, content) => {
 export const orderWrite = async (productId, memo, date, orderAmount) => {
   try {
     // 로컬에서 토큰 가져오기
-    // const accessToken = localStorage.getItem("accessToken");
-
-    const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/api/v1/orders`,
       {
