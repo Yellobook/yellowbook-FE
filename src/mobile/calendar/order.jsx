@@ -25,8 +25,8 @@ const OrderContainer = ({ setIsModal }) => {
 
   // 날짜 dropdown list
   const currentYear = new Date().getFullYear();
-  const yearList = Array.from({ length: 5 }, (_, i) =>
-    (currentYear - 2 + i).toString()
+  const yearList = Array.from({ length: 3 }, (_, i) =>
+    (currentYear + i).toString()
   ); // 현재 연도를 기준으로 ±2년
   const monthList = Array.from({ length: 12 }, (_, i) =>
     (i + 1).toString().padStart(2, "0")
@@ -377,15 +377,10 @@ const OrderContainer = ({ setIsModal }) => {
           </div>
           <div className="flex justify-between mt-[0.5rem]">
             <h1>함께하는 멤버</h1>
-            <DropDown
-              width="8.25rem"
-              height="1.5rem"
-              items={memberName}
-              size="0.75rem"
-              wid="8rem"
-              hei="1.5rem"
-              onSelect={handleMemberSelect}
-              selectedMember={selectedMembers}
+            <MultiSelectDropDown
+              items={memberName} // 조회된 멤버 리스트
+              selectedMembers={selectedMembers}
+              setSelectedMembers={setSelectedMembers}
             />
           </div>
         </div>
@@ -460,7 +455,8 @@ const DropDown = ({
         </button>
       </div>
       {isOpen && (
-        <ul className="absolute mt-[0.0625rem] w-full bg-white shadow-lg border border-[#FFDE33]">
+        <ul className="absolute mt-[0.0625rem] w-full bg-white shadow-lg border border-[#FFDE33] overflow-y-auto"
+        style={{ maxHeight: "10rem" }}>
           {items.map((item, index) => (
             <DropDownItem
               key={index}
@@ -500,3 +496,62 @@ export const Text = ({ color, size, weight, children }) => {
     </p>
   );
 };
+
+// 함께하는 멤버 언급
+const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // 멤버 선택 핸들러
+  const handleMemberSelect = (item) => {
+    if (selectedMembers.includes(item)) {
+      // 이미 선택된 멤버라면 제거
+      setSelectedMembers(selectedMembers.filter((member) => member !== item));
+    } else {
+      // 새롭게 선택된 멤버 추가
+      setSelectedMembers([...selectedMembers, item]);
+    }
+  };
+
+  return (
+    <div className="relative" style={{ width: "8.25rem", height: "1.5rem", fontSize: "0.75rem" }}>
+      <div
+        className="bg-white border border-[#FFDE33] p-1 cursor-pointer flex items-center justify-between"
+        onClick={toggleDropdown}
+      >
+        <div className="flex flex-wrap">
+          {selectedMembers.length > 0 ? (
+            selectedMembers.map((member) => (
+              <span key={member.id} className="mr-2">
+                {member.name}
+              </span>
+            ))
+          ) : (
+            <span className="text-customGray1">멤버 선택</span>
+          )}
+        </div>
+        <DropButton /> {/* DropButton을 오른쪽에 위치시킴 */}
+      </div>
+      {isOpen && (
+        <ul className="absolute mt-1 w-full bg-white shadow-lg border border-[#FFDE33] overflow-y-auto"
+        style={{ maxHeight: "10rem" }}>
+          {items.map((item, index) => (
+            <li
+              key={index}
+              className={`py-1 px-2 cursor-pointer hover:bg-gray-100 ${
+                selectedMembers.includes(item) ? "bg-yellow-100" : ""
+              }`}
+              onClick={() => handleMemberSelect(item)}
+            >
+              {item.name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );  
+};
+
