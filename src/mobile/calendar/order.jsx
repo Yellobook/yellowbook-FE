@@ -87,21 +87,22 @@ const OrderContainer = ({ setIsModal }) => {
     );
   };
 
+  const mentionIds = selectedMembers.map((member) => member.id);
+
   // 공지사항 -> 일정 게시하기 버튼 핸들러
   const handleNotice = async () => {
     try {
       const noticeData = {
         title,
         memo,
-        mentionedIds,
+        mentionIds,
         date: formattedDate,
       };
-
-      console.log("NoticeData:", noticeData); // API 호출 전 확인용
 
       const response = await PostNotice(noticeData);
 
       console.log("공지사항 작성 성공:", response);
+      console.log("NoticeData:", noticeData); // API 호출 전 확인용
       //setInformId(response.data.informId);
       if (response && response.data.informId) {
         navigate(`/notice/${response.data.informId}`);
@@ -505,14 +506,27 @@ const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => 
     setIsOpen(!isOpen);
   };
 
-  // 멤버 선택 핸들러
+// 멤버 선택 핸들러
   const handleMemberSelect = (item) => {
-    if (selectedMembers.includes(item)) {
-      // 이미 선택된 멤버라면 제거
-      setSelectedMembers(selectedMembers.filter((member) => member !== item));
+    if (item.name === "전체") {
+      // "전체" 항목 선택 시, 모든 멤버 선택
+      if (selectedMembers.length === items.length) {
+        // 이미 모두 선택된 경우, 전체 선택 해제
+        setSelectedMembers([]);
+      } else {
+        // 전체 선택
+        setSelectedMembers(items);
+      }
     } else {
-      // 새롭게 선택된 멤버 추가
-      setSelectedMembers([...selectedMembers, item]);
+      if (selectedMembers.some((member) => member.id === item.id)) {
+        // 이미 선택된 멤버라면 제거
+        setSelectedMembers(
+          selectedMembers.filter((member) => member.id !== item.id)
+        );
+      } else {
+        // 새롭게 선택된 멤버 추가
+        setSelectedMembers([...selectedMembers, item]);
+      }
     }
   };
 
@@ -549,6 +563,14 @@ const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => 
               {item.name}
             </li>
           ))}
+          <li
+            className={`py-1 px-2 cursor-pointer hover:bg-gray-100 ${
+              selectedMembers.length === items.length ? "bg-yellow-100" : ""
+            }`}
+            onClick={() => handleMemberSelect({ id: "all", name: "전체" })}
+          >
+            전체
+          </li>
         </ul>
       )}
     </div>
