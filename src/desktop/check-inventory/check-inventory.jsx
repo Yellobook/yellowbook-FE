@@ -5,6 +5,7 @@ import {
   orderPostComment,
   orderPatchCorr,
 } from "../../util/OrderUtils";
+import { getProfile } from "../../util/ProfileUtils";
 
 const DesktopCheckInventory = () => {
   const location = useLocation();
@@ -17,7 +18,7 @@ const DesktopCheckInventory = () => {
   const [isCheckBtnDisabled, setIsCheckBtnDisabled] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const accessToken = localStorage.getItem("accessToken");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -27,6 +28,16 @@ const DesktopCheckInventory = () => {
     if (idParams) {
       fetchComments(idParams);
     }
+
+    // 관리자 여부 데이터 불러오기
+    getProfile()
+      .then((profile) => {
+        const userRole = profile.teams[0].role;
+        setRole(userRole);
+      })
+      .catch((error) => {
+        console.error("프로필 정보 불러오기 중 오류 발생 : ", error);
+      });
   }, [location.search]);
 
   const handleCorrectBtnClick = async () => {
