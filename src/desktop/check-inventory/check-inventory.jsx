@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { fetchComments, orderPostComment } from "../../util/OrderUtils";
+import {
+  fetchComments,
+  orderPostComment,
+  orderPatchCorr,
+} from "../../util/OrderUtils";
 
 const DesktopCheckInventory = () => {
   const location = useLocation();
@@ -26,26 +29,9 @@ const DesktopCheckInventory = () => {
     }
   }, [location.search]);
 
-  const correctOrder = async (orderId) => {
-    try {
-      await axios.patch(
-        `https://api.yellobook.site/api/v1/${orderId}/correction`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setIsCheckBtnDisabled(false);
-    } catch (error) {
-      alert("주문 정정 요청 중 오류 발생", error);
-      setIsCheckBtnDisabled(false);
-    }
-  };
-
   const handleCorrectBtnClick = async () => {
     setIsCheckBtnDisabled(true); // '주문 확인하기' 버튼 비활성화
-    await correctOrder(orderId);
+    await orderPatchCorr(orderId);
     setIsCheckBtnDisabled(false); // '주문 확인하기' 버튼 활성화
   };
 
