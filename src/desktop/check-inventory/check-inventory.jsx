@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { fetchComments, orderPostComment } from "../../util/OrderUtils";
 
 const DesktopCheckInventory = () => {
   const location = useLocation();
@@ -39,42 +40,6 @@ const DesktopCheckInventory = () => {
     } catch (error) {
       alert("주문 정정 요청 중 오류 발생", error);
       setIsCheckBtnDisabled(false);
-    }
-  };
-
-  const fetchComments = async (orderId) => {
-    try {
-      const response = await axios.get(
-        `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setComments(response.data.data.comments);
-    } catch (error) {
-      console.error("댓글 조회 중 오류 발생", error);
-    }
-  };
-
-  const postComment = async () => {
-    try {
-      await axios.post(
-        `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
-        {
-          content: newComment,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setNewComment(""); // 입력란 초기화
-      fetchComments(orderId); // 댓글 작성 후 새로고침
-    } catch (error) {
-      alert("댓글 작성 중 오류 발생", error);
     }
   };
 
@@ -199,7 +164,7 @@ const DesktopCheckInventory = () => {
             onChange={(e) => setNewComment(e.target.value)}
           />
           <button
-            onClick={postComment}
+            onClick={() => orderPostComment(orderId, newComment)}
             className="ml-4 bg-yellow rounded-md px-8 py-2"
           >
             입력
