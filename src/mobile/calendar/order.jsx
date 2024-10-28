@@ -10,6 +10,8 @@ import {
   inventorySubName,
 } from "../../util/InventorySearchUtils";
 import { orderWrite } from "../../util/OrderUtils";
+import PermissionProvider from "../../util/Context";
+import { useIsCustomer } from "../../util/Context";
 
 const OrderContainer = ({ setIsModal }) => {
   //const memberList = [
@@ -46,8 +48,13 @@ const OrderContainer = ({ setIsModal }) => {
 
   const navigate = useNavigate();
 
+  const isCustomer = useIsCustomer();
+
+  const isLoading = isCustomer === null;
+
   // 공지사항 or 주문
-  const OrderNotice = ["주문", "공지사항"];
+  console.log('사용자 권한 뭐임?:', isCustomer);
+  const OrderNotice = isCustomer ? ["주문", "공지사항"] : ["공지사항"];
 
   // 제품 ID, 메모, 날짜, 주문 수량을 상태로 관리
   const [productId, setProductId] = useState();
@@ -245,7 +252,8 @@ const OrderContainer = ({ setIsModal }) => {
   // }, [handleName]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <PermissionProvider>
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-[18.75rem] h-[34.625rem] relative bg-white rounded-[2.5rem] flex flex-col items-center">
         <Close
           className="absolute top-[1rem] right-[1.75rem]"
@@ -393,6 +401,7 @@ const OrderContainer = ({ setIsModal }) => {
         </button>
       </div>
     </div>
+    </PermissionProvider>
   );
 };
 export default OrderContainer;
