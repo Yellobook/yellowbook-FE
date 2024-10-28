@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { Inventory, ApiResponse } from './InventoryModels'; 
 
-// API를 호출하여 재고 데이터를 받아오는 함수
+// 전체 재고 데이터를 받아오는 함수
 export const fetchInventories = async (page = 1, size = 1) => {
         // 로컬에서 토큰 가져오기
-  const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzI0MjIzNjk5LCJleHAiOjE3MjQyMzA4OTl9.6wMiN77vVJd5UYVK9cmuU6hHWT0ybeFQjR8TmPVehcQ";
+  const accessToken = localStorage.getItem("accessToken");
   //localStorage.getItem("accessToken");
   try {
-    const response = await axios.get('https://api.yellobook.site/api/v1/inventories', {
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/inventories`, {
       params: {
         page,
         size

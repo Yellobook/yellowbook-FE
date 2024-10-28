@@ -5,7 +5,7 @@ export const deleteProduct = async (productId) => {
   const accessToken = localStorage.getItem("accessToken");
 
   try {
-    const response = await axios.delete(`https://api.yellobook.site/api/v1/inventories/products/${productId}`, {
+    const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/v1/inventories/products/${productId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       }

@@ -2,13 +2,13 @@ import axios from "axios";
 import { Product } from "./InventoryModels"; // 모델을 불러옵니다
 
 // 특정 인벤토리에 대한 제품 목록을 가져오는 함수
+// 일별 재고 현황 상세 조회
 export const fetchProductsByInventoryId = async (inventoryId) => {
-  const accessToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MSwiaWF0IjoxNzI0MjIzNjk5LCJleHAiOjE3MjQyMzA4OTl9.6wMiN77vVJd5UYVK9cmuU6hHWT0ybeFQjR8TmPVehcQ";
+  const accessToken = localStorage.getItem("accessToken");
   //localStorage.getItem("accessToken");
   try {
     const response = await axios.get(
-      `https://api.yellobook.site/api/v1/inventories/${inventoryId}`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1/inventories/${inventoryId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

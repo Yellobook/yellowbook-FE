@@ -5,7 +5,7 @@ export const searchProducts = async (inventoryId, keyword) => {
   const accessToken = localStorage.getItem("accessToken");
 
   try {
-    const response = await axios.get(`https://api.yellobook.site/api/v1/inventories/${inventoryId}/search`, {
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/inventories/${inventoryId}/search`, {
       params: { keyword: keyword },
       headers: {
         Authorization: `Bearer ${accessToken}`,

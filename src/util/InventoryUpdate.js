@@ -5,7 +5,7 @@ export const updateProductAmount = async (productId, amount) => {
   const accessToken = localStorage.getItem("accessToken");
 
   try {
-    const response = await axios.put(`https://api.yellobook.site/api/v1/inventories/products/${productId}`, {
+    const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/v1/inventories/products/${productId}`, {
       amount: amount
     }, {
       headers: {

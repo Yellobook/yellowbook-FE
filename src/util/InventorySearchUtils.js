@@ -4,8 +4,8 @@ import axios from "axios";
 export const inventoryName = async (name) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/inventories/products/search`,
       {
@@ -28,8 +28,8 @@ export const inventoryName = async (name) => {
 export const inventorySubName = async (name) => {
   try {
     // 로컬에서 토큰 가져오기
-    //const accessToken = localStorage.getItem("accessToken");
-    const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
+    const accessToken = localStorage.getItem("accessToken");
+    //onst accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/api/v1/inventories/subProducts/search`,
       {
