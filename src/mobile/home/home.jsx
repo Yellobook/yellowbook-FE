@@ -2,8 +2,8 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 import ReactCalendar from "../../components/calendar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { upcomingSchedule } from "../../atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { isMobile, upcomingSchedule } from "../../atom";
 import { getUpComing } from "../../util/Schedule";
 import axios from "axios";
 import { api } from "../../util/Axios_Interceptor";
@@ -13,45 +13,53 @@ export default function MobileHome() {
   const [upcoming, setUpComing] = useState({});
   const [team, setTeam] = useState([]);
   useEffect(() => {
+    const isMobileDevice = () => {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    };
+    const mobileStatus = isMobileDevice();
     if (
       !localStorage.getItem("accessToken") ||
       localStorage.getItem("accessToken") === undefined
     ) {
       navigate("/login");
     } else {
-      axios
-        .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        })
-        .then((res) => {
-          setTeam(res.data.data.teams);
-        })
-        .catch((e) => {
-          navigate("/login");
-        });
-
-      axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
-          {
+      if (mobileStatus) {
+        axios
+          .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
-          },
-          { withCredentials: true }
-        )
-        .then((res) => {
-          setUpComing(res.data.data);
-        })
-        .catch((e) => {
-          if (e.response.data.code === "TEAM-001") {
-            navigate("/login/create-team");
-          } else {
+          })
+          .then((res) => {
+            setTeam(res.data.data.teams);
+          })
+          .catch((e) => {
             navigate("/login");
-          }
-        });
+          });
+
+        axios
+          .get(
+            `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/upcoming`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            },
+            { withCredentials: true }
+          )
+          .then((res) => {
+            setUpComing(res.data.data);
+          })
+          .catch((e) => {
+            if (e.response.data.code === "TEAM-001") {
+              navigate("/login/create-team");
+            } else {
+              navigate("/login");
+            }
+          });
+      }
     }
   }, []);
   return (

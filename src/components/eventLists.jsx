@@ -2,14 +2,25 @@ import { useRecoilValue } from "recoil";
 import { initEvents } from "../atom";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import axios from "axios";
 
 export default function EventLists({ listProps }) {
-  const calendarMonth = document.getElementsByClassName(
-    "react-calendar__navigation__label__labelText react-calendar__navigation__label__labelText--from"
-  );
-  useEffect(() => {
-    console.log(Number(calendarMonth[0].innerText.replace("월", "")));
-  }, []);
+  const onDelete = (prop) => {
+    const ok = window.confirm("정말로 삭제하시겠습니까?");
+    if (ok) {
+      axios
+        .delete(`${process.env.REACT_APP_BASE_URL}/api/v1/informs/${prop.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        })
+        .then((res) => {
+          alert("삭제되었습니다.");
+          window.location.reload();
+        })
+        .catch((e) => console.log(e));
+    }
+  };
   return (
     <div className="flex flex-col gap-4 py-5">
       {listProps
@@ -17,21 +28,21 @@ export default function EventLists({ listProps }) {
             return (
               <div
                 key={i}
-                className="flex items-center gap-5 border-b-2"
-                style={{
-                  borderColor: `${prop.color}`,
-                }}
+                className="flex items-center justify-between gap-5 border-b-2 border-yellow"
               >
+                <div className="flex gap-5 items-center">
+                  <div className="h-10 w-3 bg-yellow" />
+
+                  <div>{dayjs(prop.date).format("DD일")}</div>
+
+                  <div className="text-xl">{prop.title}</div>
+                </div>
                 <div
-                  className="h-10 w-3"
-                  style={{
-                    backgroundColor: `${prop.color}`,
-                  }}
-                />
-
-                <div>{dayjs(prop.date).format("DD일")}</div>
-
-                <div className="text-xl">{prop.title}</div>
+                  className="px-3 hover:bg-yellow cursor-pointer border-yellow border-2 rounded-md py-1"
+                  onClick={(e) => onDelete(prop)}
+                >
+                  delete
+                </div>
               </div>
             );
           })
