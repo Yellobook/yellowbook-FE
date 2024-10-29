@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import { teamIdState } from "../../atom";
 import { getProfile } from "../../util/ProfileUtils";
 import { deleteUser, logoutUser } from "../../util/AuthUtils";
+import { inviteTeam } from "../../util/TeamUtils";
 
 const MyPage = () => {
   const navigate = useNavigate();
