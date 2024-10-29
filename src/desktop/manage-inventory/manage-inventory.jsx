@@ -53,13 +53,16 @@ const DesktopManageInventory = () => {
   return (
     <div>
       <div className="mt-20 flex justify-between">
-        <div onClick={() => navigate("/manage-inventory/edit")}>edit</div>
         <div
-          style={{ color: "#FFAB08" }}
-          className="inline-block border-b text-xl"
+          className="text-[#FFAB08] font-bold text-2xl"
+          onClick={() => navigate("/manage-inventory/edit")}
         >
           재고 현황 게시글
         </div>
+        <div
+          style={{ color: "#FFAB08" }}
+          className="inline-block border-b text-xl"
+        ></div>
         <div>
           <div
             style={{ backgroundColor: "#FFDE33" }}

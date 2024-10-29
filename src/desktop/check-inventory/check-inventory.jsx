@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import {
+  fetchComments,
+  orderPostComment,
+  orderPatchCorr,
+} from "../../util/OrderUtils";
+import { getProfile } from "../../util/ProfileUtils";
 
 const DesktopCheckInventory = () => {
   const location = useLocation();
@@ -13,7 +18,7 @@ const DesktopCheckInventory = () => {
   const [isCheckBtnDisabled, setIsCheckBtnDisabled] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const accessToken = localStorage.getItem("accessToken");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -23,64 +28,21 @@ const DesktopCheckInventory = () => {
     if (idParams) {
       fetchComments(idParams);
     }
+
+    // 관리자 여부 데이터 불러오기
+    getProfile()
+      .then((profile) => {
+        const userRole = profile.teams[0].role;
+        setRole(userRole);
+      })
+      .catch((error) => {
+        console.error("프로필 정보 불러오기 중 오류 발생 : ", error);
+      });
   }, [location.search]);
-
-  const correctOrder = async (orderId) => {
-    try {
-      await axios.patch(
-        `https://api.yellobook.site/api/v1/${orderId}/correction`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setIsCheckBtnDisabled(false);
-    } catch (error) {
-      alert("주문 정정 요청 중 오류 발생", error);
-      setIsCheckBtnDisabled(false);
-    }
-  };
-
-  const fetchComments = async (orderId) => {
-    try {
-      const response = await axios.get(
-        `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setComments(response.data.data.comments);
-    } catch (error) {
-      console.error("댓글 조회 중 오류 발생", error);
-    }
-  };
-
-  const postComment = async () => {
-    try {
-      await axios.post(
-        `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
-        {
-          content: newComment,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setNewComment(""); // 입력란 초기화
-      fetchComments(orderId); // 댓글 작성 후 새로고침
-    } catch (error) {
-      alert("댓글 작성 중 오류 발생", error);
-    }
-  };
 
   const handleCorrectBtnClick = async () => {
     setIsCheckBtnDisabled(true); // '주문 확인하기' 버튼 비활성화
-    await correctOrder(orderId);
+    await orderPatchCorr(orderId);
     setIsCheckBtnDisabled(false); // '주문 확인하기' 버튼 활성화
   };
 
@@ -199,7 +161,7 @@ const DesktopCheckInventory = () => {
             onChange={(e) => setNewComment(e.target.value)}
           />
           <button
-            onClick={postComment}
+            onClick={() => orderPostComment(orderId, newComment)}
             className="ml-4 bg-yellow rounded-md px-8 py-2"
           >
             입력
