@@ -18,13 +18,15 @@ const PermissionProvider=({ children }) => {
                 const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
                     headers: { Authorization: `Bearer ${accessToken}` },
                 });
+                // 응답 구조
+                //console.log('응답 구조: ', response);
                 // 사용자 권한 출력
-                console.log('사용자 권한: ', response.data.data.teams[2].role);
+                console.log('사용자 권한: ', response.data.data.teams[0].role);
                 // API로부터 받은 데이터에서 '주문자' 여부를 확인
-                console.log('권한 찍히나?: ', response.data.data.teams[2].role.includes('주문자'));
-                setIsCustomer(response.data.data.teams[2].role.includes('주문자'));
+                console.log('권한 찍히나?: ', response.data.data.teams[0].role.includes('주문자'));
+                setIsCustomer(response.data.data.teams[0].role.includes('주문자'));
             } catch (error) {
-                console.error("프로필 불러오기 중 오류 발생");
+                console.error("프로필 불러오기 중 오류 발생", error);
             } finally {
                 setLoading(false); // 로딩 완료
             }

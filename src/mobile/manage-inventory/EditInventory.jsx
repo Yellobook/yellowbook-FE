@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { deleteProduct } from '../../util/InventoryDelete';
 
 function EditInventory() {
   const location = useLocation();
@@ -17,17 +18,40 @@ function EditInventory() {
     }
   }, [newProduct]);
 
-  const deleteSelectedProducts = () => {
-    const updatedInventory = products.filter((item, idx) => !selectedProducts.includes(idx));
-    setProducts(updatedInventory);
+  // 제품 삭제 선택 시 삭제 되어야 함
+  const deleteSelectedProducts = async () => {
+    try {
+      // 선택된 제품 ID를 비동기로 삭제
+      await Promise.all(
+        selectedProducts.map(async (productId) => {
+          //console.log('PRODUCTS: ', products);
+          //const id = products[index].productId; // 제품 ID 가져오기
+          //console.log('제품 아이디: ', id, 'type:', typeof id);
+          console.log(products);
+          await deleteProduct(productId); // API 호출로 DB에서 삭제
+        })
+      );
+  
+      // 선택된 제품을 제외한 새로운 목록으로 업데이트
+      const updatedInventory = products.filter((item) => !selectedProducts.includes(item.productId));
+      setProducts(updatedInventory);
+      setSelectedProducts([]); // 선택 항목 초기화
+  
+      alert("선택한 제품이 성공적으로 삭제되었습니다.");
+    } catch (error) {
+      console.error("제품 삭제 중 오류 발생:", error.message);
+      alert("제품 삭제에 실패했습니다.");
+    }
   };
 
-  const toggleProductSelection = (index) => {
+  const toggleProductSelection = (productId) => {
+    //const productId = products[index]?.productId;
+    //console.log(productId);
     setSelectedProducts((prevSelectedProducts) => {
-      if (prevSelectedProducts.includes(index)) {
-        return prevSelectedProducts.filter((item) => item !== index);
+      if (prevSelectedProducts.includes(productId)) {
+        return prevSelectedProducts.filter((item) => item !== productId);
       } else {
-        return [...prevSelectedProducts, index];
+        return [...prevSelectedProducts, productId];
       }
     });
   };
@@ -91,8 +115,8 @@ function EditInventory() {
         <td className="py-4 px-4">
           <input
             type="checkbox"
-            checked={selectedProducts.includes(index)}
-            onChange={() => toggleProductSelection(index)}
+            checked={selectedProducts.includes(item.productId)}
+            onChange={() => toggleProductSelection(item.productId)}
           />
         </td>
         <td className="text-lg py-2 px-4 min-w-[100px]">{item.name}</td> {/* 최소 너비 설정 */}

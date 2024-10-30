@@ -50,7 +50,7 @@ const OrderContainer = ({ setIsModal }) => {
 
   const isCustomer = useIsCustomer();
 
-  const isLoading = isCustomer === null;
+  //const isLoading = isCustomer === null;
 
   // 공지사항 or 주문
   console.log('사용자 권한 뭐임?:', isCustomer);
