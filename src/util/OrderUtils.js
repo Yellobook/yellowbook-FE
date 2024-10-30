@@ -160,3 +160,23 @@ export const orderWrite = async (productId, memo, date, orderAmount) => {
     throw error;
   }
 };
+
+// [주문자, 관리자] 주문 댓글 조회
+export const fetchComments = async (orderId) =>{
+  try{
+    const accessToken = localStorage.getItem("accessToken");
+    const response = await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/api/vi/orders/${orderId}/comment`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data.comments;
+  } catch (error) {
+    console.error("[주문자, 관리자] 주문 댓글 조회 중 오류 발생 : ", error);
+    throw error;
+  }
+}

@@ -28,7 +28,6 @@ export default function DesktopHome() {
       })
       .then((res) => {
         setTeam(res.data.data.teams);
-        console.log(res.data.data);
       })
       .catch((e) => {
         console.log(e);
@@ -46,7 +45,6 @@ export default function DesktopHome() {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data.data);
         setUpComing(res.data.data);
       })
       .catch((e) => {
