@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import ko from "date-fns/locale/ko";
 
-import { fetchInventories } from "../../util/InventoryApi";
-import { fetchProductsByInventoryId } from "../../util/InventoryDetailApi";
+import { fetchInventories } from "../../util/inventory";
+import { fetchProductsByInventoryId } from "../../util/inventory";
 
 const DesktopManageInventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

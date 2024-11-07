@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { addProductToInventory } from '../../util/InventoryAddApi';
-import { Product } from '../../util/InventoryModels';
+import { addProductToInventory } from '../../util/inventory';
 
 function ProductCreationForm() {
   const [product, setProduct] = useState({ 

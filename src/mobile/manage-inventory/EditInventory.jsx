@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { deleteProduct } from '../../util/InventoryDelete';
+import { deleteProduct } from '../../util/inventory';
 
 function EditInventory() {
   const location = useLocation();

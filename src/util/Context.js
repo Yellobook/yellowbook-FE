@@ -2,6 +2,7 @@
 // 간단한 상태 관리라 판단 -> 별도의 라이브러리를 사용하기 보단 내장 라이브러리인 Context로 관리하고자 함
 import React, {createContext, useContext, useState, useEffect} from "react";
 import axios from "axios";
+import { getTeam } from "./ProfileUtils";
 
 const PermissionContext = createContext();
 
@@ -18,13 +19,31 @@ const PermissionProvider=({ children }) => {
                 const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
                     headers: { Authorization: `Bearer ${accessToken}` },
                 });
-                // 응답 구조
-                //console.log('응답 구조: ', response);
-                // 사용자 권한 출력
-                console.log('사용자 권한: ', response.data.data.teams[0].role);
-                // API로부터 받은 데이터에서 '주문자' 여부를 확인
-                console.log('권한 찍히나?: ', response.data.data.teams[0].role.includes('주문자'));
-                setIsCustomer(response.data.data.teams[0].role.includes('주문자'));
+                
+                const teams = response.data.data.teams;
+                console.log('마이프로필 조회 응답 teams: ', teams);
+
+                // 현재 속한 팀 조회
+                const teamResponse = await getTeam();
+                if (teamResponse) {
+                    console.log('현재 속한 팀 응답구조: ', teamResponse);
+                    const currentTeamId = teamResponse.teamId;
+
+                    // teams 배열에서 teamId를 기준으로 매칭되는 인덱스를 찾기
+                    const matchedTeam = teams.find(team => team.teamId === currentTeamId);
+                    
+                    if (matchedTeam) {
+                        console.log('매칭된 팀: ', matchedTeam);
+                        // 해당 팀의 역할이 '주문자'를 포함하는지 여부 확인
+                        const isCustomerRole = matchedTeam.role;
+                        console.log('권한 포함 여부: ', isCustomerRole === "주문자");
+                        setIsCustomer(isCustomerRole);
+                    } else {
+                        console.log('현재 속한 팀과 일치하는 팀을 찾을 수 없습니다.');
+                        setIsCustomer(false);
+                    }
+                }
+
             } catch (error) {
                 console.error("프로필 불러오기 중 오류 발생", error);
             } finally {

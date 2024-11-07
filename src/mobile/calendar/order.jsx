@@ -24,6 +24,7 @@ const OrderContainer = ({ setIsModal }) => {
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [mentionedIds, setMentionedIds] = useState([]);
+  const [order, setOrder] = useState(false); // 공지사항 | 주문 => 비활성화 여부
 
   // 날짜 dropdown list
   const currentYear = new Date().getFullYear();
@@ -124,6 +125,7 @@ const OrderContainer = ({ setIsModal }) => {
 
   const handleSelect = (item) => {
     setSelectedItem(item);
+    setOrder(item === "주문"); // 주문인 경우 공지 제목 비활성화 위함
   };
 
   // 하위 제품 선택
@@ -334,6 +336,7 @@ const OrderContainer = ({ setIsModal }) => {
                 placeholder="공지 또는 업무 타이틀을 입력해주세요."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                disabled={order}
               />
             </div>
           </div>
@@ -346,8 +349,9 @@ const OrderContainer = ({ setIsModal }) => {
                   placeholder="제품 명을 입력해주세요."
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
+                  disabled={!order}
                 />
-                <img src={Search} alt="돋보기 아이콘" onClick={handleName} />
+                <img src={Search} alt="돋보기 아이콘" onClick={order ? handleName : undefined} />
               </div>
             </div>
             <div className="flex justify-between">
@@ -369,6 +373,7 @@ const OrderContainer = ({ setIsModal }) => {
                   className="w-full h-full text-xs font-light m-0 p-1"
                   value={orderAmount}
                   onChange={(e) => setOrderAmount(e.target.value)}
+                  disabled={!order}
                 />
               </div>
             </div>

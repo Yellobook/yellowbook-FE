@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import InventoryDetails from "./manageInventoryDetail";
-import { fetchInventories } from '../../util/InventoryApi'; 
-import { uploadFile } from "../../util/InventoryAddApi";
-import { fetchInventoryView } from "../../util/InventoryApi";
+import { fetchInventories } from "../../util/inventory";
+import { uploadFile } from "../../util/inventory";
+import { fetchInventoryView } from "../../util/inventory";
 
 
 

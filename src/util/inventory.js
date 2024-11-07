@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { Inventory, ApiResponse } from './InventoryModels'; 
+import { Product } from "./InventoryModels"; // 모델을 불러옵니다
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -44,7 +46,6 @@ export const uploadFile = async (file) => {
   }
 };
 
-import { Inventory, ApiResponse } from './InventoryModels'; 
 
 // 전체 재고 데이터를 받아오는 함수
 export const fetchInventories = async (page = 1, size = 8) => {
@@ -126,8 +127,6 @@ export const deleteProduct = async (productId) => {
       throw new Error('Failed to delete product: ' + (error.response?.data?.message || error.message));
     }
   };
-
-  import { Product } from "./InventoryModels"; // 모델을 불러옵니다
 
 // 특정 인벤토리에 대한 제품 목록을 가져오는 함수
 // 일별 재고 현황 상세 조회
