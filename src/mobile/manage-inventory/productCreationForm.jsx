@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { addProductToInventory } from '../../util/InventoryAddApi';
-import { Product } from '../../util/InventoryModels';
+import { addProductToInventory } from '../../util/inventory';
 
 function ProductCreationForm() {
   const [product, setProduct] = useState({ 
@@ -40,10 +39,13 @@ function ProductCreationForm() {
     setError(null);
 
     try {
-      const productId = await addProductToInventory(inventoryId, product);
-      const newProduct = { ...product, productId };
-
-
+      console.log('inventoryId: ', typeof inventoryId);
+      console.log(inventoryData);
+      const response = await addProductToInventory(inventoryId, product);
+      console.log(response);
+      const newProduct = { ...product, productId: response.productId };
+      console.log(newProduct);
+      
       navigate('/manage-inventory/edit-inventory', {
         state: { 
           inventoryId, 
@@ -53,6 +55,7 @@ function ProductCreationForm() {
       });
     } catch (error) {
       setError(error.message);
+      console.error('오류: ', error.message);
     } finally {
       setLoading(false);
     }

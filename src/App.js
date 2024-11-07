@@ -34,6 +34,7 @@ import EditInventory from "./mobile/manage-inventory/EditInventory";
 import ProductCreationForm from "./mobile/manage-inventory/productCreationForm";
 import OrderCheckOrder from "./mobile/calendar/orderer-check-order";
 import ManageCheckOrder from "./mobile/calendar/manage-check-order";
+import PermissionProvider from "./util/Context"; // 주문 모달에서 주문자만 '주문' 항목이 생겨야 하기 때문에 전역적으로 상태 관리
 
 const isMobileDevice = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -110,13 +111,15 @@ function App() {
     setIsUserMobile(deviceStatus);
   }, [isUserMobile, setIsUserMobile]);
   return (
-    <div className="App">
+    <PermissionProvider>
+      <div className="App">
       {isUserMobile ? (
         <RouterProvider router={MobileRouter} />
       ) : (
         <RouterProvider router={DesktopRouter} />
       )}
-    </div>
+      </div>
+    </PermissionProvider>
   );
 }
 

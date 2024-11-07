@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { addProductToInventory } from "../../util/InventoryAddApi";
+import { addProductToInventory } from "../../util/inventory";
 
 const DesktopPlusProduct = () => {
   const location = useLocation();
