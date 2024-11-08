@@ -7,16 +7,19 @@ import { useRecoilState } from "recoil";
 import { profile, upcomingSchedule } from "../../atom";
 import axios from "axios";
 import dayjs from "dayjs";
+import IsSwitch from "../../components/IsSwitch";
 
 export default function DesktopHome() {
   const navigate = useNavigate("");
   const [upcoming, setUpComing] = useState({});
   const [team, setTeam] = useState([]);
+  const [isSwitch, setIsSwitch] = useState(false);
+  const [currTeam, setCurrTeam] = useState({});
+
   const date = new Date();
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
-      console.log(localStorage.getItem("accessToken"));
       navigate("/login");
     }
 
@@ -27,7 +30,9 @@ export default function DesktopHome() {
         },
       })
       .then((res) => {
+        console.log("teams", res.data.data.teams);
         setTeam(res.data.data.teams);
+        handleSwitch(res.data.data.teams);
       })
       .catch((e) => {
         console.log(e);
@@ -56,21 +61,50 @@ export default function DesktopHome() {
         }
       });
   }, []);
+
+  const handleSwitch = (team) => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/teams/current`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => {
+        const curr = team.filter((t) => t.teamId === res.data.data.teamId);
+        console.log(curr[0]);
+        setCurrTeam(curr[0]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   return (
     <div className="flex flex-col gap-3">
-      <div className="homeCard bg-opacity-15">
-        <div>
+      <div className="relative">
+        <div
+          className="homeCard bg-opacity-15"
+          onClick={() => {
+            setIsSwitch((prev) => !prev);
+            handleSwitch(team);
+          }}
+          onBlur={() => setIsSwitch(false)}
+        >
           <div>
-            {team.length > 0 ? team[0].teamName : "팀 정보가 없습니다."}
+            <div>
+              {team.length > 0 ? `${currTeam.teamName}` : "팀 정보가 없습니다."}
+            </div>
+            <div className="text-orange text-[12px]">
+              {team.length > 0
+                ? `${currTeam.role} 역할`
+                : "팀 정보가 없습니다."}
+            </div>
           </div>
-          <div className="text-orange text-[12px]">
-            {team.length > 0 ? `${team[0].role} 역할` : "팀 정보가 없습니다."}
+          <div className="text-orange">
+            <ChevronUpIcon className="text-xl size-7" />
+            <ChevronDownIcon className="text-xl size-7" />
           </div>
         </div>
-        <div className="text-orange">
-          <ChevronUpIcon className="text-xl size-7" />
-          <ChevronDownIcon className="text-xl size-7" />
-        </div>
+        {isSwitch ? <IsSwitch currTeam={currTeam} teamLists={team} /> : null}
       </div>
 
       <div
