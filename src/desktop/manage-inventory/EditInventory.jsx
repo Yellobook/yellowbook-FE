@@ -84,49 +84,49 @@ const DesktopEditInventory = () => {
         style={{ color: "#97A5A4" }}
         className="border border-yellow rounded-xl text-center mt-10 p-4 overflow-x-auto"
       >
-        <table className="flex justify-center">
-          <thead>
+        <table className="table-auto w-full border-collapse">
+          <thead className="bg-yellow-100">
             <tr className="text-base text-gray">
               <th className="py-2 px-4"></th>
               <th className="py-2 px-4">제품이름</th>
               <th className="py-2 px-4">하위제품</th>
               <th className="py-2 px-4">SKU</th>
-              <th className="py-2 px-4">기본단가</th>
+              <th className="py-2 px-4">구매가</th>
               <th className="py-2 px-4">판매가</th>
               <th className="py-2 px-4">수량</th>
             </tr>
           </thead>
           <tbody className="text-base">
             {inventoryData.map((inventory) => (
-              <tr
-                className="text-center items-center"
-                key={inventory.productId}
-              >
-                <td>
+              <tr className="text-center" key={inventory.productId}>
+                <td className="py-2 px-4">
                   <input
                     type="checkbox"
                     onChange={() => handleCheckboxChange(inventory.productId)}
                   />
                 </td>
-                <td className="py-2 text-black text-base font-bold">
+                <td className="py-2 px-4 text-black font-bold">
                   {inventory.name}
                 </td>
                 <td className="py-2 px-4 text-gray">{inventory.subProduct}</td>
                 <td className="py-2 px-4 text-gray">{inventory.sku}</td>
-                <td className="py-2 px-4 text-gray">
+                <td className="py-2 px-4 text-gray ">
                   {inventory.purchasePrice.toLocaleString()}
                 </td>
                 <td className="py-2 px-4 text-gray">
                   {inventory.salePrice.toLocaleString()}
                 </td>
                 <td className="py-2 px-4 text-gray">
-                  <div className="flex items-center">
-                    <span>{inventory.amount.toLocaleString()}</span>
-                    <div className="">
+                  <div className="flex items-center justify-center">
+                    <span className="mr-2">
+                      {inventory.amount.toLocaleString()}
+                    </span>
+                    <div className="relative w-full h-2 bg-gray-200 rounded">
                       <div
                         style={{
                           width: `${(inventory.amount / 5000) * 100}%`,
                         }}
+                        className="absolute h-full bg-yellow-500 rounded"
                       ></div>
                     </div>
                   </div>
