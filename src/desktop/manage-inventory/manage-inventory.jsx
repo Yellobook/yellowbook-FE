@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import ko from "date-fns/locale/ko";
 
+import { getTeam } from "../../util/ProfileUtils";
 import { fetchInventories } from "../../util/inventory";
 import { fetchProductsByInventoryId } from "../../util/inventory";
 
@@ -12,7 +13,17 @@ const DesktopManageInventory = () => {
   const [inventories, setInventories] = useState([]);
   const [selectedInventory, setSelectedInventory] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [teamId, setTeamId] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchTeam();
+  }, []);
+
+  const fetchTeam = async () => {
+    const teamData = await getTeam();
+    setTeamId(teamData?.teamId);
+  };
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);

@@ -37,7 +37,7 @@ export async function MakeTeam(act, makeTeamProps, setTeamId) {
 export const inviteTeam = async (teamId) => {
   try {
     const inviteTeam_res = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/${teamId}/invite`,
+      `https://api.yellobook.site/api/v1/teams/${teamId}/invite`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
@@ -52,7 +52,7 @@ export const inviteTeam = async (teamId) => {
 export const getTeamInfo = async (teamId) => {
   try {
     const teamInfo_res = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/${teamId}`,
+      `https://api.yellobook.site/api/v1/teams/${teamId}`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
@@ -69,7 +69,7 @@ export const getMembers = async () => {
     //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     console.log("accessToken: ", accessToken);
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/members`,
+      `https://api.yellobook.site/api/v1/teams/members`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
@@ -85,7 +85,7 @@ export const getMembers = async () => {
 export const memberSearch = async (name) => {
   try {
     const memberSearch_res = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/members/search`,
+      `https://api.yellobook.site/api/v1/teams/members/search`,
       {
         params: {
           name: name,
@@ -102,7 +102,7 @@ export const memberSearch = async (name) => {
 export const joinTeam = async (code) => {
   try {
     const joinTeam_res = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/invitation`,
+      `https://api.yellobook.site/api/v1/teams/invitation`,
       {
         params: {
           code: code,
@@ -124,7 +124,7 @@ export const leaveTeam = async (teamId) => {
 
   try {
     const leaveTeam_res = await axios.delete(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/teams/${teamId}/leave`,
+      `https://api.yellobook.site/api/v1/teams/${teamId}/leave`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }

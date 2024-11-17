@@ -6,6 +6,7 @@ import {
   orderPatchCorr,
 } from "../../util/OrderUtils";
 import { getProfile } from "../../util/ProfileUtils";
+import { getDaily } from "../../util/Schedule";
 
 const DesktopCheckInventory = () => {
   const location = useLocation();

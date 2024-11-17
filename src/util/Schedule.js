@@ -34,10 +34,10 @@ export async function getMonth(act) {
   return res;
 }
 
-export async function getDaily(act) {
+export async function getDaily(act, year, month, day) {
   const res = await axios
     .get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/daily`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1/schedule/daily?year=${year}&motnth=${month}&day=${day}`,
       {
         headers: { Authorization: `Bearer ${act}` },
       },
@@ -45,7 +45,7 @@ export async function getDaily(act) {
     )
     .then((res) => {
       console.log(res.data);
-      return res.data.data;
+      return res.data.data.schedules;
     })
     .catch((e) => console.log("getDaily Err", e));
   return res;

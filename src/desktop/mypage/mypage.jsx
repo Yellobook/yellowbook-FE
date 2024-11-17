@@ -13,15 +13,25 @@ const MyPage = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [profile, setProfile] = useState(null);
-  const teamId = useRecoilValue(teamIdState);
+  const [teamId, setTeamId] = useState(null);
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
+  // 프로필 조회
   const fetchProfile = async () => {
     const profileData = await getProfile();
     setProfile(profileData);
+    setTeamId(profileData?.teams.teamId);
+  };
+
+  // 팀원 초대하기
+  const handleInviteClick = async () => {
+    const inviteUrl = await inviteTeam(teamId);
+    if (inviteUrl) {
+      window.location.href = inviteUrl;
+    }
   };
 
   const deactivateUser = async () => {
@@ -88,6 +98,7 @@ const MyPage = () => {
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
           className="cursor-pointer border-b flex items-center p-2"
+          onClick={handleInviteClick}
         >
           팀원 초대하기
         </div>
@@ -184,7 +195,7 @@ const MyPage = () => {
           </button>
         </div>
       </Modal>
-      {/* 회원 탈퇴 달 */}
+      {/* 회원 탈퇴 모달 */}
       <Modal
         isOpen={isDeleteModalOpen}
         onRequestClose={closeDeleteModal}
