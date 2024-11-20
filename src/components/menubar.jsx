@@ -18,7 +18,7 @@ export default function MenuBar() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/v1/members/profile`, {
+      .get(`https://api.yellobook.site/api/v1/members/profile`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },

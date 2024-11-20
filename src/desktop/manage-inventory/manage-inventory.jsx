@@ -3,19 +3,41 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import ko from "date-fns/locale/ko";
-
+import { getTeam } from "../../util/ProfileUtils";
 import { fetchInventories } from "../../util/inventory";
-import { fetchProductsByInventoryId } from "../../util/inventory";
+import { fetchProductsByInventoryId, uploadFile } from "../../util/inventory";
 
 const DesktopManageInventory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inventories, setInventories] = useState([]);
   const [selectedInventory, setSelectedInventory] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [teamId, setTeamId] = useState(null);
   const navigate = useNavigate();
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  useEffect(() => {
+    fetchTeam();
+  }, []);
+
+  const fetchTeam = async () => {
+    const teamData = await getTeam();
+    setTeamId(teamData?.teamId);
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file); // 선택한 파일 상태 저장
+
+    if (file) {
+      try {
+        const response = await uploadFile(file); // API 호출
+        alert("파일 업로드 성공: 재고가 업데이트되었습니다.");
+        getAllInventories(); // 업로드 후 재고 목록 갱신
+      } catch (error) {
+        console.error("파일 업로드 실패:", error);
+        alert("파일 업로드 중 오류가 발생했습니다.");
+      }
+    }
   };
 
   const handleClick = () => {
@@ -32,7 +54,7 @@ const DesktopManageInventory = () => {
       setSelectedInventory({ ...inventory, products });
       setIsModalOpen(true);
     } catch (error) {
-      //alert("재고 상세 정보를 불러오는 중 오류 발생: " + error.message);
+      console.error("재고 상세 정보를 불러오는 중 오류 발생:", error);
     }
   };
 
@@ -46,7 +68,7 @@ const DesktopManageInventory = () => {
       const inventoriesData = await fetchInventories(1, 5);
       setInventories(inventoriesData);
     } catch (error) {
-      //alert("전체 재고 현황 글 조회 중 오류 발생: " + error.message);
+      console.error("전체 재고 현황 조회 중 오류 발생:", error);
     }
   };
 
@@ -59,10 +81,6 @@ const DesktopManageInventory = () => {
         >
           재고 현황 게시글
         </div>
-        <div
-          style={{ color: "#FFAB08" }}
-          className="inline-block border-b text-xl"
-        ></div>
         <div>
           <div
             style={{ backgroundColor: "#FFDE33" }}
@@ -92,6 +110,10 @@ const DesktopManageInventory = () => {
       <div
         style={{ color: "#FFAB08" }}
         className="cursor-pointer inline-block border-b mt-2 text-xs"
+        onClick={() =>
+          (window.location.href =
+            "https://yellobook-business-helper.notion.site/YELLOBOOK-INTRO-4a9c74f194544087a2b3c495f328307f")
+        }
       >
         옐로우북 이용가이드 바로가기
       </div>

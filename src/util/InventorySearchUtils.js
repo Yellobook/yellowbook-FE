@@ -7,7 +7,7 @@ export const inventoryName = async (name) => {
     const accessToken = localStorage.getItem("accessToken");
     //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/inventories/products/search`,
+      `https://api.yellobook.site/api/v1/inventories/products/search`,
       {
         params: {
           name: name,
@@ -31,7 +31,7 @@ export const inventorySubName = async (name) => {
     const accessToken = localStorage.getItem("accessToken");
     //onst accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/inventories/subProducts/search`,
+      `https://api.yellobook.site/api/v1/inventories/subProducts/search`,
       {
         params: {
           name: name,

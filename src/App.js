@@ -53,7 +53,7 @@ const DesktopRouter = createBrowserRouter([
       { path: "/manage-inventory", element: <DesktopManageInventory /> },
       { path: "/manage-inventory/edit", element: <DesktopEditInventory /> },
       { path: "/manage-inventory/edit/plus", element: <DesktopPlusProduct /> },
-      { path: "/check-inventory", element: <DesktopCheckInventory /> },
+      { path: "/check-inventory/:id", element: <DesktopCheckInventory /> },
       { path: "/mypage", element: <DesktopMyPage /> },
       { path: "/exitTeam", element: <DesktopExitTeam /> },
       { path: "/about", element: <DesktopAbout /> },
@@ -113,11 +113,11 @@ function App() {
   return (
     <PermissionProvider>
       <div className="App">
-      {isUserMobile ? (
-        <RouterProvider router={MobileRouter} />
-      ) : (
-        <RouterProvider router={DesktopRouter} />
-      )}
+        {isUserMobile ? (
+          <RouterProvider router={MobileRouter} />
+        ) : (
+          <RouterProvider router={DesktopRouter} />
+        )}
       </div>
     </PermissionProvider>
   );

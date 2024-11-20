@@ -5,10 +5,8 @@ export const orderGet = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
     const accessToken = localStorage.getItem("accessToken");
-    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
-    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}`,
+      `https://api.yellobook.site/api/v1/orders/${orderId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -27,9 +25,8 @@ export const orderDelete = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
     const accessToken = localStorage.getItem("accessToken");
-    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.delete(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}`,
+      `https://api.yellobook.site/api/v1/orders/${orderId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -48,10 +45,8 @@ export const orderGetComment = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
     const accessToken = localStorage.getItem("accessToken");
-    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
-    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/comment`,
+      `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -70,9 +65,8 @@ export const orderPatchConfirm = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
     const accessToken = localStorage.getItem("accessToken");
-    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/confirm`,
+      `https://api.yellobook.site/api/v1/orders/${orderId}/confirm`,
       {},
       {
         headers: {
@@ -92,10 +86,8 @@ export const orderPatchCorr = async (orderId) => {
   try {
     // 로컬에서 토큰 가져오기
     const accessToken = localStorage.getItem("accessToken");
-    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
     const response = await axios.patch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/correction`,
-      {},
+      `https://api.yellobook.site/api/v1/orders/${orderId}/correction`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -114,10 +106,8 @@ export const orderPostComment = async (orderId, content) => {
   try {
     // 로컬에서 토큰 가져오기
     const accessToken = localStorage.getItem("accessToken");
-    //const accessToken = process.env.REACT_APP_ADMIN_TOKEN;
-    //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders/${orderId}/comment`,
+      `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
       {
         content,
       },
@@ -141,7 +131,7 @@ export const orderWrite = async (productId, memo, date, orderAmount) => {
     const accessToken = localStorage.getItem("accessToken");
     //const accessToken = process.env.REACT_APP_ORDERER_TOKEN;
     const response = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/api/v1/orders`,
+      `https://api.yellobook.site/api/v1/orders`,
       {
         productId,
         memo,
@@ -162,12 +152,11 @@ export const orderWrite = async (productId, memo, date, orderAmount) => {
 };
 
 // [주문자, 관리자] 주문 댓글 조회
-export const fetchComments = async (orderId) =>{
-  try{
+export const fetchComments = async (orderId) => {
+  try {
     const accessToken = localStorage.getItem("accessToken");
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/api/vi/orders/${orderId}/comment`,
-      {},
+      `https://api.yellobook.site/api/v1/orders/${orderId}/comment`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -179,4 +168,4 @@ export const fetchComments = async (orderId) =>{
     console.error("[주문자, 관리자] 주문 댓글 조회 중 오류 발생 : ", error);
     throw error;
   }
-}
+};

@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { teamIdState } from "../../atom";
-import { useRecoilValue } from "recoil";
 import { getProfile } from "../../util/ProfileUtils";
 import { leaveTeam } from "../../util/TeamUtils";
 
 const ExitTeam = () => {
-  const [selectedTeam, setSelectedTeam] = useState("");
-  const [profile, setProfile] = useState(null);
+  const [selectedTeam, setSelectedTeam] = useState(""); // 선택한 팀 이름
+  const [profile, setProfile] = useState(null); // 사용자 프로필 데이터
   const navigate = useNavigate();
-  const teamId = useRecoilValue(teamIdState);
 
-  const accessToken = localStorage.getItem("accessToken");
-
+  // 팀 선택 시 상태 업데이트
   const handleSelectChange = (e) => {
     setSelectedTeam(e.target.value);
   };
@@ -22,13 +17,39 @@ const ExitTeam = () => {
     fetchProfile();
   }, []);
 
+  // 프로필 데이터 가져오기
   const fetchProfile = async () => {
-    const profileData = await getProfile();
-    setProfile(profileData);
+    try {
+      const profileData = await getProfile();
+      setProfile(profileData);
+    } catch (error) {
+      console.error("프로필 불러오기 실패:", error);
+    }
   };
 
-  const doExit = async (teamId) => {
-    leaveTeam(teamId);
+  // 선택한 팀 ID로 팀 나가기
+  const doExit = async () => {
+    if (!selectedTeam) {
+      alert("팀을 선택해주세요.");
+      return;
+    }
+
+    // 선택한 팀 이름에 해당하는 팀 ID 찾기
+    const team = profile.teams.find((t) => t.teamName === selectedTeam);
+
+    if (!team) {
+      alert("올바른 팀을 선택해주세요.");
+      return;
+    }
+
+    try {
+      await leaveTeam(team.teamId); // 팀 나가기 API 호출
+      alert("팀에서 성공적으로 나갔습니다.");
+      navigate("/"); // 필요한 경우 다른 페이지로 이동
+    } catch (error) {
+      console.error("팀 나가기 실패:", error);
+      alert("팀 나가기에 실패했습니다.");
+    }
   };
 
   return (
@@ -51,13 +72,11 @@ const ExitTeam = () => {
           <option value="" disabled style={{ color: "#d1d5db" }}>
             팀 이름 선택
           </option>
-          {profile &&
-            profile.teams &&
-            profile.teams.map((team, index) => (
-              <option key={index} value={team.teamName}>
-                {team.teamName}
-              </option>
-            ))}
+          {profile?.teams?.map((team) => (
+            <option key={team.teamId} value={team.teamName}>
+              {team.teamName}
+            </option>
+          ))}
         </select>
         <div className="flex flex-col justify-center items-center mt-48">
           <div className="text-xs mb-2" style={{ color: "#97A5A4" }}>
