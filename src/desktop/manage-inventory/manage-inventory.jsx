@@ -110,6 +110,10 @@ const DesktopManageInventory = () => {
       <div
         style={{ color: "#FFAB08" }}
         className="cursor-pointer inline-block border-b mt-2 text-xs"
+        onClick={() =>
+          (window.location.href =
+            "https://yellobook-business-helper.notion.site/YELLOBOOK-INTRO-4a9c74f194544087a2b3c495f328307f")
+        }
       >
         옐로우북 이용가이드 바로가기
       </div>
