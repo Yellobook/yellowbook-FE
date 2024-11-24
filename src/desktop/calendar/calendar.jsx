@@ -19,6 +19,7 @@ export default function DestkopCalendar() {
   let debouncedText = useDebounce(typedText);
   const [searchResult, setSearchResult] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(false); // 리렌더링 트리거 상태
 
   useEffect(() => {
     if (isSearch) {
@@ -47,9 +48,14 @@ export default function DestkopCalendar() {
     setTypedText(e.target.value);
   };
 
+  const handleModalClose = () => {
+    setIsModal(false); // 모달 닫기
+    setRefreshKey((prev) => prev + 1); // 리렌더링 트리거
+  };
+
   return (
     <>
-      {isModal ? <CalendarModal setIsModal={setIsModal} /> : null}
+      {isModal ? <CalendarModal setIsModal={handleModalClose} /> : null}
 
       <div className="flex flex-col items-center gap-5 z-30">
         <div className="w-full bg-yellow bg-opacity-50 py-4 px-5 rounded-xl gmarketBold">
@@ -83,10 +89,10 @@ export default function DestkopCalendar() {
           >
             + 일정
           </div>
-          <ReactCalendar />
+          <ReactCalendar key={refreshKey}/>
         </div>
 
-        <EventLists />
+        <EventLists key={refreshKey}/>
       </div>
     </>
   );
