@@ -9,6 +9,7 @@ import axios from "axios";
 import useDebounce from "../../util/hooks/useDebounce";
 import { debounce } from "lodash";
 import IsSearch from "../../components/IsSearch";
+import Order from "../../components/order";
 
 export default function DestkopCalendar() {
   const [isModal, setIsModal] = useState(false);
@@ -55,7 +56,7 @@ export default function DestkopCalendar() {
 
   return (
     <>
-      {isModal ? <CalendarModal setIsModal={handleModalClose} /> : null}
+      {isModal ? <Order setIsModal={setIsModal} /> : null}
 
       <div className="flex flex-col items-center gap-5 z-30">
         <div className="w-full bg-yellow bg-opacity-50 py-4 px-5 rounded-xl gmarketBold">
@@ -89,10 +90,8 @@ export default function DestkopCalendar() {
           >
             + 일정
           </div>
-          <ReactCalendar key={refreshKey}/>
+          <ReactCalendar key={refreshKey} />
         </div>
-
-        <EventLists key={refreshKey}/>
       </div>
     </>
   );

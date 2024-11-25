@@ -6,6 +6,7 @@ import axios from "axios";
 
 export default function EventLists({ listProps }) {
   const onDelete = (prop) => {
+    console.log(prop.id);
     const ok = window.confirm("정말로 삭제하시겠습니까?");
     if (ok) {
       axios
@@ -18,7 +19,9 @@ export default function EventLists({ listProps }) {
           alert("삭제되었습니다.");
           window.location.reload();
         })
-        .catch((e) => console.log(e));
+        .catch((e) =>
+          alert("잘못된 요청입니다.\n작성자만 삭제할 수 있습니다.")
+        );
     }
   };
   return (
