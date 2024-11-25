@@ -47,7 +47,6 @@
 
   .homeCard {
     @apply flex items-center justify-between rounded-2xl px-5 py-3 h-20 bg-yellow hover:scale-[1.005] cursor-pointer transition;
-
   }
 
   .iconHover {
@@ -111,4 +110,9 @@ input {
 
 .mention--focused {
   background-color: #ccc !important;
+}
+
+.select {
+  min-width: 90px;
+  border: 2px solid #ffde33;
 }

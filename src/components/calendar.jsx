@@ -25,6 +25,7 @@ const ReactCalendar = () => {
         },
       })
       .then((res) => {
+        console.log(res);
         setEvents(res.data.data.calendar);
       })
       .catch((e) => console.log(e));
