@@ -54,7 +54,7 @@ const OrderContainer = ({ setIsModal }) => {
   //const isLoading = isCustomer === null;
 
   // 공지사항 or 주문
-  console.log('사용자 권한 뭐임?:', isCustomer);
+  console.log("사용자 권한 뭐임?:", isCustomer);
   const OrderNotice = isCustomer ? ["주문", "공지사항"] : ["공지사항"];
 
   // 제품 ID, 메모, 날짜, 주문 수량을 상태로 관리
@@ -256,156 +256,160 @@ const OrderContainer = ({ setIsModal }) => {
   return (
     <PermissionProvider>
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-[18.75rem] h-[34.625rem] relative bg-white rounded-[2.5rem] flex flex-col items-center">
-        <Close
-          className="absolute top-[1rem] right-[1.75rem]"
-          onClick={() => {
-            setIsModal(false);
-          }}
-        />
-        <div className="px-[2rem] pt-[3.5rem] pb-[1.5rem]">
-          <div className="flex justify-between mb-[1.25rem]">
-            <div flex items-center>
-              <Text size="text-base" color="text-black">
-                날짜
-              </Text>
-            </div>
-            <div className="flex items-center gap-[0.25rem] z-50 text-sm text-customGray">
-              <div className="flex items-center">
-                <DropDown
-                  width="4.25rem"
-                  height="1.5rem"
-                  size="0.9375rem"
-                  items={yearList}
-                  wid="4rem"
-                  hei="1.5rem"
-                  onSelect={handleYearSelect}
-                />
-                <Text size="text-sm" color="text-dateGray">
-                  년
-                </Text>
-              </div>
-              <div className="flex items-center">
-                <DropDown
-                  width="2.75rem"
-                  height="1.5rem"
-                  items={monthList}
-                  size="0.9375rem"
-                  wid="2rem"
-                  hei="1.5rem"
-                  onSelect={handleMonthSelect}
-                />
-                <Text size="text-sm" color="text-dateGray">
-                  월
-                </Text>
-              </div>
-              <div className="flex items-center">
-                <DropDown
-                  width="2.75rem"
-                  height="1.5rem"
-                  items={dayList}
-                  size="0.9375rem"
-                  wid="2rem"
-                  hei="1.5rem"
-                  onSelect={handleDaySelect}
-                />
-                <Text size="text-sm" color="text-dateGray">
-                  일
-                </Text>
-              </div>
-            </div>
-          </div>
-          <DropDown
-            width="15rem"
-            height="1.5rem"
-            hint="일정 종류"
-            weight="font-median"
-            className="z-40"
-            items={OrderNotice}
-            size="0.9375rem"
-            hintColor="text-dateGray"
-            wid="13rem"
-            hei="1.5rem"
-            onSelect={handleSelect}
+        <div className="w-[18.75rem] h-[34.625rem] relative bg-white rounded-[2.5rem] flex flex-col items-center">
+          <Close
+            className="absolute top-[1rem] right-[1.75rem]"
+            onClick={() => {
+              setIsModal(false);
+            }}
           />
-          <div className="mt-[1.25rem] mb-[1.5rem]">
-            <h1>공지 제목</h1>
-            <div className="w-[15rem] h-[2.0625rem] border border-[#FFDE33] text-xs font-light flex items-center">
-              <input
-                className="w-full h-full m-0 p-1 placeholder-customGray1"
-                placeholder="공지 또는 업무 타이틀을 입력해주세요."
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                disabled={order}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-[0.5rem]">
-            <div className="flex justify-between">
-              <h1>제품</h1>
-              <div className="flex justify-between w-[10.5625rem] h-[1.5rem] border border-[#FFDE33] text-xs font-light items-center pr-1">
-                <input
-                  className="placeholder-customGray1 w-[8.0625rem]"
-                  placeholder="제품 명을 입력해주세요."
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  disabled={!order}
-                />
-                <img src={Search} alt="돋보기 아이콘" onClick={order ? handleName : undefined} />
+          <div className="px-[2rem] pt-[3.5rem] pb-[1.5rem]">
+            <div className="flex justify-between mb-[1.25rem]">
+              <div flex items-center>
+                <Text size="text-base" color="text-black">
+                  날짜
+                </Text>
+              </div>
+              <div className="flex items-center gap-[0.25rem] z-50 text-sm text-customGray">
+                <div className="flex items-center">
+                  <DropDown
+                    width="4.25rem"
+                    height="1.5rem"
+                    size="0.9375rem"
+                    items={yearList}
+                    wid="4rem"
+                    hei="1.5rem"
+                    onSelect={handleYearSelect}
+                  />
+                  <Text size="text-sm" color="text-dateGray">
+                    년
+                  </Text>
+                </div>
+                <div className="flex items-center">
+                  <DropDown
+                    width="2.75rem"
+                    height="1.5rem"
+                    items={monthList}
+                    size="0.9375rem"
+                    wid="2rem"
+                    hei="1.5rem"
+                    onSelect={handleMonthSelect}
+                  />
+                  <Text size="text-sm" color="text-dateGray">
+                    월
+                  </Text>
+                </div>
+                <div className="flex items-center">
+                  <DropDown
+                    width="2.75rem"
+                    height="1.5rem"
+                    items={dayList}
+                    size="0.9375rem"
+                    wid="2rem"
+                    hei="1.5rem"
+                    onSelect={handleDaySelect}
+                  />
+                  <Text size="text-sm" color="text-dateGray">
+                    일
+                  </Text>
+                </div>
               </div>
             </div>
-            <div className="flex justify-between">
-              <h1>하위제품</h1>
-              <DropDown
-                width="10.5625rem"
-                height="1.5rem"
-                items={productSubNames}
-                size="0.75rem"
-                wid="9rem"
-                hei="1.5rem"
-                onSelect={handleProductSelect}
-              />
-            </div>
-            <div className="flex justify-between">
-              <h1>주문수량</h1>
-              <div className="w-[10.5625rem] h-[1.5rem] border border-[#FFDE33] flex items-center">
-                <input
-                  className="w-full h-full text-xs font-light m-0 p-1"
-                  value={orderAmount}
-                  onChange={(e) => setOrderAmount(e.target.value)}
-                  disabled={!order}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="mt-[1.25rem]">
-            <h1>메모</h1>
-            <div className="w-[15rem] h-[3.5rem] border border-[#FFDE33]">
-              <textarea
-                className="w-full h-full text-xs font-light p-1 placeholder-customGray1"
-                placeholder="주문 또는 공지와 업무에 관한 상세 정보나 메모를 입력해주세요."
-                value={memo}
-                onChange={(e) => setMemo(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex justify-between mt-[0.5rem]">
-            <h1>함께하는 멤버</h1>
-            <MultiSelectDropDown
-              items={memberName} // 조회된 멤버 리스트
-              selectedMembers={selectedMembers}
-              setSelectedMembers={setSelectedMembers}
+            <DropDown
+              width="15rem"
+              height="1.5rem"
+              hint="일정 종류"
+              weight="font-median"
+              className="z-40"
+              items={OrderNotice}
+              size="0.9375rem"
+              hintColor="text-dateGray"
+              wid="13rem"
+              hei="1.5rem"
+              onSelect={handleSelect}
             />
+            <div className="mt-[1.25rem] mb-[1.5rem]">
+              <h1>공지 제목</h1>
+              <div className="w-[15rem] h-[2.0625rem] border border-[#FFDE33] text-xs font-light flex items-center">
+                <input
+                  className="w-full h-full m-0 p-1 placeholder-customGray1"
+                  placeholder="공지 또는 업무 타이틀을 입력해주세요."
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  disabled={order}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-[0.5rem]">
+              <div className="flex justify-between">
+                <h1>제품</h1>
+                <div className="flex justify-between w-[10.5625rem] h-[1.5rem] border border-[#FFDE33] text-xs font-light items-center pr-1">
+                  <input
+                    className="placeholder-customGray1 w-[8.0625rem]"
+                    placeholder="제품 명을 입력해주세요."
+                    value={productName}
+                    onChange={(e) => setProductName(e.target.value)}
+                    disabled={!order}
+                  />
+                  <img
+                    src={Search}
+                    alt="돋보기 아이콘"
+                    onClick={order ? handleName : undefined}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <h1>하위제품</h1>
+                <DropDown
+                  width="10.5625rem"
+                  height="1.5rem"
+                  items={productSubNames}
+                  size="0.75rem"
+                  wid="9rem"
+                  hei="1.5rem"
+                  onSelect={handleProductSelect}
+                />
+              </div>
+              <div className="flex justify-between">
+                <h1>주문수량</h1>
+                <div className="w-[10.5625rem] h-[1.5rem] border border-[#FFDE33] flex items-center">
+                  <input
+                    className="w-full h-full text-xs font-light m-0 p-1"
+                    value={orderAmount}
+                    onChange={(e) => setOrderAmount(e.target.value)}
+                    disabled={!order}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-[1.25rem]">
+              <h1>메모</h1>
+              <div className="w-[15rem] h-[3.5rem] border border-[#FFDE33]">
+                <textarea
+                  className="w-full h-full text-xs font-light p-1 placeholder-customGray1"
+                  placeholder="주문 또는 공지와 업무에 관한 상세 정보나 메모를 입력해주세요."
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between mt-[0.5rem]">
+              <h1>함께하는 멤버</h1>
+              <MultiSelectDropDown
+                items={memberName} // 조회된 멤버 리스트
+                selectedMembers={selectedMembers}
+                setSelectedMembers={setSelectedMembers}
+              />
+            </div>
           </div>
+          <button
+            className="w-[15rem] h-[2.3125rem] bg-[#FFDE33] rounded-[1.875rem] text-lg"
+            onClick={handleButtonClick}
+          >
+            일정 게시하기
+          </button>
         </div>
-        <button
-          className="w-[15rem] h-[2.3125rem] bg-[#FFDE33] rounded-[1.875rem] text-lg"
-          onClick={handleButtonClick}
-        >
-          일정 게시하기
-        </button>
       </div>
-    </div>
     </PermissionProvider>
   );
 };
@@ -470,8 +474,10 @@ const DropDown = ({
         </button>
       </div>
       {isOpen && (
-        <ul className="absolute mt-[0.0625rem] w-full bg-white shadow-lg border border-[#FFDE33] overflow-y-auto"
-        style={{ maxHeight: "10rem" }}>
+        <ul
+          className="absolute mt-[0.0625rem] w-full bg-white shadow-lg border border-[#FFDE33] overflow-y-auto"
+          style={{ maxHeight: "10rem" }}
+        >
           {items.map((item, index) => (
             <DropDownItem
               key={index}
@@ -513,14 +519,18 @@ export const Text = ({ color, size, weight, children }) => {
 };
 
 // 함께하는 멤버 언급
-const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => {
+const MultiSelectDropDown = ({
+  items,
+  selectedMembers,
+  setSelectedMembers,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-// 멤버 선택 핸들러
+  // 멤버 선택 핸들러
   const handleMemberSelect = (item) => {
     if (item.name === "전체") {
       // "전체" 항목 선택 시, 모든 멤버 선택
@@ -545,7 +555,10 @@ const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => 
   };
 
   return (
-    <div className="relative" style={{ width: "8.25rem", height: "1.5rem", fontSize: "0.75rem" }}>
+    <div
+      className="relative"
+      style={{ width: "8.25rem", height: "1.5rem", fontSize: "0.75rem" }}
+    >
       <div
         className="bg-white border border-[#FFDE33] p-1 cursor-pointer flex items-center justify-between"
         onClick={toggleDropdown}
@@ -564,8 +577,10 @@ const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => 
         <DropButton /> {/* DropButton을 오른쪽에 위치시킴 */}
       </div>
       {isOpen && (
-        <ul className="absolute mt-1 w-full bg-white shadow-lg border border-[#FFDE33] overflow-y-auto"
-        style={{ maxHeight: "10rem" }}>
+        <ul
+          className="absolute mt-1 w-full bg-white shadow-lg border border-[#FFDE33] overflow-y-auto"
+          style={{ maxHeight: "10rem" }}
+        >
           {items.map((item, index) => (
             <li
               key={index}
@@ -588,6 +603,5 @@ const MultiSelectDropDown = ({ items, selectedMembers, setSelectedMembers }) => 
         </ul>
       )}
     </div>
-  );  
+  );
 };
-
