@@ -34,15 +34,19 @@ export async function MakeTeam(act, makeTeamProps, setTeamId) {
 }
 
 // 팀 초대
-export const inviteTeam = async (teamId) => {
+export const inviteTeam = async (teamId, role) => {
+  const accessToken = localStorage.getItem("accessToken");
   try {
-    const inviteTeam_res = await axios.post(
+    const response = await axios.post(
       `https://api.yellobook.site/api/v1/teams/${teamId}/invite`,
+      {
+        role: role,
+      },
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
-    return inviteTeam_res.data.data.inviteUrl;
+    return response.data.data.inviteUrl;
   } catch (e) {
     console.error("팀 초대 중 오류 발생");
   }

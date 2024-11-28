@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { addProductToInventory } from "../../util/inventory";
 
 const DesktopPlusProduct = () => {
@@ -11,6 +11,7 @@ const DesktopPlusProduct = () => {
   const [salePrice, setSalePrice] = useState("");
   const [amount, setAmount] = useState("");
   const [id, setId] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -32,6 +33,7 @@ const DesktopPlusProduct = () => {
       // 인벤토리에 제품 추가
       await addProductToInventory(id, productData);
       alert("제품이 성공적으로 추가되었습니다!");
+      navigate("/manage-inventory");
     } catch (error) {
       alert("제품 추가 중 오류 발생: " + error.message);
     }
