@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Logo from "../../assets/mobile/calendar/logo.png";
-import { useRecoilValue } from "recoil";
-import { teamIdState } from "../../atom";
-import { getProfile } from "../../util/ProfileUtils";
-import { deleteUser, logoutUser } from "../../util/AuthUtils";
+import { getProfile, getTeam } from "../../util/ProfileUtils";
+import { logoutUser } from "../../util/AuthUtils";
 import { inviteTeam } from "../../util/TeamUtils";
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [profile, setProfile] = useState(null);
   const [teamId, setTeamId] = useState(null);
+  const [selectedRole, setSelectedRole] = useState("VIEWER"); // 초대 역할 기본값
+  const [inviteUrl, setInviteUrl] = useState(null);
 
   useEffect(() => {
     fetchProfile();
@@ -23,49 +23,43 @@ const MyPage = () => {
   const fetchProfile = async () => {
     const profileData = await getProfile();
     setProfile(profileData);
-    setTeamId(profileData?.teams.teamId);
+    const currentTeam = await getTeam();
+    setTeamId(currentTeam?.teamId);
   };
 
   // 팀원 초대하기
   const handleInviteClick = async () => {
-    const inviteUrl = await inviteTeam(teamId);
-    if (inviteUrl) {
-      window.location.href = inviteUrl;
+    const url = await inviteTeam(teamId, selectedRole);
+    if (url) {
+      setInviteUrl(url);
     }
   };
 
-  const deactivateUser = async () => {
-    await deleteUser();
+  // 팀원 초대 모달 열기
+  const openInviteModal = () => {
+    setIsInviteModalOpen(true);
   };
 
+  // 팀원 초대 모달 닫기
+  const closeInviteModal = () => {
+    setIsInviteModalOpen(false);
+  };
+
+  // 로그아웃
   const logout = async () => {
-    await logoutUser(teamId);
+    await logoutUser();
+    closeLogoutModal();
+    window.location.href = "/";
   };
 
+  // 로그아웃 모달 열기
   const openLogoutModal = () => {
     setIsLogoutModalOpen(true);
   };
 
+  // 로그아웃 모달 닫기
   const closeLogoutModal = () => {
     setIsLogoutModalOpen(false);
-  };
-
-  const handleLogout = () => {
-    logout();
-    closeLogoutModal();
-  };
-
-  const openDeleteModal = () => {
-    setIsDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleDelete = () => {
-    deactivateUser();
-    closeDeleteModal();
   };
 
   return (
@@ -98,7 +92,7 @@ const MyPage = () => {
         <div
           style={{ color: "#697675", borderColor: "#FFAB08" }}
           className="cursor-pointer border-b flex items-center p-2"
-          onClick={handleInviteClick}
+          onClick={openInviteModal}
         >
           팀원 초대하기
         </div>
@@ -158,13 +152,6 @@ const MyPage = () => {
         >
           로그아웃
         </div>
-        <div
-          onClick={openDeleteModal}
-          style={{ color: "#697675", borderColor: "#FFAB08" }}
-          className="cursor-pointer border-b flex items-center p-2"
-        >
-          회원 탈퇴
-        </div>
       </div>
       {/* 로그아웃 모달 */}
       <Modal
@@ -188,40 +175,66 @@ const MyPage = () => {
             돌아가기
           </button>
           <button
-            onClick={handleLogout}
+            onClick={logout}
             className="px-4 py-2 bg-gray-200 text-red rounded"
           >
             로그아웃
           </button>
         </div>
       </Modal>
-      {/* 회원 탈퇴 모달 */}
+      {/* 팀원 초대 모달 */}
       <Modal
-        isOpen={isDeleteModalOpen}
-        onRequestClose={closeDeleteModal}
+        isOpen={isInviteModalOpen}
+        onRequestClose={closeInviteModal}
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
         className="bg-white rounded-sm w-72 text-center"
       >
         <div
-          onClick={closeDeleteModal}
-          className="cursor-pointer flex text-gray justify-end mr-2"
+          onClick={closeInviteModal}
+          className="cursor-pointer flex justify-end mr-2 text-gray"
         >
           x
         </div>
-        <h2>회원 탈퇴 하시겠습니까 ?</h2>
-        <div style={{ color: "#828282" }} className="p-3 text-xs">
-          회원 탈퇴시 계정 정보가 삭제되어 <br /> 복구가 불가능합니다.
+        <h2 className="py-6">초대할 팀원의 역할을 선택하세요</h2>
+        <div className="py-4 px-4">
+          <label
+            htmlFor="role-select"
+            className="block mb-2 text-sm text-gray-700"
+          >
+            역할 선택
+          </label>
+          <select
+            id="role-select"
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="VIEWER">뷰어</option>
+            <option value="ORDERER">주문자</option>
+            <option value="ADMIN">관리자</option>
+          </select>
+          {inviteUrl && (
+            <div className="mt-4 text-sm text-blue-600 break-all">
+              초대 링크:{" "}
+              <a href={inviteUrl} target="_blank" rel="noopener noreferrer">
+                {inviteUrl}
+              </a>
+            </div>
+          )}
         </div>
-        <div>정말로 탈퇴하시겠습니까?</div>
+
         <div className="border-t flex pl-4 pr-4 justify-between mt-4">
           <button
-            onClick={closeDeleteModal}
+            onClick={closeInviteModal}
             className="px-4 py-2 bg-gray-200 text-blue-500 rounded"
           >
             돌아가기
           </button>
-          <button onClick={handleDelete} className="px-4 py-2 text-red rounded">
-            회원 탈퇴
+          <button
+            onClick={handleInviteClick}
+            className="px-4 py-2 bg-gray-200 text-red rounded"
+          >
+            팀원 초대
           </button>
         </div>
       </Modal>
