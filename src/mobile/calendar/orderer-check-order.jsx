@@ -3,7 +3,12 @@ import { Text } from "./order"; // color, size, weight
 import Modal from "../../components/modal";
 import { useParams } from "react-router-dom";
 import { debounce } from "lodash";
-import { orderGet, orderGetComment, orderDelete, orderPostComment } from "../../util/OrderUtils";
+import {
+  orderGet,
+  orderGetComment,
+  orderDelete,
+  orderPostComment,
+} from "../../util/OrderUtils";
 
 export default function OrderCheckOrder() {
   const { orderId } = useParams();
@@ -136,7 +141,7 @@ export default function OrderCheckOrder() {
       </div>
       <hr className="border-yellow mt-[1.5rem] mb-[1rem]" />
       <Chat comments={comments} />
-      <Comment orderId={orderId} refreshOrderComment={refreshOrderComment}/>
+      <Comment orderId={orderId} refreshOrderComment={refreshOrderComment} />
       {showModal && (
         <Modal
           title="주문을 취소하시겠습니까?"
